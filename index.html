@@ -1,1 +1,304 @@
+<!doctype html>
+<html lang="no">
 
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Intensiv- og helikoptertransport</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrap"><div class="card">
+
+<h1 od="pageTitle">Intensiv- og helikoptertransport</h1>
+<div class="hasteLabel">Rekvirert hastegrad</div>
+<div class="hasteBar">
+  <button type="button" class="hasteBtn haste-akutt" data-haste="Akutt">Akutt</button>
+  <button type="button" class="hasteBtn haste-haster" data-haste="Haster">Haster<br>0-45minutter</button>
+  <button type="button" class="hasteBtn haste-samme" data-haste="Samme døgn (V1)">Samme døgn<br>(V1)</button>
+  <button type="button" class="hasteBtn haste-planlagt" data-haste="Planlagt transport (V2)">Planlagt tidspunkt<br>V2</button>
+</div>
+
+<div class="hasteSupport">
+  <div class="hasteSupportTitle">Kort beslutningsstøtte for rekvirert hastegrad</div>
+  <div class="hasteSupportGrid">
+    <div class="hasteSupportItem akutt">
+      <strong>Akutt</strong>
+      <span>Iverksettes umiddelbart.<br>Pasient som skal til umiddelbar intervensjon eller har et kritisk tidsvindu.</span>
+    </div>
+    <div class="hasteSupportItem haster">
+      <strong>Haster:</strong>
+      <span>Iverksettes uten forsinkelser med første ledigde ressurs.<br>Pasient med behov for rask overføring til høyere omsorgsnivå, for eksempel vurdering for intervensjon.</span>
+    </div>
+    <div class="hasteSupportItem samme">
+      <strong>Vanlig 1:</strong>
+      <span>Transport til høyere eller lavere omsorgsnivå som bør gjennomføres samme dag.</span>
+    </div>
+    <div class="hasteSupportItem planlagt">
+      <strong>Vanlig 2 (Planlagt tid):</strong>
+      <span>Transport til høyere eller lavere omsorgsnivå som kan planlegges frem i tid.</span>
+    </div>
+  </div>
+</div>
+
+<div id="mainContent" class="hidden">
+
+<label>Spedbarn?</label>
+<div class="binaryRow">
+  <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja"><span>Ja</span></label>
+  <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei"><span>Nei</span></label>
+</div>
+<div id="spedbarnExtraWrap" class="hidden">
+  <span class="specLabel" data-tooltip="Gestasjonsalder">GA</span></div></td></tr>
+  <div class="gestWrap">
+    <div class="gestField"><span>Uker</span><input id="gestasjonsUker" inputmode="numeric"></div>
+    <div class="gestField"><span>Dager</span><input id="gestasjonsDager" inputmode="numeric"></div>
+  </div>
+  <div id="transportWrap" class="hidden">
+    <label>Transport</label>
+    <div class="binaryRow">
+      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Kuvøse" id="transport_kuvose"><span>Kuvøse</span></label>
+      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Pedimate" id="transport_pedimate"><span>Pedimate</span></label>
+      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Barn i bag" id="transport_barnibag"><span>Barn i bag</span></label>
+      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Kengufix" id="transport_kengufix"><span>Kengufix</span></label>
+    </div>
+  </div>
+</div>
+
+<div id="acuteTop" class="hidden">
+  <div class="section">Spesialtransport</div>
+  <table class="table"><tbody>
+    <tr><td class="toggleCell specCell" data-toggle="spec_ecmo"><div class="toggleInner"><input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO"><span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_iabp"><div class="toggleInner"><input id="spec_iabp" class="chk spec specChoice" type="checkbox" value="IABP" data-spec="IABP"><span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_impella"><div class="toggleInner"><input id="spec_impella" class="chk spec specChoice" type="checkbox" value="Impella" data-spec="Impella"><span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_no"><div class="toggleInner"><input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO"><span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span></div></td></tr>
+  </tbody></table>
+
+  <label>Aktuelt</label>
+  <textarea id="acuteHovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
+
+  <label>Luftveier</label>
+  <div class="binaryRow">
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan uten O₂" id="acute_air_spont_uten"><span>Spontan uten O₂</span></label>
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan med O₂" id="acute_air_spont_med"><span>Spontan med O₂</span></label>
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontant med high flow" id="acute_air_highflow"><span>Spontant med high flow</span></label>
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="NIV (CPAP/BiPAP)" id="acute_air_niv"><span>NIV (CPAP/BiPAP)</span></label>
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Intubert" id="acute_air_intubert"><span>Intubert</span></label>
+    <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Trakeostomi" id="acute_air_trach"><span>Trakeostomi</span></label>
+  </div>
+
+  <div id="acuteSpontO2Wrap" class="hidden"><div class="inlineRow" style="margin-top:10px;"><span>Antall liter O₂</span><input id="acuteSpontO2Liter" inputmode="decimal" placeholder="Kun tall (liter)"></div></div>
+  <div id="acuteHighFlowWrap" class="hidden"><label>Fio2</label><input id="acuteHighFlowFio2" placeholder="Fritekst"><label>Flow (liter/min)</label><input id="acuteHighFlowFlow" placeholder="Fritekst"></div>
+  <div id="acuteNivWrap" class="hidden"><label>Fio2</label><input id="acuteNivFio2" placeholder="Fritekst"></div>
+  <div id="acuteIntubWrap" class="hidden"><label>Fio2</label><input id="acuteIntubFio2" placeholder="Fritekst"><label>Peep</label><input id="acuteIntubPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="acuteIntubTopp" placeholder="Fritekst"></div>
+
+  <div id="acuteTrachWrap" class="hidden">
+    <div class="section" style="margin-top:16px;">Trakeostomi</div>
+    <table class="table"><tbody>
+      <tr><td class="toggleCell" data-toggle="acute_tr_spont"><div class="toggleInner"><input id="acute_tr_spont" class="chk acuteTrachOpt" type="checkbox" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="acute_tr_o2"><div class="toggleInner"><input id="acute_tr_o2" class="chk acuteTrachOpt" type="checkbox" data-name="O₂ via trakeostomi"><span>O₂ via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="acute_tr_vent"><div class="toggleInner"><input id="acute_tr_vent" class="chk acuteTrachOpt" type="checkbox" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
+    </tbody></table>
+    <div id="acuteTrachO2Wrap" class="hidden"><label>Antall liter O2</label><input id="acuteTrachO2Liter" placeholder="Fritekst"></div>
+    <div id="acuteTrachVentWrap" class="hidden"><label>Fio2</label><input id="acuteTrachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="acuteTrachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="acuteTrachVentTopp" placeholder="Fritekst"></div>
+  </div>
+</div>
+
+<div id="fullTop" class="hidden">
+  <label id="vektLabel">Vekt (kg)</label><input id="vekt" type="text" placeholder="Fritekst"/>
+
+  <div class="section">Spesialtransport</div>
+  <table class="table"><tbody>
+    <tr><td class="toggleCell specCell" data-toggle="spec_ecmo"><div class="toggleInner"><input data-mirror="spec_ecmo" class="chk specMirror specChoice" type="checkbox" value="ECMO" data-spec="ECMO"><span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_iabp"><div class="toggleInner"><input data-mirror="spec_iabp" class="chk specMirror specChoice" type="checkbox" value="IABP" data-spec="IABP"><span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_impella"><div class="toggleInner"><input data-mirror="spec_impella" class="chk specMirror specChoice" type="checkbox" value="Impella" data-spec="Impella"><span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span></div></td></tr>
+    <tr><td class="toggleCell specCell" data-toggle="spec_no"><div class="toggleInner"><input data-mirror="spec_no" class="chk specMirror specChoice" type="checkbox" value="NO" data-spec="NO"><span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span></div></td></tr>
+  </tbody></table>
+
+  <label>Aktuelt</label><textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
+  <label>Tidligere</label><textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
+
+  <div class="section">Vitalparametre</div>
+  <div class="inlineVitals">
+    <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
+    <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
+    <div class="vpField"><span>GCS</span><input id="gcs"></div>
+  </div>
+
+  <label>Luftveier</label>
+  <div class="binaryRow">
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan uten O₂" id="air_spont_uten"><span>Spontan uten O₂</span></label>
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan med O₂" id="air_spont_med"><span>Spontan med O₂</span></label>
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontant med high flow" id="air_highflow"><span>Spontant med high flow</span></label>
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="NIV (CPAP/BiPAP)" id="air_niv"><span>NIV (CPAP/BiPAP)</span></label>
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Intubert" id="air_intubert"><span>Intubert</span></label>
+    <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Trakeostomi" id="air_trach"><span>Trakeostomi</span></label>
+  </div>
+  <div id="spontO2Wrap" class="hidden"><div class="inlineRow" style="margin-top:10px;"><span>Antall liter O₂</span><input id="spontO2Liter" inputmode="decimal" placeholder="Kun tall (liter)"></div></div>
+  <div id="highFlowWrap" class="hidden"><label>Fio2</label><input id="highFlowFio2" placeholder="Fritekst"><label>Flow (liter/min)</label><input id="highFlowFlow" placeholder="Fritekst"></div>
+  <div id="nivWrap" class="hidden"><label>Fio2</label><input id="nivFio2" placeholder="Fritekst"></div>
+  <div id="intubWrap" class="hidden"><label>Fio2</label><input id="intubFio2" placeholder="Fritekst"><label>Peep</label><input id="intubPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="intubTopp" placeholder="Fritekst"></div>
+  <div id="trachWrap" class="hidden">
+    <div class="section" style="margin-top:16px;">Trakeostomi</div>
+    <table class="table"><tbody>
+      <tr><td class="toggleCell" data-toggle="tr_spont"><div class="toggleInner"><input id="tr_spont" class="chk trachOpt" type="checkbox" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="tr_o2"><div class="toggleInner"><input id="tr_o2" class="chk trachOpt" type="checkbox" data-name="O₂ via trakeostomi"><span>O₂ via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="tr_vent"><div class="toggleInner"><input id="tr_vent" class="chk trachOpt" type="checkbox" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
+    </tbody></table>
+    <div id="trachO2Wrap" class="hidden"><label>Antall liter O2</label><input id="trachO2Liter" placeholder="Fritekst"></div>
+    <div id="trachVentWrap" class="hidden"><label>Fio2</label><input id="trachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="trachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="trachVentTopp" placeholder="Fritekst"></div>
+  </div>
+</div>
+
+<div class="section">Medikamenter og infusjoner</div>
+
+<table class="table medUnifiedTable">
+  <thead>
+    <tr>
+      <th>Sedasjon</th>
+      <th>Pressor</th>
+      <th>Andre medikamenter/infusjoner</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="toggleCell" data-toggle="sed_fentanyl">
+        <div class="toggleInner">
+          <input id="sed_fentanyl" class="chk sed" type="checkbox" data-name="Fentanyl">
+          <span>Fentanyl</span>
+        </div>
+      </td>
+      <td class="toggleCell" data-toggle="pre_adrenalin">
+        <div class="toggleInner">
+          <input id="pre_adrenalin" class="chk pre" type="checkbox" data-name="Adrenalin">
+          <span>Adrenalin</span>
+        </div>
+      </td>
+      <td id="andreInfCell" rowspan="6">
+        <div id="andreInfBody"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="toggleCell" data-toggle="sed_ketamin">
+        <div class="toggleInner">
+          <input id="sed_ketamin" class="chk sed" type="checkbox" data-name="Ketamin">
+          <span>Ketamin</span>
+        </div>
+      </td>
+      <td class="toggleCell" data-toggle="pre_noradrenalin">
+        <div class="toggleInner">
+          <input id="pre_noradrenalin" class="chk pre" type="checkbox" data-name="Noradrenalin">
+          <span>Noradrenalin</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="toggleCell" data-toggle="sed_midazolam">
+        <div class="toggleInner">
+          <input id="sed_midazolam" class="chk sed" type="checkbox" data-name="Midazolam">
+          <span>Midazolam</span>
+        </div>
+      </td>
+      <td class="toggleCell" data-toggle="pre_dobutamin">
+        <div class="toggleInner">
+          <input id="pre_dobutamin" class="chk pre" type="checkbox" data-name="Dobutamin">
+          <span>Dobutamin</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="toggleCell" data-toggle="sed_sufentanil">
+        <div class="toggleInner">
+          <input id="sed_sufentanil" class="chk sed" type="checkbox" data-name="Sufentanil">
+          <span>Sufentanil</span>
+        </div>
+      </td>
+      <td class="toggleCell" data-toggle="pre_vasopressin">
+        <div class="toggleInner">
+          <input id="pre_vasopressin" class="chk pre" type="checkbox" data-name="Vasopressin">
+          <span>Vasopressin</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="toggleCell" data-toggle="sed_propofol">
+        <div class="toggleInner">
+          <input id="sed_propofol" class="chk sed" type="checkbox" data-name="Propofol">
+          <span>Propofol</span>
+        </div>
+      </td>
+      <td id="pressorDynamicCell" rowspan="2">
+        <div id="pressorDynamicBody"></div>
+      </td>
+    </tr>
+    <tr>
+      <td id="sedDynamicCell">
+        <div id="sedDynamicBody"></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div id="acuteBottom" class="hidden">
+  <label>Antall infusjonspumper</label>
+  <div class="nonToggleRow"><label class="clickableChoice" for="acutePumperChk"><input id="acutePumperChk" class="chk" type="checkbox"><span>Infusjonspumper</span></label>
+    <select id="acutePumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select>
+  </div>
+  <div class="section">Rekvirerende lege</div>
+  <div class="dualRow"><input id="acuteRekNavn" placeholder="Navn"><input id="acuteRekTlf" placeholder="Nummer"></div>
+</div>
+
+<div class="section">Smitte <span class="hint">Ett alternativ + ev. blodsmitte</span></div>
+<div class="smLine">
+  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen"><span>Ingen kjente</span></label>
+  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt"><span>Kontaktsmitte</span></label>
+  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Dråpesmitte" id="sm_draape"><span>Dråpesmitte</span></label>
+  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Luftsmitte" id="sm_luft"><span>Luftsmitte</span></label>
+  <label class="smOpt"><input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod"><span>Blodsmitte</span></label>
+</div>
+<div id="smitteSpesWrap" class="hidden"><label>Spesifiser</label><input id="smitteSpes" placeholder="Fritekst"></div>
+
+<div class="section">CAVE?</div>
+<div class="binaryRow"><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei"><span>Nei</span></label><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja"><span>Ja</span></label></div>
+<div id="caveTextWrap" class="hidden"><label>Spesifiser allergi</label><input id="caveText" placeholder="Fritekst (legemiddel, reaksjon osv.)"></div>
+
+<div id="fullBottom" class="hidden">
+  <div class="section">Tilganger</div>
+  <table class="table"><tbody>
+    <tr><td class="toggleCell" data-toggle="til_cvk"><div class="toggleInner"><input id="til_cvk" class="chk til" type="checkbox" data-name="CVK"><span>CVK</span></div></td></tr>
+    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
+  </tbody><tbody id="tilgangerDynamicBody"></tbody></table>
+
+  <label style="margin-top:14px;">Utstyr</label>
+  <table class="table"><tbody>
+    <tr><td class="toggleCell" data-toggle="utst_arterie"><div class="toggleInner"><input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran"><span>Arteriekran</span></div></td><td class="toggleCell" data-toggle="dren_thorax"><div class="toggleInner"><input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren"><span>Thoraxdren</span></div></td></tr>
+    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Infusjonspumper"><span>Infusjonspumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
+    <tr><td id="dren_annet_container" colspan="2"></td></tr>
+  </tbody></table>
+
+  <div class="section">Legeinformasjon</div>
+  <label>Rekvirerende lege</label><div class="dualRow"><input id="rekNavn" placeholder="Navn"><input id="rekTlf" placeholder="Nummer"></div>
+  <label>Mottakende lege</label><div class="dualRow"><input id="mottNavn" placeholder="Navn"><input id="mottTlf" placeholder="Nummer"></div>
+</div>
+
+<div class="btnbar">
+  <button type="button" class="btn-copy actionBtn" onclick="kopier()"><svg class="copyIcon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1z"/><path fill="currentColor" d="M18 5H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H10V7h8v14z"/></svg><span>Kopier rapporttekst</span></button>
+  <span id="copyMsg" class="copyMsg"></span>
+  <button type="button" class="btn-red actionBtn push-right" onclick="nullstill()"><span>🗑️</span><span>Nullstill</span></button>
+</div>
+
+<textarea id="rapport" class="report" readonly placeholder="Rapportteksten oppdateres automatisk…"></textarea>
+</div></div></div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
