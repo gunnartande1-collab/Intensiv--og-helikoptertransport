@@ -470,7 +470,6 @@ function handleVitalInput(evt){const id=evt.target.id;if(id==="rf"){const digits
 function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
 function updateSmitteSpes(){const base=document.querySelector(".smitteBase:checked"),blod=$("sm_blod");const show=!!(base&&base.dataset.name!=="Ingen kjente")||blod.checked;setHidden(smitteSpesWrap,!show);if(!show)smitteSpes.value=""}
 function refreshTrachDeps(){setHidden(trachO2Wrap,!trO2?.checked);setHidden(trachVentWrap,!trVent?.checked);if(!trO2?.checked)$("trachO2Liter").value="";if(!trVent?.checked)["trachVentFio2","trachVentPeep","trachVentTopp"].forEach(id=>$(id).value="")}
-function enforceSingleTrachSelection(sel,changed){if(changed.checked)document.querySelectorAll(sel).forEach(cb=>{if(cb!==changed)cb.checked=false})}
 function handleAirwayChange(){const v=getBinaryValue("airwayMain");[spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap].forEach(el=>setHidden(el,true));if(v==="Spontan med O₂")setHidden(spontO2Wrap,false);else if(v==="Spontant med high flow")setHidden(highFlowWrap,false);else if(v==="NIV (CPAP/BiPAP)")setHidden(nivWrap,false);else if(v==="Intubert")setHidden(intubWrap,false);else if(v==="Trakeostomi")setHidden(trachWrap,false);refreshTrachDeps()}
 function updateAcuteAirwayDetails(){const a=getBinaryValue("acuteAirway");[acuteSpontO2Wrap,acuteHighFlowWrap,acuteNivWrap,acuteIntubWrap,acuteTrachWrap,acuteTrachO2Wrap,acuteTrachVentWrap].forEach(el=>setHidden(el,true));if(a==="Spontan med O₂"&&(clean($("acuteSpontO2Liter").value)||clean($("spontO2Liter").value)))setHidden(acuteSpontO2Wrap,false);if(a==="Spontant med high flow"&&(clean($("acuteHighFlowFio2").value)||clean($("acuteHighFlowFlow").value)||clean($("highFlowFio2").value)||clean($("highFlowFlow").value)))setHidden(acuteHighFlowWrap,false);if(a==="NIV (CPAP/BiPAP)"&&(clean($("acuteNivFio2").value)||clean($("nivFio2").value)))setHidden(acuteNivWrap,false);if(a==="Intubert"&&(clean($("acuteIntubFio2").value)||clean($("acuteIntubPeep").value)||clean($("acuteIntubTopp").value)||clean($("intubFio2").value)||clean($("intubPeep").value)||clean($("intubTopp").value)))setHidden(acuteIntubWrap,false);if(a==="Trakeostomi"){setHidden(acuteTrachWrap,false);if($("acute_tr_o2").checked||$("tr_o2").checked||clean($("acuteTrachO2Liter").value)||clean($("trachO2Liter").value))setHidden(acuteTrachO2Wrap,false);if($("acute_tr_vent").checked||$("tr_vent").checked||clean($("acuteTrachVentFio2").value)||clean($("acuteTrachVentPeep").value)||clean($("acuteTrachVentTopp").value)||clean($("trachVentFio2").value)||clean($("trachVentPeep").value)||clean($("trachVentTopp").value))setHidden(acuteTrachVentWrap,false)}}
 function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
@@ -644,26 +643,22 @@ function bindToggleEvents() {
 
     const master = $(id);
 
-    if (master) {
-      master.checked = !master.checked;
+if (master) {
+  if (master.type === "radio") {
+    master.checked = true;
+  } else {
+    master.checked = !master.checked;
+  }
 
-      if (master.classList.contains("trachOpt")) {
-        enforceSingleTrachSelection(".trachOpt", master);
-      }
+  if (master.classList.contains("trachOpt")) {
+    refreshTrachDeps();
+  }
 
-      if (master.classList.contains("acuteTrachOpt")) {
-        enforceSingleTrachSelection(".acuteTrachOpt", master);
-      }
+  if (master.classList.contains("acuteTrachOpt")) {
+    updateAcuteAirwayDetails();
+  }
 
-      if (master === trO2 || master === trVent) {
-        refreshTrachDeps();
-      }
-
-      if (master.classList.contains("acuteTrachOpt")) {
-        updateAcuteAirwayDetails();
-      }
-
-      lagRapport();
+  lagRapport();
     }
   });
 }
@@ -736,7 +731,6 @@ function bindTrachEvents() {
     .forEach(cb =>
       cb.addEventListener("change", () => {
 
-        enforceSingleTrachSelection(".trachOpt", cb);
         refreshTrachDeps();
         lagRapport();
       })
@@ -749,11 +743,6 @@ function bindAcuteTrachEvents() {
     .querySelectorAll(".acuteTrachOpt")
     .forEach(cb =>
       cb.addEventListener("change", () => {
-
-        enforceSingleTrachSelection(
-          ".acuteTrachOpt",
-          cb
-        );
 
         updateAcuteAirwayDetails();
         lagRapport();

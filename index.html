@@ -53,11 +53,20 @@
   <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei"><span>Nei</span></label>
 </div>
 <div id="spedbarnExtraWrap" class="hidden">
-  <span class="specLabel" data-tooltip="Gestasjonsalder">GA</span></div></td></tr>
+  <span class="specLabel" data-tooltip="Gestasjonsalder">GA</span>
+
   <div class="gestWrap">
-    <div class="gestField"><span>Uker</span><input id="gestasjonsUker" inputmode="numeric"></div>
-    <div class="gestField"><span>Dager</span><input id="gestasjonsDager" inputmode="numeric"></div>
+    <div class="gestField">
+      <span>Uker</span>
+      <input id="gestasjonsUker" inputmode="numeric">
+    </div>
+
+    <div class="gestField">
+      <span>Dager</span>
+      <input id="gestasjonsDager" inputmode="numeric">
+    </div>
   </div>
+
   <div id="transportWrap" class="hidden">
     <label>Transport</label>
     <div class="binaryRow">
@@ -67,6 +76,11 @@
       <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Kengufix" id="transport_kengufix"><span>Kengufix</span></label>
     </div>
   </div>
+</div>
+
+<div id="weightWrap">
+  <label id="vektLabel" for="vekt">Vekt (kg)</label>
+  <input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="kg">
 </div>
 
 <div id="acuteTop" class="hidden">
@@ -96,15 +110,28 @@
   <div id="acuteNivWrap" class="hidden"><label>Fio2</label><input id="acuteNivFio2" placeholder="Fritekst"></div>
   <div id="acuteIntubWrap" class="hidden"><label>Fio2</label><input id="acuteIntubFio2" placeholder="Fritekst"><label>Peep</label><input id="acuteIntubPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="acuteIntubTopp" placeholder="Fritekst"></div>
 
-  <div id="acuteTrachWrap" class="hidden">
-    <div class="section" style="margin-top:16px;">Trakeostomi</div>
-    <table class="table"><tbody>
-      <tr><td class="toggleCell" data-toggle="acute_tr_spont"><div class="toggleInner"><input id="acute_tr_spont" class="chk acuteTrachOpt" type="checkbox" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
-      <tr><td class="toggleCell" data-toggle="acute_tr_o2"><div class="toggleInner"><input id="acute_tr_o2" class="chk acuteTrachOpt" type="checkbox" data-name="O₂ via trakeostomi"><span>O₂ via trakeostomi</span></div></td></tr>
-      <tr><td class="toggleCell" data-toggle="acute_tr_vent"><div class="toggleInner"><input id="acute_tr_vent" class="chk acuteTrachOpt" type="checkbox" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
-    </tbody></table>
-    <div id="acuteTrachO2Wrap" class="hidden"><label>Antall liter O2</label><input id="acuteTrachO2Liter" placeholder="Fritekst"></div>
-    <div id="acuteTrachVentWrap" class="hidden"><label>Fio2</label><input id="acuteTrachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="acuteTrachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="acuteTrachVentTopp" placeholder="Fritekst"></div>
+<div id="acuteTrachWrap" class="hidden">
+  <div class="section" style="margin-top:16px;">Trakeostomi</div>
+  <table class="table"><tbody>
+    <tr><td class="toggleCell" data-toggle="acute_tr_spont"><div class="toggleInner"><input id="acute_tr_spont" name="acuteTrach" class="chk acuteTrachOpt" type="radio" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
+    <tr><td class="toggleCell" data-toggle="acute_tr_o2"><div class="toggleInner"><input id="acute_tr_o2" name="acuteTrach" class="chk acuteTrachOpt" type="radio" data-name="O₂ via trakeostomi"><span>O₂ via trakeostomi</span></div></td></tr>
+    <tr><td class="toggleCell" data-toggle="acute_tr_vent"><div class="toggleInner"><input id="acute_tr_vent" name="acuteTrach" class="chk acuteTrachOpt" type="radio" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
+  </tbody></table>
+
+  <div id="acuteTrachO2Wrap" class="hidden">
+    <label>Antall liter O₂</label>
+    <input id="acuteTrachO2Liter" placeholder="Fritekst">
+  </div>
+
+  <div id="acuteTrachVentWrap" class="hidden">
+    <label>FiO₂</label>
+    <input id="acuteTrachVentFio2" placeholder="Fritekst">
+
+    <label>PEEP</label>
+    <input id="acuteTrachVentPeep" placeholder="Fritekst">
+
+    <label>Topptrykk med PEEP</label>
+    <input id="acuteTrachVentTopp" placeholder="Fritekst">
   </div>
 </div>
 
