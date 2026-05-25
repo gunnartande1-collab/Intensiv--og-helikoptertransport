@@ -815,6 +815,9 @@ function bindEvents() {
 
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
+
+  $("copyBtn")?.addEventListener("click", kopierRapport);
+  $("resetBtn")?.addEventListener("click", nullstillSkjema);
 }
 
 /* ======================================================
@@ -1100,6 +1103,56 @@ function addFullDoctors(lines) {
     );
   }
 }
+
+function kopierRapport() {
+  navigator.clipboard.writeText(rapport.value);
+
+  copyMsg.textContent = "Rapport kopiert";
+  copyMsg.classList.add("show");
+
+  clearTimeout(copyTimer);
+
+  copyTimer = setTimeout(() => {
+    copyMsg.classList.remove("show");
+  }, 2000);
+}
+
+function nullstillSkjema() {
+
+  document.querySelectorAll("input").forEach(el => {
+
+    if (
+      el.type === "checkbox" ||
+      el.type === "radio"
+    ) {
+      el.checked = false;
+    } else {
+      el.value = "";
+    }
+  });
+
+  document.querySelectorAll("textarea").forEach(el => {
+    el.value = "";
+    autoGrowTextarea(el);
+  });
+
+  valgtHastegrad = "";
+  forrigeHastegrad = "";
+
+  document
+    .querySelectorAll(".hasteBtn")
+    .forEach(b => b.classList.remove("active"));
+
+  updateMainVisibility();
+  updateSpedbarnUI();
+  updateCaveUI();
+  updateSmitteSpes();
+  handleAirwayChange();
+  updateAcuteAirwayDetails();
+
+  rapport.value = "";
+}
+
 function init() {
 
   bindEvents();
