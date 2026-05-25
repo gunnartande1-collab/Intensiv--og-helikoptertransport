@@ -1,3 +1,6 @@
+/* ======================================================
+   DOM ELEMENTER
+====================================================== */
 const $=id=>document.getElementById(id);
 const pageTitle=$("pageTitle"),mainContent=$("mainContent"),acuteTop=$("acuteTop"),fullTop=$("fullTop"),acuteBottom=$("acuteBottom"),fullBottom=$("fullBottom"),transportWrap=$("transportWrap"),spedbarnExtraWrap=$("spedbarnExtraWrap"),rapport=$("rapport"),vektLabel=$("vektLabel"),copyMsg=$("copyMsg");
 const spontO2Wrap=$("spontO2Wrap"),highFlowWrap=$("highFlowWrap"),nivWrap=$("nivWrap"),intubWrap=$("intubWrap"),trachWrap=$("trachWrap"),trO2=$("tr_o2"),trVent=$("tr_vent"),trachO2Wrap=$("trachO2Wrap"),trachVentWrap=$("trachVentWrap");
@@ -6,6 +9,9 @@ const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("sm
 const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("dren_annet_container");
 const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumperAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
 let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
+/* ======================================================
+   GENERELLE HJELPEFUNKSJONER
+====================================================== */
 const clean=v=>(v??"").toString().trim();
 function setHidden(el,hide){if(el)el.classList.toggle("hidden",!!hide)}
 function formatPhone(raw){const d=(raw||"").replace(/\D/g,"");return d.length===8?d.slice(0,3)+" "+d.slice(3,5)+" "+d.slice(5):raw}
@@ -41,6 +47,401 @@ function setSpecChoice(specName, checked){
 function syncSpecMirrors(){
   syncSpecChoices();
 }
+/* ======================================================
+   RAPPORTBYGGING
+====================================================== */
+function buildVitalsLine() {
+  const p = [];
+
+  const vals = {
+    RF: clean($("rf").value),
+    SpO2: clean($("spo2").value),
+    Puls: clean($("puls").value),
+    Tmp: clean($("temp").value),
+    GCS: clean($("gcs").value)
+  };
+
+  if (vals.RF) {
+    p.push("RF: " + vals.RF);
+  }
+
+  if (vals.SpO2) {
+    p.push("SpO2: " + vals.SpO2 + "%");
+  }
+
+  if (vals.Puls) {
+    p.push("Puls: " + vals.Puls);
+  }
+
+  const sys = clean($("btSys").value);
+  const dia = clean($("btDia").value);
+  const map = clean($("map").value);
+
+  if (sys || dia) {
+    p.push("BT: " + (sys || "?") + "/" + (dia || "?"));
+  }
+
+  if (map) {
+    p.push("MAP: " + map);
+  }
+
+  if (vals.Tmp) {
+    p.push("Tmp: " + vals.Tmp);
+  }
+
+  const gcsLine = formatGcsValue(vals.GCS);
+
+  if (gcsLine) {
+    p.push(gcsLine);
+  }
+
+  return p.join(", ");
+}
+function linesTilganger() {
+  const out = [];
+
+  if ($("til_cvk").checked) {
+    out.push("CVK");
+  }
+
+  const n = clean(pvkAntall.value);
+
+  if (pvkChk.checked) {
+    out.push(n ? "PVK -" + n + "stk" : "PVK");
+  }
+
+  out.push(
+    ...collectDynamicTexts(".tilgangText", ".tilgangDynChk")
+  );
+
+  return out;
+}
+
+function buildFullAirwayLine() {
+  const main = getBinaryValue("airwayMain");
+
+  if (!main) return "";
+
+  if (main === "Spontan uten O₂") {
+    return "Luftveier: Spontan uten O₂";
+  }
+
+  if (main === "Spontan med O₂") {
+    const l = clean($("spontO2Liter").value);
+
+    return l
+      ? "Luftveier: Spontan med O₂, antall liter O₂ " + l
+      : "Luftveier: Spontan med O₂";
+  }
+
+  if (main === "Spontant med high flow") {
+    const p = ["Luftveier: Spontant med high flow"];
+    const f = clean($("highFlowFio2").value);
+    const fl = clean($("highFlowFlow").value);
+
+    if (f) p.push("Fio2 " + f);
+    if (fl) p.push("Flow " + fl + " liter/min");
+
+    return p.join(", ");
+  }
+
+  if (main === "NIV (CPAP/BiPAP)") {
+    const p = ["Luftveier: NIV"];
+    const f = clean($("nivFio2").value);
+
+    if (f) p.push("Fio2 " + f);
+
+    return p.join(", ");
+  }
+
+  if (main === "Intubert") {
+    const p = ["Luftveier: Intubert"];
+    const f = clean($("intubFio2").value);
+    const pe = clean($("intubPeep").value);
+    const t = clean($("intubTopp").value);
+
+    if (f) p.push("Fio2 " + f);
+    if (pe) p.push("Peep " + pe);
+    if (t) p.push("Topptrykk med peep " + t);
+
+    return p.join(", ");
+  }
+
+  if (main === "Trakeostomi") {
+    const p = ["Luftveier: Trakeostomi"];
+    const sel = [];
+
+    document.querySelectorAll(".trachOpt").forEach(cb => {
+      if (cb.checked) {
+        sel.push(cb.dataset.name);
+      }
+    });
+
+    if (sel.length) p.push(sel.join(", "));
+
+    const l = clean($("trachO2Liter").value);
+    const f = clean($("trachVentFio2").value);
+    const pe = clean($("trachVentPeep").value);
+    const t = clean($("trachVentTopp").value);
+
+    if (l) p.push("Antall liter O₂ " + l);
+    if (f) p.push("Fio2 " + f);
+    if (pe) p.push("Peep " + pe);
+    if (t) p.push("Topptrykk med peep " + t);
+
+    return p.join(", ");
+  }
+
+  return "";
+}
+function buildAcuteAirwayLines() {
+
+  const airway = getBinaryValue("acuteAirway");
+
+  if (!airway) {
+    return [];
+  }
+
+  if (airway === "Spontan uten O₂") {
+    return ["Luftveier: Spontan uten O₂"];
+  }
+
+  if (airway === "Spontan med O₂") {
+
+    const l =
+      clean($("acuteSpontO2Liter").value) ||
+      clean($("spontO2Liter").value);
+
+    return [
+      l
+        ? "Luftveier: Spontan med O₂, antall liter O₂ " + l
+        : "Luftveier: Spontan med O₂"
+    ];
+  }
+
+  if (airway === "Spontant med high flow") {
+
+    const p = ["Luftveier: Spontant med high flow"];
+
+    const f =
+      clean($("acuteHighFlowFio2").value) ||
+      clean($("highFlowFio2").value);
+
+    const fl =
+      clean($("acuteHighFlowFlow").value) ||
+      clean($("highFlowFlow").value);
+
+    if (f) p.push("Fio2 " + f);
+
+    if (fl) {
+      p.push("Flow " + fl + " liter/min");
+    }
+
+    return [p.join(", ")];
+  }
+
+  if (airway === "NIV (CPAP/BiPAP)") {
+
+    const p = ["Luftveier: NIV"];
+
+    const f =
+      clean($("acuteNivFio2").value) ||
+      clean($("nivFio2").value);
+
+    if (f) p.push("Fio2 " + f);
+
+    return [p.join(", ")];
+  }
+
+  if (airway === "Intubert") {
+
+    const p = ["Luftveier: Intubert"];
+
+    const f =
+      clean($("acuteIntubFio2").value) ||
+      clean($("intubFio2").value);
+
+    const pe =
+      clean($("acuteIntubPeep").value) ||
+      clean($("intubPeep").value);
+
+    const t =
+      clean($("acuteIntubTopp").value) ||
+      clean($("intubTopp").value);
+
+    if (f) p.push("Fio2 " + f);
+    if (pe) p.push("Peep " + pe);
+    if (t) p.push("Topptrykk med peep " + t);
+
+    return [p.join(", ")];
+  }
+
+  if (airway === "Trakeostomi") {
+
+    const p = ["Luftveier: Trakeostomi"];
+    const sel = [];
+
+    document
+      .querySelectorAll(".acuteTrachOpt,.trachOpt")
+      .forEach(cb => {
+
+        if (
+          cb.checked &&
+          !sel.includes(cb.dataset.name)
+        ) {
+          sel.push(cb.dataset.name);
+        }
+      });
+
+    if (sel.length) {
+      p.push(sel.join(", "));
+    }
+
+    const l =
+      clean($("acuteTrachO2Liter").value) ||
+      clean($("trachO2Liter").value);
+
+    const f =
+      clean($("acuteTrachVentFio2").value) ||
+      clean($("trachVentFio2").value);
+
+    const pe =
+      clean($("acuteTrachVentPeep").value) ||
+      clean($("trachVentPeep").value);
+
+    const t =
+      clean($("acuteTrachVentTopp").value) ||
+      clean($("trachVentTopp").value);
+
+    if (l) p.push("Antall liter O₂ " + l);
+    if (f) p.push("Fio2 " + f);
+    if (pe) p.push("Peep " + pe);
+    if (t) p.push("Topptrykk med peep " + t);
+
+    return [p.join(", ")];
+  }
+
+  return ["Luftveier: " + airway];
+}
+
+function buildSpedbarnLine() {
+
+  if (getSpedbarnValue() !== "Ja") {
+    return "";
+  }
+
+  const u = clean($("gestasjonsUker").value);
+  const d = clean($("gestasjonsDager").value);
+  const v = clean($("vekt").value);
+
+  const p = ["Spedbarn"];
+
+  if (u || d) {
+    p.push(
+      "GA " +
+      (u || "?") +
+      "+" +
+      (d || "0")
+    );
+  }
+
+  if (v) {
+    p.push("Vekt: " + v + " g");
+  }
+
+  return p.join(", ");
+}
+function buildUtstyrList() {
+  const out = [];
+
+  const n = clean(utstPumperAntall.value);
+
+  if (utstPumperChk.checked) {
+    out.push(
+      n
+        ? "Infusjonspumper -" + n + "stk"
+        : "Infusjonspumper"
+    );
+  }
+
+  if ($("utst_arterie").checked) {
+    out.push("Arteriekran");
+  }
+
+  if ($("dren_thorax").checked) {
+    out.push("Thoraxdren");
+  }
+
+  if ($("dren_vent").checked) {
+    out.push("Ventrikkelsonde");
+  }
+
+  document.querySelectorAll(".drenAnnetText").forEach(txt => {
+    const row = txt.closest(".dynamicRow");
+    const cb = row ? row.querySelector(".drenAnnetChk") : null;
+    const val = clean(txt.value);
+
+    if (cb && cb.checked && val) {
+      out.push(val);
+    }
+  });
+
+  return out;
+}
+
+function buildSmitteLines() {
+  const base = document.querySelector(".smitteBase:checked");
+  const blod = $("sm_blod");
+  const spes = clean(smitteSpes.value);
+
+  if (!base || base.dataset.name === "Ingen kjente") {
+
+    if (blod.checked) {
+      let line = "Smitte: Blodsmitte";
+
+      if (spes) {
+        line += " (" + spes + ")";
+      }
+
+      return [line];
+    }
+
+    return ["Smitte: Nei"];
+  }
+
+  let line = "Smitte: " + base.dataset.name;
+
+  if (blod.checked) {
+    line += " og blodsmitte";
+  }
+
+  if (spes) {
+    line += " (" + spes + ")";
+  }
+
+  return [line];
+}
+
+function buildCaveLines() {
+  const val = getCaveValue();
+  const txt = clean(caveText.value);
+
+  if (!val) {
+    return [];
+  }
+
+  if (val === "Nei") {
+    return ["CAVE: Nei"];
+  }
+
+  return [
+    "CAVE: Ja" +
+    (txt ? " (" + txt + ")" : "")
+  ];
+}
+/* ======================================================
+   UI OPPDATERING
+====================================================== */
 function updateSpedbarnUI(){const val=getSpedbarnValue();setHidden(spedbarnExtraWrap,val!=="Ja");setHidden(transportWrap,val!=="Ja");vektLabel.textContent=val==="Ja"?"Vekt (gram)":"Vekt (kg)";updateTitle()}
 function updateCaveUI(){const val=getCaveValue();setHidden(caveTextWrap,val!=="Ja");if(val!=="Ja")caveText.value=""}
 function calcMapFromSysDia(sysRaw,diaRaw){const sys=Number(clean(sysRaw)),dia=Number(clean(diaRaw));return(!sys||!dia)?"":String(Math.round((sys+2*dia)/3))}
@@ -77,82 +478,359 @@ function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=g
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
 function syncVisibleSharedFieldsBeforeSwitch(){if(forrigeHastegrad==="Akutt"&&valgtHastegrad!=="Akutt")syncAcuteToFull();else if(forrigeHastegrad!=="Akutt"&&valgtHastegrad==="Akutt")syncFullToAcute()}
 function updateMainVisibility(){const h=getBinaryValue("hast");setHidden(mainContent,!h);if(!h){rapport.value="";return}const acute=isAcute();setHidden(acuteTop,!acute);setHidden(acuteBottom,!acute);setHidden(fullTop,acute);setHidden(fullBottom,acute);acute?updateAcuteAirwayDetails():handleAirwayChange();updateTitle()}
+/* ======================================================
+   EVENT BINDING
+====================================================== */
+function bindHastegradEvents() {
 
-document.querySelectorAll(".hasteBtn").forEach(btn=>btn.addEventListener("click",()=>{forrigeHastegrad=valgtHastegrad;valgtHastegrad=btn.dataset.haste;syncVisibleSharedFieldsBeforeSwitch();document.querySelectorAll(".hasteBtn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");updateMainVisibility();lagRapport()}));
-document.querySelectorAll(".autoGrow").forEach(el=>el.addEventListener("input",()=>autoGrowTextarea(el)));
-["btSys","btDia"].forEach(id=>{const el=$(id);if(el){el.addEventListener("input",()=>{updateMapField();handleVitalInput({target:el});});el.addEventListener("keydown",handleVitalSpace)}});$("map").addEventListener("input",handleVitalInput);$("map").addEventListener("keydown",handleVitalSpace);["rf","spo2","puls","temp"].forEach(id=>{const el=$(id);if(el){el.addEventListener("input",handleVitalInput);el.addEventListener("keydown",handleVitalSpace)}});
-pvkAntall.addEventListener("change",()=>{pvkChk.checked=!!pvkAntall.value;lagRapport()});pvkChk.addEventListener("change",()=>{if(!pvkChk.checked)pvkAntall.value="";lagRapport()});
-utstPumperAntall.addEventListener("change",()=>{utstPumperChk.checked=!!utstPumperAntall.value;lagRapport()});utstPumperChk.addEventListener("change",()=>{if(!utstPumperChk.checked)utstPumperAntall.value="";lagRapport()});
-acutePumperAntall.addEventListener("change",()=>{acutePumperChk.checked=!!acutePumperAntall.value;lagRapport()});acutePumperChk.addEventListener("change",()=>{if(!acutePumperChk.checked)acutePumperAntall.value="";lagRapport()});
+  document
+    .querySelectorAll(".hasteBtn")
+    .forEach(btn =>
+      btn.addEventListener("click", () => {
 
-/* Spesialtransport: samme funksjon som medikamenter.
-   - Klikk direkte på avhukningsboksen virker
-   - Klikk på teksten/raden virker
-   - Valget speiles mellom akutt og full visning
-*/
-document.addEventListener("change", e => {
-  if (!e.target.classList.contains("specChoice")) return;
-  e.stopPropagation();
+        forrigeHastegrad = valgtHastegrad;
+        valgtHastegrad = btn.dataset.haste;
 
-  const specName = e.target.dataset.spec;
-  const checked = e.target.checked;
+        syncVisibleSharedFieldsBeforeSwitch();
 
-  document.querySelectorAll('.specChoice[data-spec="' + specName + '"]').forEach(cb => {
-    cb.checked = checked;
+        document
+          .querySelectorAll(".hasteBtn")
+          .forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        updateMainVisibility();
+        lagRapport();
+      })
+    );
+}
+
+function bindVitalEvents() {
+
+  ["btSys", "btDia"].forEach(id => {
+    const el = $(id);
+
+    if (el) {
+      el.addEventListener("input", () => {
+        updateMapField();
+        handleVitalInput({ target: el });
+      });
+
+      el.addEventListener("keydown", handleVitalSpace);
+    }
   });
 
-  lagRapport();
-}, true);
+  $("map").addEventListener("input", handleVitalInput);
+  $("map").addEventListener("keydown", handleVitalSpace);
 
-document.addEventListener("click", e => {
-  const cell = e.target.closest(".toggleCell");
-  if (!cell) return;
+  ["rf", "spo2", "puls", "temp"].forEach(id => {
+    const el = $(id);
 
-  const tag = (e.target.tagName || "").toLowerCase();
+    if (el) {
+      el.addEventListener("input", handleVitalInput);
+      el.addEventListener("keydown", handleVitalSpace);
+    }
+  });
+}
 
-  if (tag === "select" || tag === "textarea" || e.target.closest(".clickableChoice")) return;
+function bindAutoGrowEvents() {
 
-  if (cell.classList.contains("specCell")){
-    if (tag === "input") return;
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(el =>
+      el.addEventListener("input", () =>
+        autoGrowTextarea(el)
+      )
+    );
+}
 
-    const cb = cell.querySelector(".specChoice");
-    if (!cb) return;
+function bindPvkEvents() {
 
-    setSpecChoice(cb.dataset.spec, !cb.checked);
-    return;
-  }
+  pvkAntall.addEventListener("change", () => {
+    pvkChk.checked = !!pvkAntall.value;
+    lagRapport();
+  });
 
-  if (tag === "input") return;
+  pvkChk.addEventListener("change", () => {
 
-  const id = cell.dataset.toggle;
-  if (!id) return;
-
-  const master = $(id);
-
-  if (master){
-    master.checked = !master.checked;
-
-    if (master.classList.contains("trachOpt")) enforceSingleTrachSelection(".trachOpt", master);
-    if (master.classList.contains("acuteTrachOpt")) enforceSingleTrachSelection(".acuteTrachOpt", master);
-
-    if (master === trO2 || master === trVent) refreshTrachDeps();
-
-    if (master.classList.contains("acuteTrachOpt")){
-      updateAcuteAirwayDetails();
+    if (!pvkChk.checked) {
+      pvkAntall.value = "";
     }
 
     lagRapport();
-  }
-});
+  });
+}
 
-document.querySelectorAll(".spedRadio").forEach(r=>r.addEventListener("change",()=>{updateSpedbarnUI();lagRapport()}));
-document.querySelectorAll(".caveRadio").forEach(r=>r.addEventListener("change",()=>{updateCaveUI();lagRapport()}));
-document.querySelectorAll(".binOpt").forEach(chk=>chk.addEventListener("change",()=>{const g=chk.dataset.group;if(chk.checked)document.querySelectorAll('.binOpt[data-group="'+g+'"]').forEach(o=>{if(o!==chk)o.checked=false});if(g==="transport")updateTitle();if(g==="airwayMain")handleAirwayChange();if(g==="acuteAirway")updateAcuteAirwayDetails();lagRapport()}));
-document.querySelectorAll(".trachOpt").forEach(cb=>cb.addEventListener("change",()=>{enforceSingleTrachSelection(".trachOpt",cb);refreshTrachDeps();lagRapport()}));
-document.querySelectorAll(".acuteTrachOpt").forEach(cb=>cb.addEventListener("change",()=>{enforceSingleTrachSelection(".acuteTrachOpt",cb);updateAcuteAirwayDetails();lagRapport()}));
-document.querySelectorAll(".smitteBase").forEach(r=>r.addEventListener("change",()=>{updateSmitteSpes();lagRapport()}));$("sm_blod").addEventListener("change",()=>{updateSmitteSpes();lagRapport()});
-["acuteSpontO2Liter","acuteHighFlowFio2","acuteHighFlowFlow","acuteNivFio2","acuteIntubFio2","acuteIntubPeep","acuteIntubTopp","acuteTrachO2Liter","acuteTrachVentFio2","acuteTrachVentPeep","acuteTrachVentTopp"].forEach(id=>$(id)?.addEventListener("input",()=>{updateAcuteAirwayDetails();lagRapport()}));
+function bindUtstyrPumpeEvents() {
 
+  utstPumperAntall.addEventListener("change", () => {
+    utstPumperChk.checked = !!utstPumperAntall.value;
+    lagRapport();
+  });
+
+  utstPumperChk.addEventListener("change", () => {
+
+    if (!utstPumperChk.checked) {
+      utstPumperAntall.value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindAcutePumpeEvents() {
+
+  acutePumperAntall.addEventListener("change", () => {
+    acutePumperChk.checked = !!acutePumperAntall.value;
+    lagRapport();
+  });
+
+  acutePumperChk.addEventListener("change", () => {
+
+    if (!acutePumperChk.checked) {
+      acutePumperAntall.value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindToggleEvents() {
+
+  document.addEventListener("change", e => {
+    if (!e.target.classList.contains("specChoice")) return;
+    e.stopPropagation();
+
+    const specName = e.target.dataset.spec;
+    const checked = e.target.checked;
+
+    document
+      .querySelectorAll('.specChoice[data-spec="' + specName + '"]')
+      .forEach(cb => {
+        cb.checked = checked;
+      });
+
+    lagRapport();
+  }, true);
+
+  document.addEventListener("click", e => {
+    const cell = e.target.closest(".toggleCell");
+    if (!cell) return;
+
+    const tag = (e.target.tagName || "").toLowerCase();
+
+    if (
+      tag === "select" ||
+      tag === "textarea" ||
+      e.target.closest(".clickableChoice")
+    ) {
+      return;
+    }
+
+    if (cell.classList.contains("specCell")) {
+      if (tag === "input") return;
+
+      const cb = cell.querySelector(".specChoice");
+      if (!cb) return;
+
+      setSpecChoice(cb.dataset.spec, !cb.checked);
+      return;
+    }
+
+    if (tag === "input") return;
+
+    const id = cell.dataset.toggle;
+    if (!id) return;
+
+    const master = $(id);
+
+    if (master) {
+      master.checked = !master.checked;
+
+      if (master.classList.contains("trachOpt")) {
+        enforceSingleTrachSelection(".trachOpt", master);
+      }
+
+      if (master.classList.contains("acuteTrachOpt")) {
+        enforceSingleTrachSelection(".acuteTrachOpt", master);
+      }
+
+      if (master === trO2 || master === trVent) {
+        refreshTrachDeps();
+      }
+
+      if (master.classList.contains("acuteTrachOpt")) {
+        updateAcuteAirwayDetails();
+      }
+
+      lagRapport();
+    }
+  });
+}
+
+function bindSpedbarnEvents() {
+  document.querySelectorAll(".spedRadio").forEach(r =>
+    r.addEventListener("change", () => {
+      updateSpedbarnUI();
+      lagRapport();
+    })
+  );
+}
+
+function bindCaveEvents() {
+
+  document
+    .querySelectorAll(".caveRadio")
+    .forEach(r =>
+      r.addEventListener("change", () => {
+
+        updateCaveUI();
+        lagRapport();
+      })
+    );
+}
+
+function bindBinaryOptionEvents() {
+
+  document
+    .querySelectorAll(".binOpt")
+    .forEach(chk =>
+
+      chk.addEventListener("change", () => {
+
+        const g = chk.dataset.group;
+
+        if (chk.checked) {
+
+          document
+            .querySelectorAll('.binOpt[data-group="' + g + '"]')
+            .forEach(o => {
+
+              if (o !== chk) {
+                o.checked = false;
+              }
+            });
+        }
+
+        if (g === "transport") {
+          updateTitle();
+        }
+
+        if (g === "airwayMain") {
+          handleAirwayChange();
+        }
+
+        if (g === "acuteAirway") {
+          updateAcuteAirwayDetails();
+        }
+
+        lagRapport();
+      })
+    );
+}
+
+function bindTrachEvents() {
+
+  document
+    .querySelectorAll(".trachOpt")
+    .forEach(cb =>
+      cb.addEventListener("change", () => {
+
+        enforceSingleTrachSelection(".trachOpt", cb);
+        refreshTrachDeps();
+        lagRapport();
+      })
+    );
+}
+
+function bindAcuteTrachEvents() {
+
+  document
+    .querySelectorAll(".acuteTrachOpt")
+    .forEach(cb =>
+      cb.addEventListener("change", () => {
+
+        enforceSingleTrachSelection(
+          ".acuteTrachOpt",
+          cb
+        );
+
+        updateAcuteAirwayDetails();
+        lagRapport();
+      })
+    );
+}
+
+function bindSmitteEvents() {
+
+  document
+    .querySelectorAll(".smitteBase")
+    .forEach(r =>
+      r.addEventListener("change", () => {
+
+        updateSmitteSpes();
+        lagRapport();
+      })
+    );
+
+  $("sm_blod").addEventListener("change", () => {
+
+    updateSmitteSpes();
+    lagRapport();
+  });
+}
+
+function bindAcuteAirwayInputEvents() {
+
+  [
+    "acuteSpontO2Liter",
+    "acuteHighFlowFio2",
+    "acuteHighFlowFlow",
+    "acuteNivFio2",
+    "acuteIntubFio2",
+    "acuteIntubPeep",
+    "acuteIntubTopp",
+    "acuteTrachO2Liter",
+    "acuteTrachVentFio2",
+    "acuteTrachVentPeep",
+    "acuteTrachVentTopp"
+  ].forEach(id =>
+
+    $(id)?.addEventListener("input", () => {
+
+      updateAcuteAirwayDetails();
+      lagRapport();
+    })
+  );
+}
+
+
+function bindEvents() {
+
+  bindHastegradEvents();
+  bindAutoGrowEvents();
+  bindVitalEvents();
+
+  bindPvkEvents();
+  bindUtstyrPumpeEvents();
+  bindAcutePumpeEvents();
+
+  bindSpedbarnEvents();
+  bindCaveEvents();
+  bindSmitteEvents();
+
+  bindBinaryOptionEvents();
+
+  bindTrachEvents();
+  bindAcuteTrachEvents();
+
+  bindAcuteAirwayInputEvents();
+  bindToggleEvents();
+}
+
+/* ======================================================
+   DYNAMISKE FELTER
+====================================================== */
 function cleanupDynamicTextRows(container,textClass,checkboxClass){
   const rows=Array.from(container.querySelectorAll(".dynamicRow"));
   const blanks=rows.filter(row=>{
@@ -193,16 +871,273 @@ function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetFiel
 function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
 function linesFixedMeds(selector){const out=[];document.querySelectorAll(selector).forEach(chk=>{if(chk.checked&&chk.dataset.name)out.push(chk.dataset.name)});return out}
 function formatGcsValue(raw){if(!raw)return"";const match=raw.match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);if(match){const sum=Number(match[1])+Number(match[2])+Number(match[3]);return"GCS: "+match[1]+"+"+match[2]+"+"+match[3]+"="+sum}return"GCS: "+raw}
-function buildVitalsLine(){const p=[];const vals={RF:clean($("rf").value),SpO2:clean($("spo2").value),Puls:clean($("puls").value),Tmp:clean($("temp").value),GCS:clean($("gcs").value)};if(vals.RF)p.push("RF: "+vals.RF);if(vals.SpO2)p.push("SpO2: "+vals.SpO2+"%");if(vals.Puls)p.push("Puls: "+vals.Puls);const sys=clean($("btSys").value),dia=clean($("btDia").value),map=clean($("map").value);if(sys||dia)p.push("BT: "+(sys||"?")+"/"+(dia||"?"));if(map)p.push("MAP: "+map);if(vals.Tmp)p.push("Tmp: "+vals.Tmp);const gcsLine=formatGcsValue(vals.GCS);if(gcsLine)p.push(gcsLine);return p.join(", ")}
-function linesTilganger(){const out=[];if($("til_cvk").checked)out.push("CVK");const n=clean(pvkAntall.value);if(pvkChk.checked)out.push(n?"PVK -"+n+"stk":"PVK");out.push(...collectDynamicTexts(".tilgangText",".tilgangDynChk"));return out}
-function buildFullAirwayLine(){const main=getBinaryValue("airwayMain");if(!main)return"";if(main==="Spontan uten O₂")return"Luftveier: Spontan uten O₂";if(main==="Spontan med O₂"){const l=clean($("spontO2Liter").value);return l?"Luftveier: Spontan med O₂, antall liter O₂ "+l:"Luftveier: Spontan med O₂"}if(main==="Spontant med high flow"){const p=["Luftveier: Spontant med high flow"],f=clean($("highFlowFio2").value),fl=clean($("highFlowFlow").value);if(f)p.push("Fio2 "+f);if(fl)p.push("Flow "+fl+" liter/min");return p.join(", ")}if(main==="NIV (CPAP/BiPAP)"){const f=clean($("nivFio2").value),p=["Luftveier: NIV"];if(f)p.push("Fio2 "+f);return p.join(", ")}if(main==="Intubert"){const p=["Luftveier: Intubert"],f=clean($("intubFio2").value),pe=clean($("intubPeep").value),t=clean($("intubTopp").value);if(f)p.push("Fio2 "+f);if(pe)p.push("Peep "+pe);if(t)p.push("Topptrykk med peep "+t);return p.join(", ")}if(main==="Trakeostomi"){const p=["Luftveier: Trakeostomi"],sel=[];document.querySelectorAll(".trachOpt").forEach(cb=>{if(cb.checked)sel.push(cb.dataset.name)});if(sel.length)p.push(sel.join(", "));const l=clean($("trachO2Liter").value),f=clean($("trachVentFio2").value),pe=clean($("trachVentPeep").value),t=clean($("trachVentTopp").value);if(l)p.push("Antall liter O₂ "+l);if(f)p.push("Fio2 "+f);if(pe)p.push("Peep "+pe);if(t)p.push("Topptrykk med peep "+t);return p.join(", ")}return""}
-function buildAcuteAirwayLines(){const airway=getBinaryValue("acuteAirway");if(!airway)return[];if(airway==="Spontan uten O₂")return["Luftveier: Spontan uten O₂"];if(airway==="Spontan med O₂"){const l=clean($("acuteSpontO2Liter").value)||clean($("spontO2Liter").value);return[l?"Luftveier: Spontan med O₂, antall liter O₂ "+l:"Luftveier: Spontan med O₂"]}if(airway==="Spontant med high flow"){const p=["Luftveier: Spontant med high flow"],f=clean($("acuteHighFlowFio2").value)||clean($("highFlowFio2").value),fl=clean($("acuteHighFlowFlow").value)||clean($("highFlowFlow").value);if(f)p.push("Fio2 "+f);if(fl)p.push("Flow "+fl+" liter/min");return[p.join(", ")]};if(airway==="NIV (CPAP/BiPAP)"){const p=["Luftveier: NIV"],f=clean($("acuteNivFio2").value)||clean($("nivFio2").value);if(f)p.push("Fio2 "+f);return[p.join(", ")]}if(airway==="Intubert"){const p=["Luftveier: Intubert"],f=clean($("acuteIntubFio2").value)||clean($("intubFio2").value),pe=clean($("acuteIntubPeep").value)||clean($("intubPeep").value),t=clean($("acuteIntubTopp").value)||clean($("intubTopp").value);if(f)p.push("Fio2 "+f);if(pe)p.push("Peep "+pe);if(t)p.push("Topptrykk med peep "+t);return[p.join(", ")]}if(airway==="Trakeostomi"){const p=["Luftveier: Trakeostomi"],sel=[];document.querySelectorAll(".acuteTrachOpt,.trachOpt").forEach(cb=>{if(cb.checked&&!sel.includes(cb.dataset.name))sel.push(cb.dataset.name)});if(sel.length)p.push(sel.join(", "));const l=clean($("acuteTrachO2Liter").value)||clean($("trachO2Liter").value),f=clean($("acuteTrachVentFio2").value)||clean($("trachVentFio2").value),pe=clean($("acuteTrachVentPeep").value)||clean($("trachVentPeep").value),t=clean($("acuteTrachVentTopp").value)||clean($("trachVentTopp").value);if(l)p.push("Antall liter O₂ "+l);if(f)p.push("Fio2 "+f);if(pe)p.push("Peep "+pe);if(t)p.push("Topptrykk med peep "+t);return[p.join(", ")]}return["Luftveier: "+airway]}
-function buildSpedbarnLine(){if(getSpedbarnValue()!=="Ja")return"";const u=clean($("gestasjonsUker").value),d=clean($("gestasjonsDager").value),v=clean($("vekt").value),p=["Spedbarn"];if(u||d)p.push("GA "+(u||"?")+"+"+(d||"0"));if(v)p.push("Vekt: "+v+" g");return p.join(", ")}
-function buildUtstyrList(){const out=[],n=clean(utstPumperAntall.value);if(utstPumperChk.checked)out.push(n?"Infusjonspumper -"+n+"stk":"Infusjonspumper");if($("utst_arterie").checked)out.push("Arteriekran");if($("dren_thorax").checked)out.push("Thoraxdren");if($("dren_vent").checked)out.push("Ventrikkelsonde");document.querySelectorAll(".drenAnnetText").forEach(txt=>{const row=txt.closest(".dynamicRow"),cb=row?row.querySelector(".drenAnnetChk"):null,val=clean(txt.value);if(cb&&cb.checked&&val)out.push(val)});return out}
-function buildSmitteLines(){const base=document.querySelector(".smitteBase:checked"),blod=$("sm_blod");const spes=clean(smitteSpes.value);if(!base||base.dataset.name==="Ingen kjente"){if(blod.checked){let line="Smitte: Blodsmitte";if(spes)line+=" ("+spes+")";return [line]}return ["Smitte: Nei"]}let line="Smitte: "+base.dataset.name;if(blod.checked)line+=" og blodsmitte";if(spes)line+=" ("+spes+")";return[line]}
-function buildCaveLines(){const val=getCaveValue(),txt=clean(caveText.value);if(!val)return[];if(val==="Nei")return["CAVE: Nei"];return["CAVE: Ja"+(txt?" ("+txt+")":"")]}
-function lagRapport(){syncSpecMirrors();updateTitle();const h=getBinaryValue("hast");if(!h){rapport.value="";return}const lines=[],transportVal=getBinaryValue("transport");lines.push(transportVal==="Kuvøse"?"KUVØSETRANSPORT":"INTENSIV");const specs=[...new Set(Array.from(document.querySelectorAll(".specChoice")).filter(x=>x.checked).map(x=>x.dataset.spec || x.value))];if(specs.length)lines.push("Spesialtransport: "+specs.join(", "));lines.push("Rekvirentens hastegrad: "+h);const sped=buildSpedbarnLine();if(sped)lines.push(sped);if(getSpedbarnValue()==="Ja"&&transportVal)lines.push("Transportform: "+transportVal);const sed=[...linesFixedMeds(".sed"),...collectDynamicTexts(".sedText",".sedDynChk")],pre=[...linesFixedMeds(".pre"),...collectDynamicTexts(".pressorText",".pressorDynChk")],andre=collectDynamicTexts(".andreInfText",".andreInfChk");if(isAcute()){const hp=clean($("acuteHovedproblem").value);if(hp)lines.push("Aktuelt: "+hp);buildAcuteAirwayLines().forEach(l=>lines.push(l));if(sed.length)lines.push("Sedasjon: "+sed.join(", "));if(pre.length)lines.push("Pressor: "+pre.join(", "));if(andre.length)lines.push("Andre medikamenter/infusjoner: "+andre.join(", "));if(acutePumperChk.checked)lines.push("Antall infusjonspumper: "+(clean(acutePumperAntall.value)||"ikke oppgitt"));buildCaveLines().forEach(l=>lines.push(l));buildSmitteLines().forEach(l=>lines.push(l));const rn=clean($("acuteRekNavn").value),rt=clean($("acuteRekTlf").value)?formatPhone(clean($("acuteRekTlf").value)):"";if(rn||rt)lines.push("Rekvirerende lege: "+(rn&&rt?rn+" - "+rt:rn||rt));rapport.value=lines.join("\n");return}const hp=clean($("hovedproblem").value);if(hp)lines.push("Aktuelt: "+hp);const tid=clean($("tidligere").value);if(tid)lines.push("T: "+tid);if(clean($("vekt").value)&&getSpedbarnValue()!=="Ja")lines.push("Vekt: "+clean($("vekt").value)+" kg");const vit=buildVitalsLine();if(vit)lines.push(vit);const airway=buildFullAirwayLine();if(airway)lines.push(airway);if(sed.length)lines.push("Sedasjon: "+sed.join(", "));if(pre.length)lines.push("Pressor: "+pre.join(", "));if(andre.length)lines.push("Andre medikamenter/infusjoner: "+andre.join(", "));const til=linesTilganger();if(til.length)lines.push("Tilganger: "+til.join(", "));const utstyr=buildUtstyrList();if(utstyr.length)lines.push("Utstyr: "+utstyr.join(", "));buildCaveLines().forEach(l=>lines.push(l));buildSmitteLines().forEach(l=>lines.push(l));const rn=clean($("rekNavn").value),rt=clean($("rekTlf").value)?formatPhone(clean($("rekTlf").value)):"",mn=clean($("mottNavn").value),mt=clean($("mottTlf").value)?formatPhone(clean($("mottTlf").value)):"";if(rn||rt)lines.push("Rekvirerende lege: "+(rn&&rt?rn+" - "+rt:rn||rt));if(mn||mt)lines.push("Mottakende lege: "+(mn&&mt?mn+" - "+mt:mn||mt));rapport.value=lines.join("\n")}
-async function kopier(){lagRapport();if(!rapport.value.trim())return;try{await navigator.clipboard.writeText(rapport.value);copyMsg.textContent="Kopiert."}catch(e){rapport.focus();rapport.select();document.execCommand("copy");copyMsg.textContent="Kopiert."}if(copyTimer)clearTimeout(copyTimer);copyTimer=setTimeout(()=>copyMsg.textContent="",2000)}
-function nullstill(){valgtHastegrad="";forrigeHastegrad="";document.querySelectorAll(".hasteBtn").forEach(b=>b.classList.remove("active"));document.querySelectorAll("input, select, textarea").forEach(el=>{if(el.id==="rapport")return;if(el.type==="checkbox"||el.type==="radio")el.checked=false;else el.value=""});[mainContent,acuteTop,fullTop,acuteBottom,fullBottom,spedbarnExtraWrap,transportWrap,spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap,trachO2Wrap,trachVentWrap,acuteSpontO2Wrap,acuteHighFlowWrap,acuteNivWrap,acuteIntubWrap,acuteTrachWrap,acuteTrachO2Wrap,acuteTrachVentWrap,caveTextWrap,smitteSpesWrap].forEach(el=>setHidden(el,true));resetSedRows();resetPressorRows();resetAndreInfRows();resetTilgangRows();resetDrenAnnetFields();updateSpedbarnUI();updateCaveUI();updateSmitteSpes();handleAirwayChange();updateAcuteAirwayDetails();updateMapField();syncSpecMirrors();updateTitle();document.querySelectorAll(".autoGrow").forEach(autoGrowTextarea);rapport.value="";copyMsg.textContent=""}
-document.addEventListener("input",lagRapport);document.addEventListener("change",lagRapport);
-resetSedRows();resetPressorRows();resetAndreInfRows();resetTilgangRows();resetDrenAnnetFields();updateSpedbarnUI();updateCaveUI();updateSmitteSpes();handleAirwayChange();updateAcuteAirwayDetails();updateMapField();syncSpecMirrors();updateMainVisibility();updateTitle();document.querySelectorAll(".autoGrow").forEach(autoGrowTextarea);lagRapport();
+function lagRapport() {
+  syncSpecMirrors();
+  updateTitle();
+
+  const h = getBinaryValue("hast");
+
+  if (!h) {
+    rapport.value = "";
+    return;
+  }
+
+  const lines = [];
+
+  addHeader(lines);
+  addSpesialtransport(lines);
+  addHastegrad(lines);
+
+  const sped = buildSpedbarnLine();
+  if (sped) lines.push(sped);
+
+  if (getSpedbarnValue() === "Ja") {
+    addTransportform(lines);
+  }
+
+  if (isAcute()) {
+    buildAcuteReport(lines);
+  } else {
+    buildFullReport(lines);
+  }
+
+  rapport.value = lines.join("\n");
+}
+function addHeader(lines) {
+  const transportVal = getBinaryValue("transport");
+
+  lines.push(
+    transportVal === "Kuvøse"
+      ? "KUVØSETRANSPORT"
+      : "INTENSIV"
+  );
+}
+function addSpesialtransport(lines) {
+  const specs = [
+    ...new Set(
+      Array.from(document.querySelectorAll(".specChoice"))
+        .filter(x => x.checked)
+        .map(x => x.dataset.spec || x.value)
+    )
+  ];
+
+  if (specs.length) {
+    lines.push("Spesialtransport: " + specs.join(", "));
+  }
+}
+function addHastegrad(lines) {
+  lines.push(
+    "Rekvirentens hastegrad: " +
+    getBinaryValue("hast")
+  );
+}
+function addTransportform(lines) {
+  const transportVal = getBinaryValue("transport");
+
+  if (transportVal) {
+    lines.push("Transportform: " + transportVal);
+  }
+}
+function getMedicationData() {
+  return {
+    sedasjon: [
+      ...linesFixedMeds(".sed"),
+      ...collectDynamicTexts(".sedText", ".sedDynChk")
+    ],
+
+    pressor: [
+      ...linesFixedMeds(".pre"),
+      ...collectDynamicTexts(".pressorText", ".pressorDynChk")
+    ],
+
+    andre: collectDynamicTexts(
+      ".andreInfText",
+      ".andreInfChk"
+    )
+  };
+}
+function addMedicationSections(lines) {
+  const meds = getMedicationData();
+
+  if (meds.sedasjon.length) {
+    lines.push(
+      "Sedasjon: " +
+      meds.sedasjon.join(", ")
+    );
+  }
+
+  if (meds.pressor.length) {
+    lines.push(
+      "Pressor: " +
+      meds.pressor.join(", ")
+    );
+  }
+
+  if (meds.andre.length) {
+    lines.push(
+      "Andre medikamenter/infusjoner: " +
+      meds.andre.join(", ")
+    );
+  }
+}
+function buildAcuteReport(lines) {
+
+  const hp = clean($("acuteHovedproblem").value);
+
+  if (hp) {
+    lines.push("Aktuelt: " + hp);
+  }
+
+  buildAcuteAirwayLines().forEach(l => {
+    lines.push(l);
+  });
+
+  addMedicationSections(lines);
+
+  if (acutePumperChk.checked) {
+    lines.push(
+      "Antall infusjonspumper: " +
+      (clean(acutePumperAntall.value) || "ikke oppgitt")
+    );
+  }
+
+  buildCaveLines().forEach(l => lines.push(l));
+  buildSmitteLines().forEach(l => lines.push(l));
+
+  addAcuteDoctor(lines);
+}
+function buildFullReport(lines) {
+
+  const hp = clean($("hovedproblem").value);
+
+  if (hp) {
+    lines.push("Aktuelt: " + hp);
+  }
+
+  const tid = clean($("tidligere").value);
+
+  if (tid) {
+    lines.push("T: " + tid);
+  }
+
+  if (
+    clean($("vekt").value) &&
+    getSpedbarnValue() !== "Ja"
+  ) {
+    lines.push(
+      "Vekt: " +
+      clean($("vekt").value) +
+      " kg"
+    );
+  }
+
+  const vit = buildVitalsLine();
+
+  if (vit) {
+    lines.push(vit);
+  }
+
+  const airway = buildFullAirwayLine();
+
+  if (airway) {
+    lines.push(airway);
+  }
+
+  addMedicationSections(lines);
+
+  const til = linesTilganger();
+
+  if (til.length) {
+    lines.push(
+      "Tilganger: " +
+      til.join(", ")
+    );
+  }
+
+  const utstyr = buildUtstyrList();
+
+  if (utstyr.length) {
+    lines.push(
+      "Utstyr: " +
+      utstyr.join(", ")
+    );
+  }
+
+  buildCaveLines().forEach(l => lines.push(l));
+  buildSmitteLines().forEach(l => lines.push(l));
+
+  addFullDoctors(lines);
+}
+function addAcuteDoctor(lines) {
+
+  const rn = clean($("acuteRekNavn").value);
+
+  const rt = clean($("acuteRekTlf").value)
+    ? formatPhone(clean($("acuteRekTlf").value))
+    : "";
+
+  if (rn || rt) {
+    lines.push(
+      "Rekvirerende lege: " +
+      (rn && rt ? rn + " - " + rt : rn || rt)
+    );
+  }
+}
+function addFullDoctors(lines) {
+
+  const rn = clean($("rekNavn").value);
+
+  const rt = clean($("rekTlf").value)
+    ? formatPhone(clean($("rekTlf").value))
+    : "";
+
+  const mn = clean($("mottNavn").value);
+
+  const mt = clean($("mottTlf").value)
+    ? formatPhone(clean($("mottTlf").value))
+    : "";
+
+  if (rn || rt) {
+    lines.push(
+      "Rekvirerende lege: " +
+      (rn && rt ? rn + " - " + rt : rn || rt)
+    );
+  }
+
+  if (mn || mt) {
+    lines.push(
+      "Mottakende lege: " +
+      (mn && mt ? mn + " - " + mt : mn || mt)
+    );
+  }
+}
+function init() {
+
+  bindEvents();
+
+  resetSedRows();
+  resetPressorRows();
+  resetAndreInfRows();
+  resetTilgangRows();
+  resetDrenAnnetFields();
+
+  updateSpedbarnUI();
+  updateCaveUI();
+  updateSmitteSpes();
+
+  handleAirwayChange();
+  updateAcuteAirwayDetails();
+
+  updateMapField();
+  syncSpecMirrors();
+  updateMainVisibility();
+  updateTitle();
+
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(autoGrowTextarea);
+
+  lagRapport();
+}
+
+init();
