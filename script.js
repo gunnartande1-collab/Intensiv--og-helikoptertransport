@@ -443,7 +443,11 @@ function buildCaveLines() {
    UI OPPDATERING
 ====================================================== */
 function updateSpedbarnUI(){const val=getSpedbarnValue();setHidden(spedbarnExtraWrap,val!=="Ja");setHidden(transportWrap,val!=="Ja");vektLabel.textContent=val==="Ja"?"Vekt (gram)":"Vekt (kg)";updateTitle()}
-function updateCaveUI(){const val=getCaveValue();setHidden(caveTextWrap,val!=="Ja");if(val!=="Ja")caveText.value=""}
+function updateCaveUI(){
+  const val = getCaveValue();
+  setHidden(caveTextWrap, val !== "Ja");
+}
+
 function calcMapFromSysDia(sysRaw,diaRaw){const sys=Number(clean(sysRaw)),dia=Number(clean(diaRaw));return(!sys||!dia)?"":String(Math.round((sys+2*dia)/3))}
 function updateMapField(){const mapEl=$("map"),auto=calcMapFromSysDia($("btSys").value,$("btDia").value);if(auto){mapEl.value=auto;mapEl.dataset.auto="1"}else if(mapEl.dataset.auto==="1"){mapEl.value="";mapEl.dataset.auto=""}}
 function normalizeNumericField(el,maxDigits,maxValue){let raw=(el.value||"").replace(/\D/g,"");if(maxValue!=null&&raw){const numeric=Number(raw);if(numeric>maxValue)raw=String(maxValue)}if(raw.length>maxDigits)raw=raw.slice(0,maxDigits);if(el.value!==raw)el.value=raw;return raw}
@@ -468,7 +472,10 @@ function handleVitalInput(evt){const id=evt.target.id;if(id==="rf"){const digits
   // advance only when a decimal digit is present (e.g., 36,5)
   if(r.dec.length>=1)focusNextField(id)}}
 function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
-function updateSmitteSpes(){const base=document.querySelector(".smitteBase:checked"),blod=$("sm_blod");const show=!!(base&&base.dataset.name!=="Ingen kjente")||blod.checked;setHidden(smitteSpesWrap,!show);if(!show)smitteSpes.value=""}
+function updateSmitteSpes(){
+  setHidden(smitteSpesWrap, false);
+}
+
 function refreshTrachDeps(){setHidden(trachO2Wrap,!trO2?.checked);setHidden(trachVentWrap,!trVent?.checked);if(!trO2?.checked)$("trachO2Liter").value="";if(!trVent?.checked)["trachVentFio2","trachVentPeep","trachVentTopp"].forEach(id=>$(id).value="")}
 function handleAirwayChange(){const v=getBinaryValue("airwayMain");[spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap].forEach(el=>setHidden(el,true));if(v==="Spontan med O₂")setHidden(spontO2Wrap,false);else if(v==="Spontant med high flow")setHidden(highFlowWrap,false);else if(v==="NIV (CPAP/BiPAP)")setHidden(nivWrap,false);else if(v==="Intubert")setHidden(intubWrap,false);else if(v==="Trakeostomi")setHidden(trachWrap,false);refreshTrachDeps()}
 function updateAcuteAirwayDetails(){const a=getBinaryValue("acuteAirway");[acuteSpontO2Wrap,acuteHighFlowWrap,acuteNivWrap,acuteIntubWrap,acuteTrachWrap,acuteTrachO2Wrap,acuteTrachVentWrap].forEach(el=>setHidden(el,true));if(a==="Spontan med O₂"&&(clean($("acuteSpontO2Liter").value)||clean($("spontO2Liter").value)))setHidden(acuteSpontO2Wrap,false);if(a==="Spontant med high flow"&&(clean($("acuteHighFlowFio2").value)||clean($("acuteHighFlowFlow").value)||clean($("highFlowFio2").value)||clean($("highFlowFlow").value)))setHidden(acuteHighFlowWrap,false);if(a==="NIV (CPAP/BiPAP)"&&(clean($("acuteNivFio2").value)||clean($("nivFio2").value)))setHidden(acuteNivWrap,false);if(a==="Intubert"&&(clean($("acuteIntubFio2").value)||clean($("acuteIntubPeep").value)||clean($("acuteIntubTopp").value)||clean($("intubFio2").value)||clean($("intubPeep").value)||clean($("intubTopp").value)))setHidden(acuteIntubWrap,false);if(a==="Trakeostomi"){setHidden(acuteTrachWrap,false);if($("acute_tr_o2").checked||$("tr_o2").checked||clean($("acuteTrachO2Liter").value)||clean($("trachO2Liter").value))setHidden(acuteTrachO2Wrap,false);if($("acute_tr_vent").checked||$("tr_vent").checked||clean($("acuteTrachVentFio2").value)||clean($("acuteTrachVentPeep").value)||clean($("acuteTrachVentTopp").value)||clean($("trachVentFio2").value)||clean($("trachVentPeep").value)||clean($("trachVentTopp").value))setHidden(acuteTrachVentWrap,false)}}
@@ -818,6 +825,14 @@ function bindEvents() {
 
   $("copyBtn")?.addEventListener("click", kopierRapport);
   $("resetBtn")?.addEventListener("click", nullstillSkjema);
+
+  document.addEventListener("input", () => {
+    lagRapport();
+  });
+
+  document.addEventListener("change", () => {
+    lagRapport();
+  });
 }
 
 /* ======================================================
@@ -978,6 +993,17 @@ function buildAcuteReport(lines) {
 
   if (hp) {
     lines.push("Aktuelt: " + hp);
+  }
+
+  if (
+    clean($("vekt").value) &&
+    getSpedbarnValue() !== "Ja"
+  ) {
+    lines.push(
+      "Vekt: " +
+      clean($("vekt").value) +
+      " kg"
+    );
   }
 
   buildAcuteAirwayLines().forEach(l => {

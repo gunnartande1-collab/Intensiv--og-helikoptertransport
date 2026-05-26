@@ -77,13 +77,11 @@
     </div>
   </div>
 </div>
-
 <div id="weightWrap">
-  <label id="vektLabel" for="vekt">Vekt (kg)</label>
+    <label id="vektLabel" for="vekt">Vekt (kg)</label>
   <input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="kg">
 </div>
 
-<div id="acuteTop" class="hidden">
   <div class="section">Spesialtransport</div>
   <table class="table"><tbody>
     <tr><td class="toggleCell specCell" data-toggle="spec_ecmo"><div class="toggleInner"><input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO"><span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span></div></td></tr>
@@ -92,9 +90,10 @@
     <tr><td class="toggleCell specCell" data-toggle="spec_no"><div class="toggleInner"><input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO"><span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span></div></td></tr>
   </tbody></table>
 
+<div id="acuteTop" class="hidden">
+
   <label>Aktuelt</label>
   <textarea id="acuteHovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
-
   <label>Luftveier</label>
   <div class="binaryRow">
     <label class="binaryOpt"><input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan uten O2" id="acute_air_spont_uten"><span>Spontan uten O2</span></label>
@@ -133,20 +132,15 @@
     <label>Topptrykk med PEEP</label>
     <input id="acuteTrachVentTopp" placeholder="Fritekst">
   </div>
-</div>
+
+</div> <!-- acuteTrachWrap -->
+
+</div> <!-- acuteTop -->
 
 <div id="fullTop" class="hidden">
-  <label id="vektLabel">Vekt (kg)</label><input id="vekt" type="text" placeholder="Fritekst"/>
-
-  <div class="section">Spesialtransport</div>
-  <table class="table"><tbody>
-    <tr><td class="toggleCell specCell" data-toggle="spec_ecmo"><div class="toggleInner"><input data-mirror="spec_ecmo" class="chk specMirror specChoice" type="checkbox" value="ECMO" data-spec="ECMO"><span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span></div></td></tr>
-    <tr><td class="toggleCell specCell" data-toggle="spec_iabp"><div class="toggleInner"><input data-mirror="spec_iabp" class="chk specMirror specChoice" type="checkbox" value="IABP" data-spec="IABP"><span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span></div></td></tr>
-    <tr><td class="toggleCell specCell" data-toggle="spec_impella"><div class="toggleInner"><input data-mirror="spec_impella" class="chk specMirror specChoice" type="checkbox" value="Impella" data-spec="Impella"><span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span></div></td></tr>
-    <tr><td class="toggleCell specCell" data-toggle="spec_no"><div class="toggleInner"><input data-mirror="spec_no" class="chk specMirror specChoice" type="checkbox" value="NO" data-spec="NO"><span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span></div></td></tr>
-  </tbody></table>
-
-  <label>Aktuelt</label><textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
+    
+  <label>Aktuelt</label>
+  <textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
   <label>Tidligere</label><textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
 
   <div class="section">Vitalparametre</div>
@@ -183,6 +177,8 @@
     <div id="trachVentWrap" class="hidden"><label>Fio2</label><input id="trachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="trachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="trachVentTopp" placeholder="Fritekst"></div>
   </div>
 </div>
+
+</div> <!-- fullTop -->
 
 <div class="section">Medikamenter og infusjoner</div>
 
