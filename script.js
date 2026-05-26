@@ -122,16 +122,16 @@ function buildFullAirwayLine() {
 
   if (!main) return "";
 
-  if (main === "Spontan uten O₂") {
-    return "Luftveier: Spontan uten O₂";
+  if (main === "Spontan uten O2") {
+    return "Luftveier: Spontan uten O2";
   }
 
-  if (main === "Spontan med O₂") {
+  if (main === "Spontan med O2") {
     const l = clean($("spontO2Liter").value);
 
     return l
-      ? "Luftveier: Spontan med O₂, antall liter O₂ " + l
-      : "Luftveier: Spontan med O₂";
+      ? "Luftveier: Spontan med O2, antall liter O2 " + l
+      : "Luftveier: Spontan med O2";
   }
 
   if (main === "Spontant med high flow") {
@@ -167,31 +167,41 @@ function buildFullAirwayLine() {
     return p.join(", ");
   }
 
-  if (main === "Trakeostomi") {
-    const p = ["Luftveier: Trakeostomi"];
-    const sel = [];
+if (main === "Trakeostomi") {
+  const sel = [];
 
-    document.querySelectorAll(".trachOpt").forEach(cb => {
-      if (cb.checked) {
-        sel.push(cb.dataset.name);
-      }
-    });
+  document.querySelectorAll(".trachOpt").forEach(cb => {
+    if (cb.checked) {
+      sel.push(cb.dataset.name);
+    }
+  });
 
-    if (sel.length) p.push(sel.join(", "));
+  const p = [];
+  const l = clean($("trachO2Liter").value);
+  const f = clean($("trachVentFio2").value);
+  const pe = clean($("trachVentPeep").value);
+  const t = clean($("trachVentTopp").value);
 
-    const l = clean($("trachO2Liter").value);
-    const f = clean($("trachVentFio2").value);
-    const pe = clean($("trachVentPeep").value);
-    const t = clean($("trachVentTopp").value);
+let luftveiTekst = sel.join(", ");
 
-    if (l) p.push("Antall liter O₂ " + l);
-    if (f) p.push("Fio2 " + f);
-    if (pe) p.push("Peep " + pe);
-    if (t) p.push("Topptrykk med peep " + t);
+if (l && luftveiTekst.includes("O2 via trakeostomi")) {
+  luftveiTekst = luftveiTekst.replace(
+    "O2 via trakeostomi",
+    l + "l O2 via trakeostomi"
+  );
+}
 
-    return p.join(", ");
-  }
+if (luftveiTekst) {
+  p.push("Luftveier: " + luftveiTekst);
+} else {
+  p.push("Luftveier: Trakeostomi");
+}
+  if (f) p.push("Fio2 " + f);
+  if (pe) p.push("Peep " + pe);
+  if (t) p.push("Topptrykk med peep " + t);
 
+  return p.join(", ");
+}
   return "";
 }
 function buildAcuteAirwayLines() {
@@ -202,11 +212,11 @@ function buildAcuteAirwayLines() {
     return [];
   }
 
-  if (airway === "Spontan uten O₂") {
-    return ["Luftveier: Spontan uten O₂"];
+  if (airway === "Spontan uten O2") {
+    return ["Luftveier: Spontan uten O2"];
   }
 
-  if (airway === "Spontan med O₂") {
+  if (airway === "Spontan med O2") {
 
     const l =
       clean($("acuteSpontO2Liter").value) ||
@@ -214,8 +224,8 @@ function buildAcuteAirwayLines() {
 
     return [
       l
-        ? "Luftveier: Spontan med O₂, antall liter O₂ " + l
-        : "Luftveier: Spontan med O₂"
+        ? "Luftveier: Spontan med O2, antall liter O2 " + l
+        : "Luftveier: Spontan med O2"
     ];
   }
 
@@ -275,53 +285,71 @@ function buildAcuteAirwayLines() {
 
     return [p.join(", ")];
   }
+if (airway === "Trakeostomi") {
 
-  if (airway === "Trakeostomi") {
+  const p = [];
+  const sel = [];
 
-    const p = ["Luftveier: Trakeostomi"];
-    const sel = [];
+  const valgtTrach = document.querySelector(
+    isAcute()
+      ? ".acuteTrachOpt:checked"
+      : ".trachOpt:checked"
+  );
 
-    document
-      .querySelectorAll(".acuteTrachOpt,.trachOpt")
-      .forEach(cb => {
-
-        if (
-          cb.checked &&
-          !sel.includes(cb.dataset.name)
-        ) {
-          sel.push(cb.dataset.name);
-        }
-      });
-
-    if (sel.length) {
-      p.push(sel.join(", "));
-    }
-
-    const l =
-      clean($("acuteTrachO2Liter").value) ||
-      clean($("trachO2Liter").value);
-
-    const f =
-      clean($("acuteTrachVentFio2").value) ||
-      clean($("trachVentFio2").value);
-
-    const pe =
-      clean($("acuteTrachVentPeep").value) ||
-      clean($("trachVentPeep").value);
-
-    const t =
-      clean($("acuteTrachVentTopp").value) ||
-      clean($("trachVentTopp").value);
-
-    if (l) p.push("Antall liter O₂ " + l);
-    if (f) p.push("Fio2 " + f);
-    if (pe) p.push("Peep " + pe);
-    if (t) p.push("Topptrykk med peep " + t);
-
-    return [p.join(", ")];
+  if (valgtTrach) {
+    sel.push(valgtTrach.dataset.name);
   }
 
-  return ["Luftveier: " + airway];
+  const l = clean(
+    isAcute()
+      ? $("acuteTrachO2Liter").value
+      : $("trachO2Liter").value
+  );
+
+  let luftveiTekst = sel.join(", ");
+
+  if (
+    l &&
+    luftveiTekst.includes("O2 via trakeostomi")
+  ) {
+    luftveiTekst = luftveiTekst.replace(
+      "O2 via trakeostomi",
+      l + "l O2 via trakeostomi"
+    );
+  }
+
+  if (luftveiTekst) {
+    p.push("Luftveier: " + luftveiTekst);
+  } else {
+    p.push("Luftveier: Trakeostomi");
+  }
+
+  const f = clean(
+    isAcute()
+      ? $("acuteTrachVentFio2").value
+      : $("trachVentFio2").value
+  );
+
+  const pe = clean(
+    isAcute()
+      ? $("acuteTrachVentPeep").value
+      : $("trachVentPeep").value
+  );
+
+  const t = clean(
+    isAcute()
+      ? $("acuteTrachVentTopp").value
+      : $("trachVentTopp").value
+  );
+
+  if (f) p.push("Fio2 " + f);
+  if (pe) p.push("Peep " + pe);
+  if (t) p.push("Topptrykk med peep " + t);
+
+  return p.join(", ");
+}
+
+return ["Luftveier: " + airway];
 }
 
 function buildSpedbarnLine() {
@@ -493,8 +521,32 @@ function updateSmitteSpes(){
 }
 
 function refreshTrachDeps(){setHidden(trachO2Wrap,!trO2?.checked);setHidden(trachVentWrap,!trVent?.checked);if(!trO2?.checked)$("trachO2Liter").value="";if(!trVent?.checked)["trachVentFio2","trachVentPeep","trachVentTopp"].forEach(id=>$(id).value="")}
-function handleAirwayChange(){const v=getBinaryValue("airwayMain");[spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap].forEach(el=>setHidden(el,true));if(v==="Spontan med O₂")setHidden(spontO2Wrap,false);else if(v==="Spontant med high flow")setHidden(highFlowWrap,false);else if(v==="NIV (CPAP/BiPAP)")setHidden(nivWrap,false);else if(v==="Intubert")setHidden(intubWrap,false);else if(v==="Trakeostomi")setHidden(trachWrap,false);refreshTrachDeps()}
-function updateAcuteAirwayDetails(){const a=getBinaryValue("acuteAirway");[acuteSpontO2Wrap,acuteHighFlowWrap,acuteNivWrap,acuteIntubWrap,acuteTrachWrap,acuteTrachO2Wrap,acuteTrachVentWrap].forEach(el=>setHidden(el,true));if(a==="Spontan med O₂"&&(clean($("acuteSpontO2Liter").value)||clean($("spontO2Liter").value)))setHidden(acuteSpontO2Wrap,false);if(a==="Spontant med high flow"&&(clean($("acuteHighFlowFio2").value)||clean($("acuteHighFlowFlow").value)||clean($("highFlowFio2").value)||clean($("highFlowFlow").value)))setHidden(acuteHighFlowWrap,false);if(a==="NIV (CPAP/BiPAP)"&&(clean($("acuteNivFio2").value)||clean($("nivFio2").value)))setHidden(acuteNivWrap,false);if(a==="Intubert"&&(clean($("acuteIntubFio2").value)||clean($("acuteIntubPeep").value)||clean($("acuteIntubTopp").value)||clean($("intubFio2").value)||clean($("intubPeep").value)||clean($("intubTopp").value)))setHidden(acuteIntubWrap,false);if(a==="Trakeostomi"){setHidden(acuteTrachWrap,false);if($("acute_tr_o2").checked||$("tr_o2").checked||clean($("acuteTrachO2Liter").value)||clean($("trachO2Liter").value))setHidden(acuteTrachO2Wrap,false);if($("acute_tr_vent").checked||$("tr_vent").checked||clean($("acuteTrachVentFio2").value)||clean($("acuteTrachVentPeep").value)||clean($("acuteTrachVentTopp").value)||clean($("trachVentFio2").value)||clean($("trachVentPeep").value)||clean($("trachVentTopp").value))setHidden(acuteTrachVentWrap,false)}}
+function handleAirwayChange(){const v=getBinaryValue("airwayMain");[spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap].forEach(el=>setHidden(el,true));if(v==="Spontan med O2")setHidden(spontO2Wrap,false);else if(v==="Spontant med high flow")setHidden(highFlowWrap,false);else if(v==="NIV (CPAP/BiPAP)")setHidden(nivWrap,false);else if(v==="Intubert")setHidden(intubWrap,false);else if(v==="Trakeostomi")setHidden(trachWrap,false);refreshTrachDeps()}
+function updateAcuteAirwayDetails() {
+  const a = getBinaryValue("acuteAirway");
+
+  [
+    acuteSpontO2Wrap,
+    acuteHighFlowWrap,
+    acuteNivWrap,
+    acuteIntubWrap,
+    acuteTrachWrap,
+    acuteTrachO2Wrap,
+    acuteTrachVentWrap
+  ].forEach(el => setHidden(el, true));
+
+  if (a === "Intubert") {
+    setHidden(acuteIntubWrap, false);
+  }
+
+  if (a === "Trakeostomi") {
+    setHidden(acuteTrachWrap, false);
+
+    const trachVent = $("acute_tr_vent")?.checked;
+
+    setHidden(acuteTrachVentWrap, !trachVent);
+  }
+}
 function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
 function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
