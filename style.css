@@ -21,7 +21,19 @@ textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-famil
 .medTable th{font-size:13px;color:#fff;text-align:left;background:#31343b;padding:8px}
 .chk{width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
 .binaryRow{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px}
-.binaryOpt,.radioOpt,.clickableChoice{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:400;margin:0}
+.binaryOpt,
+.radioOpt,
+.clickableChoice{
+  display:inline-flex;
+  align-items:center;
+  gap: 3px;
+  cursor:pointer;
+  font-weight:400;
+  margin:0 40px 0 0;
+}
+.radioOpt input{
+  margin:0;
+}
 .binaryOpt input,.radioOpt input,.clickableChoice input{margin:0;cursor:pointer}
 .clickableChoice span{font-weight:400}
 .toggleCell{cursor:pointer;user-select:none;border-radius:10px}
@@ -120,3 +132,7 @@ button:hover{opacity:.97}button:active{transform:translateY(1px)}
 #sedDynamicBody .dynamicRow,#pressorDynamicBody .dynamicRow,#andreInfBody .dynamicRow{display:flex !important;flex-direction:row !important;align-items:center !important;flex-wrap:nowrap !important;width:100% !important;gap:8px !important;margin-top:0 !important}
 #sedDynamicBody .dynamicRow .chk,#pressorDynamicBody .dynamicRow .chk,#andreInfBody .dynamicRow .chk{flex:0 0 18px !important;width:18px !important;height:18px !important;margin:0 !important}
 #sedDynamicBody .dynamicRow input[type="text"],#pressorDynamicBody .dynamicRow input[type="text"],#andreInfBody .dynamicRow input[type="text"]{flex:1 1 auto !important;width:auto !important;min-width:0 !important;margin:0 !important}
+
+.spedbarnRow{
+  gap:32px !important;
+}

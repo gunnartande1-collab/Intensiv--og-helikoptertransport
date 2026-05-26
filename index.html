@@ -138,7 +138,7 @@
 </div> <!-- acuteTop -->
 
 <div id="fullTop" class="hidden">
-    
+
   <label>Aktuelt</label>
   <textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
   <label>Tidligere</label><textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
@@ -169,19 +169,17 @@
   <div id="trachWrap" class="hidden">
     <div class="section" style="margin-top:16px;">Trakeostomi</div>
     <table class="table"><tbody>
-      <tr><td class="toggleCell" data-toggle="tr_spont"><div class="toggleInner"><input id="tr_spont" class="chk trachOpt" type="checkbox" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
-      <tr><td class="toggleCell" data-toggle="tr_o2"><div class="toggleInner"><input id="tr_o2" class="chk trachOpt" type="checkbox" data-name="O2 via trakeostomi"><span>O2 via trakeostomi</span></div></td></tr>
-      <tr><td class="toggleCell" data-toggle="tr_vent"><div class="toggleInner"><input id="tr_vent" class="chk trachOpt" type="checkbox" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="tr_spont"><div class="toggleInner"><input id="tr_spont" name="trachType" class="chk trachOpt" type="radio" data-name="Spontan pust via trakeostomi"><span>Spontan pust via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="tr_o2"><div class="toggleInner"><input id="tr_o2" name="trachType" class="chk trachOpt" type="radio"data-name="O2 via trakeostomi"><span>O2 via trakeostomi</span></div></td></tr>
+      <tr><td class="toggleCell" data-toggle="tr_vent"><div class="toggleInner"><input id="tr_vent" name="trachType" class="chk trachOpt" type="radio" data-name="Koblet til respirator"><span>Koblet til respirator</span></div></td></tr>
     </tbody></table>
     <div id="trachO2Wrap" class="hidden"><label>Antall liter O2</label><input id="trachO2Liter" placeholder="Fritekst"></div>
     <div id="trachVentWrap" class="hidden"><label>Fio2</label><input id="trachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="trachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="trachVentTopp" placeholder="Fritekst"></div>
   </div>
-</div>
 
 </div> <!-- fullTop -->
 
 <div class="section">Medikamenter og infusjoner</div>
-
 <table class="table medUnifiedTable">
   <thead>
     <tr>
@@ -289,7 +287,7 @@
 <div id="smitteSpesWrap" class="hidden"><label>Spesifiser</label><input id="smitteSpes" placeholder="Fritekst"></div>
 
 <div class="section">CAVE?</div>
-<div class="binaryRow"><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei"><span>Nei</span></label><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja"><span>Ja</span></label></div>
+<div class="binaryRow spedbarnRow"><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei"><span>Nei</span></label><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja"><span>Ja</span></label></div>
 <div id="caveTextWrap" class="hidden"><label>Spesifiser allergi</label><input id="caveText" placeholder="Fritekst (legemiddel, reaksjon osv.)"></div>
 
 <div id="fullBottom" class="hidden">
@@ -328,10 +326,11 @@
   </button>
 </div>
 <textarea id="rapport" class="report" readonly placeholder="Rapportteksten oppdateres automatisk…"></textarea>
-</div></div></div>
 
+</div> <!-- mainContent -->
+
+</div></div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
