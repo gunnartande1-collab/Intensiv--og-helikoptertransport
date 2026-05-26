@@ -75,7 +75,69 @@ stextarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-fami
 .btnbar{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 button{border:none;border-radius:10px;font-weight:800;cursor:pointer;transition:.15s;font-size:14px}
 button:hover{opacity:.97}button:active{transform:translateY(1px)}
-.actionBtn{min-height:48px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:10px;line-height:1;white-space:nowrap}
+.actionBtn{
+  min-height:52px;
+  padding:0 22px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  line-height:1;
+  white-space:nowrap;
+
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.08);
+
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.2px;
+
+  transition:
+    background .18s ease,
+    transform .12s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.22);
+}
+
+.actionBtn:hover{
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 8px 22px rgba(0,0,0,0.28);
+}
+
+.actionBtn:active{
+  transform:translateY(0);
+}
+
+.btn-copy{
+  background:#2f9e5b;
+  color:#ffffff;
+  min-width:220px;
+}
+
+.btn-copy:hover{
+  background:#36ad66;
+}
+
+.btn-red{
+  background:#4a2b2b;
+  color:#f3d6d6;
+  min-width:160px;
+}
+
+.btn-red:hover{
+  background:#5a3232;
+}
+
+.copyIcon{
+  width:18px;
+  height:18px;
+  opacity:.92;
+}
 .btn-copy{background:var(--green);color:#0b1a10;min-width:190px}.btn-copy:hover{background:var(--greenHover)}
 .btn-red{background:var(--red);color:#fff;min-width:140px}.btn-red:hover{background:var(--redHover)}
 .copyIcon{width:20px;height:20px;flex:0 0 auto}.push-right{margin-left:auto}.copyMsg{color:#a7f3c1;font-weight:700;min-height:20px;font-size:13px}
@@ -183,4 +245,11 @@ input[type=number]{
 
 .spesialtransportRow .specLabel{
   cursor:pointer;
+}
+
+.copyIcon,
+.trashIcon{
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
 }
