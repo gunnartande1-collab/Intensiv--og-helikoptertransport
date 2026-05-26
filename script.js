@@ -442,9 +442,25 @@ function buildCaveLines() {
 /* ======================================================
    UI OPPDATERING
 ====================================================== */
-function updateSpedbarnUI(){const val=getSpedbarnValue();setHidden(spedbarnExtraWrap,val!=="Ja");setHidden(transportWrap,val!=="Ja");vektLabel.textContent=val==="Ja"?"Vekt (gram)":"Vekt (kg)";updateTitle()}
+function updateSpedbarnUI() {
+  const val = getSpedbarnValue();
+
+  setHidden(spedbarnExtraWrap, val !== "Ja");
+  setHidden(transportWrap, val !== "Ja");
+
+  vektLabel.textContent = val === "Ja"
+    ? "Vekt (gram)"
+    : "Vekt (kg)";
+
+  $("vekt").placeholder = val === "Ja"
+    ? "gram"
+    : "kg";
+
+  updateTitle();
+}
 function updateCaveUI(){
   const val = getCaveValue();
+
   setHidden(caveTextWrap, val !== "Ja");
 }
 
@@ -552,7 +568,7 @@ function bindAutoGrowEvents() {
 
 function bindPvkEvents() {
 
-  pvkAntall.addEventListener("change", () => {
+  pvkAntall.addEventListener("input", () => {
     pvkChk.checked = !!pvkAntall.value;
     lagRapport();
   });
@@ -569,8 +585,7 @@ function bindPvkEvents() {
 
 function bindUtstyrPumpeEvents() {
 
-  utstPumperAntall.addEventListener("change", () => {
-    utstPumperChk.checked = !!utstPumperAntall.value;
+utstPumperAntall.addEventListener("input", () => {    utstPumperChk.checked = !!utstPumperAntall.value;
     lagRapport();
   });
 
@@ -586,8 +601,7 @@ function bindUtstyrPumpeEvents() {
 
 function bindAcutePumpeEvents() {
 
-  acutePumperAntall.addEventListener("change", () => {
-    acutePumperChk.checked = !!acutePumperAntall.value;
+acutePumperAntall.addEventListener("input", () => {    acutePumperChk.checked = !!acutePumperAntall.value;
     lagRapport();
   });
 
@@ -1209,3 +1223,36 @@ function init() {
 }
 
 init();
+
+function bindGestasjonsalderEvents() {
+  const uker = document.getElementById("gestasjonsUker");
+  const dager = document.getElementById("gestasjonsDager");
+
+  if (!uker || !dager) return;
+
+  uker.addEventListener("input", () => {
+    uker.value = uker.value.replace(/\D/g, "").slice(0, 2);
+
+    if (uker.value.length === 2) {
+      dager.focus();
+      dager.select?.();
+    }
+
+    lagRapport();
+  });
+
+  uker.addEventListener("keydown", e => {
+    if ((e.key === " " || e.code === "Space") && uker.value.length >= 1) {
+      e.preventDefault();
+      dager.focus();
+      dager.select?.();
+    }
+  });
+
+  dager.addEventListener("input", () => {
+    dager.value = dager.value.replace(/\D/g, "").slice(0, 1);
+    lagRapport();
+  });
+}
+
+bindGestasjonsalderEvents();
