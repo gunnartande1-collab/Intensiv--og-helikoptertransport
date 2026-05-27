@@ -42,7 +42,13 @@ textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-famil
 .table tr:last-child td{border-bottom:none}
 .medTable th{font-size:13px;color:#fff;text-align:left;background:#31343b;padding:8px}
 .chk{width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
-.binaryRow{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px}
+.binaryRow{
+  display:flex;
+  gap:20px;
+  flex-wrap:nowrap;
+  margin-bottom:10px;
+  overflow-x:auto;
+}
 .binaryOpt,
 .radioOpt,
 .clickableChoice{
@@ -272,4 +278,9 @@ input[type=number]{
   font-size:15px;
   color:#fff;
   width:100%;
+}
+
+.airwayRow{
+  flex-wrap:nowrap;
+  overflow-x:auto;
 }

@@ -252,7 +252,7 @@
   </div>
 
 <div class="section airwaySection">Luftveier</div>
-  <div class="binaryRow">
+<div class="binaryRow airwayRow">
     <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan uten O2" id="air_spont_uten"><span>Spontan uten O2</span></label>
     <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan med O2" id="air_spont_med"><span>Spontan med O2</span></label>
     <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontant med high flow" id="air_highflow"><span>Spontant med high flow</span></label>
@@ -421,9 +421,16 @@
     <tr><td id="dren_annet_container" colspan="2"></td></tr>
   </tbody></table>
 
-  <div class="section">Legeinformasjon</div>
-  <label>Rekvirerende lege</label><div class="dualRow"><input id="rekNavn" placeholder="Navn"><input id="rekTlf" placeholder="Nummer"></div>
-  <label>Mottakende lege</label><div class="dualRow"><input id="mottNavn" placeholder="Navn"><input id="mottTlf" placeholder="Nummer"></div>
+<div class="section">Rekvirerende lege</div>
+<div class="dualRow">
+  <input id="rekNavn" placeholder="Navn">
+  <input id="rekTlf" placeholder="Nummer">
+</div>
+
+<label>Mottakende lege</label>
+<div class="dualRow">
+  <input id="mottNavn" placeholder="Navn">
+  <input id="mottTlf" placeholder="Nummer">
 </div>
 
 <div class="btnbar">
