@@ -392,8 +392,25 @@
 <div id="fullBottom" class="hidden">
   <div class="section">Tilganger</div>
   <table class="table"><tbody>
-    <tr><td class="toggleCell" data-toggle="til_cvk"><div class="toggleInner"><input id="til_cvk" class="chk til" type="checkbox" data-name="CVK"><span>CVK</span></div></td></tr>
-    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
+<tr>
+  <td>
+    <div class="nonToggleRow">
+      <label class="clickableChoice" for="til_cvk">
+        <input id="til_cvk" class="chk til" type="checkbox" data-name="CVK">
+        <span>CVK</span>
+      </label>
+
+      <select id="cvkLumen" class="pvkSelect">
+        <option value=""></option>
+        <option value="1 lumen">1 lumen</option>
+        <option value="2 lumen">2 lumen</option>
+        <option value="3 lumen">3 lumen</option>
+        <option value="4 lumen">4 lumen</option>
+        <option value="5 lumen">5 lumen</option>
+      </select>
+    </div>
+  </td>
+</tr>    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
   </tbody><tbody id="tilgangerDynamicBody"></tbody></table>
 
   <label style="margin-top:14px;">Utstyr</label>
