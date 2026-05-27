@@ -487,10 +487,20 @@ function updateSpedbarnUI() {
 
   updateTitle();
 }
-function updateCaveUI(){
-  const val = getCaveValue();
+function updateCaveUI() {
 
-  setHidden(caveTextWrap, val !== "Ja");
+  const valgt =
+    document.querySelector(".caveRadio:checked");
+
+  const skalVises =
+    valgt &&
+    valgt.dataset.value === "Ja";
+
+  setHidden(caveTextWrap, !skalVises);
+
+  if (!skalVises) {
+    caveText.value = "";
+  }
 }
 
 function calcMapFromSysDia(sysRaw,diaRaw){const sys=Number(clean(sysRaw)),dia=Number(clean(diaRaw));return(!sys||!dia)?"":String(Math.round((sys+2*dia)/3))}
@@ -517,8 +527,20 @@ function handleVitalInput(evt){const id=evt.target.id;if(id==="rf"){const digits
   // advance only when a decimal digit is present (e.g., 36,5)
   if(r.dec.length>=1)focusNextField(id)}}
 function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
-function updateSmitteSpes(){
-  setHidden(smitteSpesWrap, false);
+function updateSmitteSpes() {
+
+  const valgt =
+    document.querySelector(".smitteBase:checked");
+
+  const skalVises =
+    valgt &&
+    valgt.id !== "sm_ingen";
+
+  setHidden(smitteSpesWrap, !skalVises);
+
+  if (!skalVises) {
+    smitteSpes.value = "";
+  }
 }
 
 function refreshTrachDeps(){setHidden(trachO2Wrap,!trO2?.checked);setHidden(trachVentWrap,!trVent?.checked);if(!trO2?.checked)$("trachO2Liter").value="";if(!trVent?.checked)["trachVentFio2","trachVentPeep","trachVentTopp"].forEach(id=>$(id).value="")}
@@ -925,19 +947,33 @@ bindAcutePumpeEvents();
 /* ======================================================
    DYNAMISKE FELTER
 ====================================================== */
-function cleanupDynamicTextRows(container,textClass,checkboxClass){
-  const rows=Array.from(container.querySelectorAll(".dynamicRow"));
-  const blanks=rows.filter(row=>{
-    const txt=row.querySelector("."+textClass);
-    const chk=row.querySelector("."+checkboxClass);
-    const val=clean(txt?.value);
+function cleanupDynamicTextRows(container, textClass, checkboxClass) {
+  const rows = Array.from(
+    container.querySelectorAll(".dynamicRow")
+  );
+
+  const blanks = rows.filter(row => {
+    const txt = row.querySelector("." + textClass);
+    const chk = row.querySelector("." + checkboxClass);
+    const val = clean(txt?.value);
+
     return !val && (!chk || !chk.checked);
   });
-  if(blanks.length<=1) return;
-  blanks.slice(0,-1).forEach(row=>row.remove());
+
+  if (blanks.length <= 1) return;
+
+  blanks.slice(0, -1).forEach(row => {
+    const tr = row.closest("tr");
+
+    if (tr) {
+      tr.remove();
+    } else {
+      row.remove();
+    }
+  });
 }
-function addDynamicTextRow(container,placeholder,checkboxClass,textClass){
-  const row=document.createElement("div");
+
+function addDynamicTextRow(container, placeholder, checkboxClass, textClass) {  const row=document.createElement("div");
   row.className="dynamicRow";
   row.innerHTML='<input type="checkbox" class="chk '+checkboxClass+'"><input type="text" class="'+textClass+'" placeholder="'+placeholder+'">';
   container.appendChild(row);
@@ -956,10 +992,48 @@ function ensureBlankByClass(textClass,addFn){const texts=Array.from(document.que
 function addSedRow(){addDynamicTextRow(sedDynamicBody,"Sedativ","sedDynChk","sedText")}function ensureSedBlankRow(){ensureBlankByClass("sedText",addSedRow)}function resetSedRows(){sedDynamicBody.innerHTML="";addSedRow()}
 function addPressorRow(){addDynamicTextRow(pressorDynamicBody,"Pressor","pressorDynChk","pressorText")}function ensurePressorBlankRow(){ensureBlankByClass("pressorText",addPressorRow)}function resetPressorRows(){pressorDynamicBody.innerHTML="";addPressorRow()}
 function addAndreInfRow(){addDynamicTextRow(andreInfBody,"Medikament/infusjon","andreInfChk","andreInfText")}function ensureAndreInfBlankRow(){ensureBlankByClass("andreInfText",addAndreInfRow)}function resetAndreInfRows(){andreInfBody.innerHTML="";addAndreInfRow();addAndreInfRow()}
-function addTilgangRow(){const row=document.createElement("tr");row.innerHTML='<td><div class="dynamicRow"><input type="checkbox" class="chk tilgangDynChk"><input type="text" class="tilgangText" placeholder="Annen tilgang"></div></td>';tilgangerDynamicBody.appendChild(row);const chk=row.querySelector(".tilgangDynChk"),txt=row.querySelector(".tilgangText");txt.addEventListener("input",()=>{chk.checked=!!clean(txt.value);ensureTilgangBlankRow();lagRapport()});chk.addEventListener("change",lagRapport)}
+function addTilgangRow() {
+  const row = document.createElement("tr");
+
+row.innerHTML =
+  '<td class="dynamicTableCell"><div class="dynamicRow"><input type="checkbox" class="chk tilgangDynChk"><input type="text" class="tilgangText" placeholder="Annen tilgang"></div></td>';
+
+  tilgangerDynamicBody.appendChild(row);
+
+  const chk = row.querySelector(".tilgangDynChk");
+  const txt = row.querySelector(".tilgangText");
+
+  txt.addEventListener("input", () => {
+    chk.checked = !!clean(txt.value);
+
+    cleanupDynamicTextRows(
+      tilgangerDynamicBody,
+      "tilgangText",
+      "tilgangDynChk"
+    );
+
+    ensureTilgangBlankRow();
+    lagRapport();
+  });
+
+  chk.addEventListener("change", lagRapport);
+}
 function ensureTilgangBlankRow(){const texts=Array.from(document.querySelectorAll(".tilgangText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addTilgangRow()}
 function resetTilgangRows(){tilgangerDynamicBody.innerHTML="";addTilgangRow()}
-function addDrenAnnetField(){const row=document.createElement("div");row.className="dynamicRow";row.innerHTML='<input type="checkbox" class="chk drenAnnetChk"><input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';const cb=row.querySelector(".drenAnnetChk"),txt=row.querySelector(".drenAnnetText");txt.addEventListener("input",()=>{cb.checked=!!clean(txt.value);ensureDrenAnnetBlankField();lagRapport()});cb.addEventListener("change",lagRapport);drenAnnetContainer.appendChild(row)}
+function addDrenAnnetField(){const row=document.createElement("div");row.className="dynamicRow";row.innerHTML='<input type="checkbox" class="chk drenAnnetChk"><input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';const cb=row.querySelector(".drenAnnetChk"),txt=row.querySelector(".drenAnnetText");txt.addEventListener("input", () => {
+
+  cb.checked = !!clean(txt.value);
+
+  cleanupDynamicTextRows(
+    drenAnnetContainer,
+    "drenAnnetText",
+    "drenAnnetChk"
+  );
+
+  ensureDrenAnnetBlankField();
+
+  lagRapport();
+});cb.addEventListener("change",lagRapport);drenAnnetContainer.appendChild(row)}
 function ensureDrenAnnetBlankField(){const texts=Array.from(document.querySelectorAll(".drenAnnetText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addDrenAnnetField()}
 function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetField()}
 function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
@@ -995,7 +1069,8 @@ function lagRapport() {
     buildFullReport(lines);
   }
 
-  rapport.value = lines.join("\n");
+rapport.value = lines.join("\n");
+autoGrowTextarea(rapport);
 }
 function addHeader(lines) {
   const transportVal = getBinaryValue("transport");
