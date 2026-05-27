@@ -241,7 +241,7 @@
   <textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
   <label>Tidligere</label><textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
 
-  <div class="section">Vitalparametre</div>
+<div class="section vpTitle">Vitalparametre</div>
   <div class="inlineVitals">
     <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
     <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
@@ -277,7 +277,7 @@
 
 </div> <!-- fullTop -->
 
-<div class="section">Medikamenter og infusjoner</div>
+<label class="minorTitle">Medikamenter og infusjoner</label>
 <table class="table medUnifiedTable">
   <thead>
     <tr>
@@ -374,7 +374,9 @@
   <div class="dualRow"><input id="acuteRekNavn" placeholder="Navn"><input id="acuteRekTlf" placeholder="Nummer"></div>
 </div>
 
-<div class="section">Smitte <span class="hint">Ett alternativ + ev. blodsmitte</span></div>
+<label class="minorTitle">
+  Smitte <span class="hint">Ett alternativ + ev. blodsmitte</span>
+</label>
 <div class="smLine">
   <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen"><span>Ingen kjente</span></label>
   <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt"><span>Kontaktsmitte</span></label>
@@ -385,13 +387,14 @@
 <div id="smitteSpesWrap" class="hidden">
   <input id="smitteSpes" placeholder="Spesifiser smitte">
 </div>
-<div class="section">CAVE?</div>
+<label class="minorTitle">CAVE?</label>
 <div class="binaryRow spedbarnRow"><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei"><span>Nei</span></label><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja"><span>Ja</span></label></div>
 <div id="caveTextWrap" class="hidden">
   <input id="caveText" placeholder="Spesifiser CAVE">
 </div>
 <div id="fullBottom" class="hidden">
-  <div class="section">Tilganger</div>
+
+<label class="minorTitle">Tilganger</label>
   <table class="table"><tbody>
 <tr>
   <td>
@@ -414,23 +417,23 @@
 </tr>    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
   </tbody><tbody id="tilgangerDynamicBody"></tbody></table>
 
-<div class="section">Utstyr</div>
+<label class="minorTitle">Utstyr</label>
   <table class="table"><tbody>
     <tr><td class="toggleCell" data-toggle="utst_arterie"><div class="toggleInner"><input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran"><span>Arteriekran</span></div></td><td class="toggleCell" data-toggle="dren_thorax"><div class="toggleInner"><input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren"><span>Thoraxdren</span></div></td></tr>
     <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Sprøytepumper"><span>Sprøytepumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
     <tr><td id="dren_annet_container" colspan="2"></td></tr>
   </tbody></table>
 
-<div class="section">Rekvirerende lege</div>
-<div class="dualRow">
+<label class="minorTitle">Rekvirerende lege</label>
+<div class="doctorRow">
   <input id="rekNavn" placeholder="Navn">
-  <input id="rekTlf" placeholder="Nummer">
+  <input id="rekTlf" class="phoneInput" placeholder="Tlf">
 </div>
 
-<label>Mottakende lege</label>
-<div class="dualRow">
+<label class="minorTitle">Mottakende lege</label>
+<div class="doctorRow">
   <input id="mottNavn" placeholder="Navn">
-  <input id="mottTlf" placeholder="Nummer">
+  <input id="mottTlf" class="phoneInput" placeholder="Tlf">
 </div>
 
 </div> <!-- fullBottom -->

@@ -33,7 +33,10 @@ textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-famil
 .section{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-weight:900;font-size:15px;color:#ffffff}
 .hidden{display:none!important}
 .table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#34373e}
-.table td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+.table td{
+  padding:10px 8px;
+  vertical-align:top;
+}
 #rapport{
   min-height:180px;
   overflow-y:hidden;
@@ -177,7 +180,13 @@ button:hover{opacity:.97}button:active{transform:translateY(1px)}
 
 #andreInfBody .dynamicRow,#tilgangerDynamicBody .dynamicRow,#dren_annet_container .dynamicRow{display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;width:100%}
 
-#andreInfBody input[type="text"],#tilgangerDynamicBody input[type="text"],#dren_annet_container input[type="text"]{flex:1 1 auto!important;width:auto!important;min-width:0!important}
+#andreInfBody input[type="text"],
+#tilgangerDynamicBody input[type="text"],
+#dren_annet_container input[type="text"]{
+  flex:0 0 420px!important;
+  width:420px!important;
+  min-width:0!important;
+}
 
 /* Sedasjon + Pressor dynamiske fritekstlinjer */
 #sedDynamicBody .dynamicRow,#pressorDynamicBody .dynamicRow,#andreInfBody .dynamicRow,#tilgangerDynamicBody .dynamicRow,#dren_annet_container .dynamicRow{display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;width:100% !important;gap:8px !important}
@@ -265,11 +274,6 @@ input[type=number]{
   flex:0 0 auto;
 }
 
-.dynamicTableCell {
-  border-top: 1px solid rgba(255,255,255,0.14);
-  padding: 10px;
-}
-
 .section{
   margin-top:28px;
   padding-top:16px;
@@ -299,4 +303,93 @@ input[type=number]{
   min-height:120px;
   margin-top:10px;
   margin-bottom:26px;
+}
+
+.blockTitle{
+  margin-top:34px;
+  margin-bottom:18px;
+  padding-left:14px;
+  border-left:4px solid #777;
+  font-size:15px;
+  font-weight:900;
+  color:#fff;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.compactBlock{
+  margin-top:22px;
+  padding-top:12px;
+  border-top:1px solid #444;
+  font-size:13px;
+  color:#ccc;
+}
+
+.phoneInput{
+  width:150px;
+}
+
+#vekt{
+  width:140px;
+}
+
+#weightWrap{
+  margin-top:18px;
+  max-width:220px;
+}
+
+.section + .binaryRow{
+  margin-top:12px;
+}
+
+.minorTitle{
+  display:block;
+  margin-top:18px;
+  margin-bottom:14px;
+  line-height:1.3;
+  font-size:14px;
+  font-weight:700;
+  color:#e6e6e6;
+}
+.vpTitle{
+  margin-bottom:14px;
+}
+
+/* Felles høyrekant for legefelt og fritekstfelt i tilgang/utstyr */
+:root{
+  --adminRowWidth:570px;
+}
+
+.doctorRow{
+  display:grid;
+  grid-template-columns:420px 145px;
+  gap:10px;
+  width:var(--adminRowWidth);
+  max-width:100%;
+  align-items:center;
+}
+
+#tilgangerDynamicBody .dynamicRow,
+#dren_annet_container .dynamicRow{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:nowrap !important;
+  gap:10px !important;
+  width:var(--adminRowWidth) !important;
+  max-width:100% !important;
+}
+
+#tilgangerDynamicBody .dynamicRow input,
+#dren_annet_container .dynamicRow input{
+  flex:1 1 auto !important;
+  width:auto !important;
+  max-width:none !important;
+  min-width:0 !important;
+  margin-bottom:0 !important;
+}
+
+.pvkSelect,
+.pumperSelect{
+  margin-bottom:0;
+  align-self:center;
 }
