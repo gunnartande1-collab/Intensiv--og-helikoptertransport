@@ -131,7 +131,7 @@ function buildFullAirwayLine() {
     const l = clean($("spontO2Liter").value);
 
     return l
-      ? "Luftveier: Spontan med O2, antall liter O2 " + l
+      ? "Luftveier: Spontan med O2 " + l + " l/min"
       : "Luftveier: Spontan med O2";
   }
 
@@ -140,35 +140,44 @@ function buildFullAirwayLine() {
     const f = clean($("highFlowFio2").value);
     const fl = clean($("highFlowFlow").value);
 
-    if (f) p.push("Fio2 " + f);
-    if (fl) p.push("Flow " + fl + " liter/min");
+if (f) p.push("FiO2 " + f);
+if (fl) p.push("flow " + fl + " l/min");
 
-    return p.join(", ");
+return p.length > 1
+  ? p[0] + "; " + p.slice(1).join(" og ")
+  : p[0];
   }
 
   if (main === "NIV (CPAP/BiPAP)") {
     const p = ["Luftveier: NIV"];
     const f = clean($("nivFio2").value);
 
-    if (f) p.push("Fio2 " + f);
+    if (f) p.push("FiO2 " + f + " %");
 
-    return p.join(", ");
+return p.length > 1
+  ? p[0] + "; " + p.slice(1).join(" og ")
+  : p[0];
   }
 
-  if (main === "Intubert") {
-    const p = ["Luftveier: Intubert"];
-    const f = clean($("intubFio2").value);
-    const pe = clean($("intubPeep").value);
-    const t = clean($("intubTopp").value);
+if (main === "Intubert") {
 
-    if (f) p.push("Fio2 " + f);
-    if (pe) p.push("Peep " + pe);
-    if (t) p.push("Topptrykk med peep " + t);
+  const p = ["Luftveier: Intubert"];
 
-    return p.join(", ");
-  }
+  const f = clean($("intubFio2").value);
+  const pe = clean($("intubPeep").value);
+  const t = clean($("intubTopp").value);
+
+  if (f) p.push("FiO2 " + f + " %");
+  if (pe) p.push("PEEP " + pe);
+  if (t) p.push("topptrykk " + t);
+
+  return p.length > 1
+    ? p[0] + "; " + p.slice(1).join(", ").replace(/,([^,]*)$/, " og$1")
+    : p[0];
+}
 
 if (main === "Trakeostomi") {
+
   const sel = [];
 
   document.querySelectorAll(".trachOpt").forEach(cb => {
@@ -177,35 +186,45 @@ if (main === "Trakeostomi") {
     }
   });
 
-  const p = [];
   const l = clean($("trachO2Liter").value);
   const f = clean($("trachVentFio2").value);
   const pe = clean($("trachVentPeep").value);
   const t = clean($("trachVentTopp").value);
 
-let luftveiTekst = sel.join(", ");
+  let tekst = "Luftveier: Trakeostomi";
 
-if (l && luftveiTekst.includes("O2 via trakeostomi")) {
-  luftveiTekst = luftveiTekst.replace(
-    "O2 via trakeostomi",
-    l + "l O2 via trakeostomi"
-  );
-}
+  if (sel.includes("Spontan pust via trakeostomi")) {
+    tekst += "; spontan";
+  }
 
-if (luftveiTekst) {
-  p.push("Luftveier: " + luftveiTekst);
-} else {
-  p.push("Luftveier: Trakeostomi");
-}
-  if (f) p.push("Fio2 " + f);
-  if (pe) p.push("Peep " + pe);
-  if (t) p.push("Topptrykk med peep " + t);
+  if (sel.includes("O2 via trakeostomi")) {
+    tekst += l
+      ? "; O2 " + l + " l/min"
+      : "; O2";
+  }
 
-  return p.join(", ");
+  if (
+    sel.includes("Koblet til respirator") ||
+    sel.includes("Trykkstøtte (NIV via trakeostomi)")
+  ) {
+    const vent = [];
+
+    if (f) vent.push("FiO2 " + f + " %");
+    if (pe) vent.push("PEEP " + pe);
+    if (t) vent.push("topptrykk " + t);
+
+    tekst += vent.length
+      ? "; respiratorbehandlet med " +
+        vent.join(", ").replace(/,([^,]*)$/, " og$1")
+      : "; respiratorbehandlet";
+  }
+
+  return tekst;
 }
-  return "";
+return "";
 }
 function buildAcuteAirwayLines() {
+  
 
   const airway = getBinaryValue("acuteAirway");
 
@@ -264,90 +283,77 @@ function buildAcuteAirwayLines() {
     return [p.join(", ")];
   }
 
-  if (airway === "Intubert") {
+if (airway === "Intubert") {
 
-    const p = ["Luftveier: Intubert"];
+  const p = ["Luftveier: Intubert"];
 
-    const f =
-      clean($("acuteIntubFio2").value) ||
-      clean($("intubFio2").value);
+  const f =
+    clean($("acuteIntubFio2").value) ||
+    clean($("intubFio2").value);
 
-    const pe =
-      clean($("acuteIntubPeep").value) ||
-      clean($("intubPeep").value);
+  const pe =
+    clean($("acuteIntubPeep").value) ||
+    clean($("intubPeep").value);
 
-    const t =
-      clean($("acuteIntubTopp").value) ||
-      clean($("intubTopp").value);
+  const t =
+    clean($("acuteIntubTopp").value) ||
+    clean($("intubTopp").value);
 
-    if (f) p.push("Fio2 " + f);
-    if (pe) p.push("Peep " + pe);
-    if (t) p.push("Topptrykk med peep " + t);
+  if (f) p.push("FiO2 " + f + " %");
+  if (pe) p.push("PEEP " + pe);
+  if (t) p.push("topptrykk " + t);
 
-    return [p.join(", ")];
-  }
+  return [
+    p.length > 1
+      ? p[0] + "; " + p.slice(1).join(", ").replace(/,([^,]*)$/, " og$1")
+      : p[0]
+  ];
+}
+
 if (airway === "Trakeostomi") {
 
-  const p = [];
   const sel = [];
 
-  const valgtTrach = document.querySelector(
-    isAcute()
-      ? ".acuteTrachOpt:checked"
-      : ".trachOpt:checked"
-  );
+  const valgtTrach = document.querySelector(".acuteTrachOpt:checked");
 
   if (valgtTrach) {
     sel.push(valgtTrach.dataset.name);
   }
 
-  const l = clean(
-    isAcute()
-      ? $("acuteTrachO2Liter").value
-      : $("trachO2Liter").value
-  );
+  const l = clean($("acuteTrachO2Liter").value);
+  const f = clean($("acuteTrachVentFio2").value);
+  const pe = clean($("acuteTrachVentPeep").value);
+  const t = clean($("acuteTrachVentTopp").value);
 
-  let luftveiTekst = sel.join(", ");
+  let tekst = "Luftveier: Trakeostomi";
+
+  if (sel.includes("Spontan pust via trakeostomi")) {
+    tekst += "; spontan";
+  }
+
+  if (sel.includes("O2 via trakeostomi")) {
+    tekst += l
+      ? "; O2 " + l + " l/min"
+      : "; O2";
+  }
 
   if (
-    l &&
-    luftveiTekst.includes("O2 via trakeostomi")
+    sel.includes("Koblet til respirator") ||
+    sel.includes("Trykkstøtte (NIV via trakeostomi)")
   ) {
-    luftveiTekst = luftveiTekst.replace(
-      "O2 via trakeostomi",
-      l + "l O2 via trakeostomi"
-    );
+    const vent = [];
+
+    if (f) vent.push("FiO2 " + f + " %");
+    if (pe) vent.push("PEEP " + pe);
+    if (t) vent.push("topptrykk " + t);
+
+    tekst += vent.length
+      ? "; respiratorbehandlet med " +
+        vent.join(", ").replace(/,([^,]*)$/, " og$1")
+      : "; respiratorbehandlet";
   }
 
-  if (luftveiTekst) {
-    p.push("Luftveier: " + luftveiTekst);
-  } else {
-    p.push("Luftveier: Trakeostomi");
-  }
-
-  const f = clean(
-    isAcute()
-      ? $("acuteTrachVentFio2").value
-      : $("trachVentFio2").value
-  );
-
-  const pe = clean(
-    isAcute()
-      ? $("acuteTrachVentPeep").value
-      : $("trachVentPeep").value
-  );
-
-  const t = clean(
-    isAcute()
-      ? $("acuteTrachVentTopp").value
-      : $("trachVentTopp").value
-  );
-
-  if (f) p.push("Fio2 " + f);
-  if (pe) p.push("Peep " + pe);
-  if (t) p.push("Topptrykk med peep " + t);
-
-  return p.join(", ");
+  return [tekst];
 }
 
 return ["Luftveier: " + airway];

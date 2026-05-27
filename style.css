@@ -29,11 +29,16 @@ textarea::-webkit-resizer{
       transparent 100%
     );
 }
-stextarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;overflow:auto}
+textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;overflow:auto}
 .section{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-weight:900;font-size:15px;color:#ffffff}
 .hidden{display:none!important}
 .table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#34373e}
 .table td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+#rapport{
+  min-height:180px;
+  overflow-y:hidden;
+  resize:none;
+}
 .table tr:last-child td{border-bottom:none}
 .medTable th{font-size:13px;color:#fff;text-align:left;background:#31343b;padding:8px}
 .chk{width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
@@ -252,4 +257,19 @@ input[type=number]{
   width:18px;
   height:18px;
   flex:0 0 auto;
+}
+
+.dynamicTableCell {
+  border-top: 1px solid rgba(255,255,255,0.14);
+  padding: 10px;
+}
+
+.section{
+  margin-top:28px;
+  padding-top:16px;
+  border-top:1px solid #5a5d66;
+  font-weight:900;
+  font-size:15px;
+  color:#fff;
+  width:100%;
 }

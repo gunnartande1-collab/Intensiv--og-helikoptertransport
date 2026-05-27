@@ -47,7 +47,7 @@
 
 <div id="mainContent" class="hidden">
 
-<label>Spedbarn?</label>
+<div class="section">Spedbarn</div>
 <div class="binaryRow">
   <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja"><span>Ja</span></label>
   <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei"><span>Nei</span></label>
@@ -110,8 +110,7 @@
 <label>Aktuelt</label>
 <textarea id="acuteHovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
 
-<label>Luftveier</label>
-
+<div class="section airwaySection">Luftveier</div>
 <div class="binaryRow">
   <label class="binaryOpt">
     <input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan uten O2" id="acute_air_spont_uten">
@@ -252,7 +251,7 @@
     <div class="vpField"><span>GCS</span><input id="gcs"></div>
   </div>
 
-  <label>Luftveier</label>
+<div class="section airwaySection">Luftveier</div>
   <div class="binaryRow">
     <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan uten O2" id="air_spont_uten"><span>Spontan uten O2</span></label>
     <label class="binaryOpt"><input type="radio" name="airwayMain" class="chk binOpt" data-group="airwayMain" data-value="Spontan med O2" id="air_spont_med"><span>Spontan med O2</span></label>
@@ -415,7 +414,7 @@
 </tr>    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
   </tbody><tbody id="tilgangerDynamicBody"></tbody></table>
 
-  <label style="margin-top:14px;">Utstyr</label>
+<div class="section">Utstyr</div>
   <table class="table"><tbody>
     <tr><td class="toggleCell" data-toggle="utst_arterie"><div class="toggleInner"><input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran"><span>Arteriekran</span></div></td><td class="toggleCell" data-toggle="dren_thorax"><div class="toggleInner"><input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren"><span>Thoraxdren</span></div></td></tr>
     <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Infusjonspumper"><span>Infusjonspumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
