@@ -100,10 +100,11 @@ function buildVitalsLine() {
 function linesTilganger() {
   const out = [];
 
-  if ($("til_cvk").checked) {
-    out.push("CVK");
-  }
+const cvkLumen = clean($("cvkLumen")?.value);
 
+if ($("til_cvk").checked) {
+  out.push(cvkLumen ? "CVK - " + cvkLumen : "CVK");
+}
   const n = clean(pvkAntall.value);
 
   if (pvkChk.checked) {
@@ -635,6 +636,25 @@ function bindPvkEvents() {
   });
 }
 
+function bindCvkEvents() {
+
+  $("cvkLumen")?.addEventListener("input", () => {
+
+    $("til_cvk").checked = !!$("cvkLumen").value;
+
+    lagRapport();
+  });
+
+  $("til_cvk")?.addEventListener("change", () => {
+
+    if (!$("til_cvk").checked) {
+      $("cvkLumen").value = "";
+    }
+
+    lagRapport();
+  });
+}
+
 function bindUtstyrPumpeEvents() {
 
 utstPumperAntall.addEventListener("input", () => {    utstPumperChk.checked = !!utstPumperAntall.value;
@@ -873,9 +893,10 @@ function bindEvents() {
   bindAutoGrowEvents();
   bindVitalEvents();
 
-  bindPvkEvents();
-  bindUtstyrPumpeEvents();
-  bindAcutePumpeEvents();
+bindPvkEvents();
+bindCvkEvents();
+bindUtstyrPumpeEvents();
+bindAcutePumpeEvents();
 
   bindSpedbarnEvents();
   bindCaveEvents();
