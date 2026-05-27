@@ -394,8 +394,8 @@ function buildUtstyrList() {
   if (utstPumperChk.checked) {
     out.push(
       n
-        ? "Infusjonspumper -" + n + "stk"
-        : "Infusjonspumper"
+        ? "Sprøytepumper -" + n + "stk"
+        : "Sprøytepumper"
     );
   }
 
@@ -1182,7 +1182,7 @@ function buildAcuteReport(lines) {
 
   if (acutePumperChk.checked) {
     lines.push(
-      "Antall infusjonspumper: " +
+      "Antall sprøytepumper: " +
       (clean(acutePumperAntall.value) || "ikke oppgitt")
     );
   }

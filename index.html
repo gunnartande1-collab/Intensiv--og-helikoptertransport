@@ -366,8 +366,8 @@
 </table>
 
 <div id="acuteBottom" class="hidden">
-  <label>Antall infusjonspumper</label>
-  <div class="nonToggleRow"><label class="clickableChoice" for="acutePumperChk"><input id="acutePumperChk" class="chk" type="checkbox"><span>Infusjonspumper</span></label>
+  <label>Antall sprøytepumper</label>
+  <div class="nonToggleRow"><label class="clickableChoice" for="acutePumperChk"><input id="acutePumperChk" class="chk" type="checkbox"><span>Sprøytepumper</span></label>
     <select id="acutePumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select>
   </div>
   <div class="section">Rekvirerende lege</div>
@@ -417,7 +417,7 @@
 <div class="section">Utstyr</div>
   <table class="table"><tbody>
     <tr><td class="toggleCell" data-toggle="utst_arterie"><div class="toggleInner"><input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran"><span>Arteriekran</span></div></td><td class="toggleCell" data-toggle="dren_thorax"><div class="toggleInner"><input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren"><span>Thoraxdren</span></div></td></tr>
-    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Infusjonspumper"><span>Infusjonspumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
+    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Sprøytepumper"><span>Sprøytepumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
     <tr><td id="dren_annet_container" colspan="2"></td></tr>
   </tbody></table>
 
@@ -432,6 +432,8 @@
   <input id="mottNavn" placeholder="Navn">
   <input id="mottTlf" placeholder="Nummer">
 </div>
+
+</div> <!-- fullBottom -->
 
 <div class="btnbar">
   <button id="copyBtn" type="button" class="btn-copy actionBtn">
