@@ -21,7 +21,7 @@ function getSpedbarnValue(){const el=document.querySelector(".spedRadio:checked"
 function getCaveValue(){const el=document.querySelector(".caveRadio:checked");return el?el.dataset.value:""}
 function isAcute(){return valgtHastegrad==="Akutt"}
 function autoGrowTextarea(el){if(!el)return;el.style.height="auto";el.style.height=el.scrollHeight+"px"}
-function updateTitle(){pageTitle.textContent=getBinaryValue("transport")==="Kuvøse"?"KUVØSETRANSPORT":"INTENSIVTRANSPORT"}
+function updateTitle(){pageTitle.textContent=getBinaryValue("transport")==="Kuvøse"?"KUVØSETRANSPORT":"Intensiv- og helikoptertransport"}
 function syncSpecChoices(){
   const state = {};
 
