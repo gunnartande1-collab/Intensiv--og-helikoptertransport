@@ -200,7 +200,14 @@ button:hover{opacity:.97}button:active{transform:translateY(1px)}
 
 .hasteBtn{min-height:64px !important;min-width:190px !important;font-size:16px !important;letter-spacing:.4px;text-transform:uppercase}
 
-.hasteSupport{margin-top:12px;margin-bottom:20px;background:#34373e;border:1px solid var(--line);border-radius:14px;padding:14px}
+.hasteSupport{
+  margin-top:12px;
+  margin-bottom:20px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
 
 .hasteSupportTitle{font-weight:600;color:#d1d5db;margin-bottom:10px;font-size:13px;letter-spacing:.2px;text-transform:uppercase}
 
@@ -344,13 +351,18 @@ input[type=number]{
 
 .minorTitle{
   display:block;
+
   margin-top:18px;
-  margin-bottom:14px;
+  margin-bottom:8px;
+
   line-height:1.3;
-  font-size:14px;
-  font-weight:700;
-  color:#e6e6e6;
+
+  font-size:15px;
+  font-weight:800;
+
+  color:#f3f4f6;
 }
+
 .vpTitle{
   margin-bottom:14px;
 }
@@ -393,3 +405,977 @@ input[type=number]{
   margin-bottom:0;
   align-self:center;
 }
+
+/* ===============================
+   NY MEDIKAMENTSEKSJON
+================================ */
+
+.medSection{
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
+}
+
+.medSection .minorTitle{
+  margin-top:0;
+  margin-bottom:16px;
+  font-size:15px;
+  font-weight:900;
+  color:#fff;
+}
+
+.medGroup{
+  margin-top:16px;
+}
+
+.medGroup:first-of-type{
+  margin-top:0;
+}
+
+.medGroupTitle{
+  margin-bottom:8px;
+  font-size:13px;
+  font-weight:800;
+  color:#d8d8d8;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.chipRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.medChip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:#2f3238;
+  color:#f1f1f1;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:650;
+  user-select:none;
+  transition:.15s ease;
+}
+
+.medChip:hover{
+  background:#3a3e46;
+}
+
+.medChip input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.medChip:has(input:checked){
+  background:#8fb0ff;
+  color:#111;
+  border-color:#8fb0ff;
+  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
+}
+
+.medDynamic{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  max-width:570px;
+}
+
+.medDynamic .dynamicRow{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex-wrap:nowrap !important;
+  width:100% !important;
+  margin-top:0 !important;
+}
+
+.medDynamic .dynamicRow .chk{
+  flex:0 0 18px !important;
+  width:18px !important;
+  height:18px !important;
+  margin:0 !important;
+}
+
+.medDynamic .dynamicRow input[type="text"]{
+  flex:1 1 auto !important;
+  width:auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+
+@media(max-width:720px){
+  .medSection{
+    padding:14px;
+  }
+
+  .medChip{
+    flex:1 1 auto;
+  }
+
+  .medDynamic{
+    max-width:100%;
+  }
+}
+
+/* ===============================
+   MODERNE LUFTVEIVALG
+================================ */
+
+.airwayRow{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  overflow:visible;
+}
+
+.airwayRow .binaryOpt{
+  margin:0;
+  min-height:48px;
+  padding:0 14px;
+  border-radius:14px;
+  background:#2f3238;
+  border:1px solid rgba(255,255,255,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#f1f1f1;
+  font-weight:750;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.airwayRow .binaryOpt:hover{
+  background:#3a3e46;
+}
+
+.airwayRow .binaryOpt input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.airwayRow .binaryOpt:has(input:checked){
+  background:#8fb0ff;
+  color:#111;
+  border-color:#8fb0ff;
+  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
+}
+
+.airwayRow .binaryOpt span{
+  line-height:1.2;
+}
+
+@media(max-width:720px){
+  .airwayRow{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* ===============================
+   MODERNE TRACHEOSTOMI-VALG
+================================ */
+
+#trachWrap .table,
+#acuteTrachWrap .table{
+  border:none;
+  background:transparent;
+  margin-top:10px;
+}
+
+#trachWrap table,
+#acuteTrachWrap table{
+  display:block;
+}
+
+#trachWrap tbody,
+#acuteTrachWrap tbody{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+#trachWrap tr,
+#acuteTrachWrap tr{
+  display:block;
+}
+
+#trachWrap td,
+#acuteTrachWrap td{
+  display:block;
+  padding:0;
+}
+
+#trachWrap .toggleCell,
+#acuteTrachWrap .toggleCell{
+  min-height:40px;
+  padding:0 14px;
+  border-radius:14px;
+  background:#2a2d33;  
+  border:1px solid rgba(255,255,255,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#f1f1f1;
+  font-weight:650;
+  font-size:13px;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+#trachWrap .toggleCell:hover,
+#acuteTrachWrap .toggleCell:hover{
+  background:#3a3e46;
+}
+
+#trachWrap .toggleInner,
+#acuteTrachWrap .toggleInner{
+  justify-content:center;
+}
+
+#trachWrap .toggleInner input,
+#acuteTrachWrap .toggleInner input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+#trachWrap .toggleCell:has(input:checked),
+#acuteTrachWrap .toggleCell:has(input:checked){
+  background:#8fb0ff;
+  color:#111;
+  border-color:#8fb0ff;
+  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
+}
+
+@media(max-width:720px){
+  #trachWrap tbody,
+  #acuteTrachWrap tbody{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ===============================
+   KOMPAKTE DETALJFELT
+================================ */
+
+#spontO2Wrap,
+#highFlowWrap,
+#nivWrap,
+#intubWrap,
+#trachO2Wrap,
+#trachVentWrap,
+
+#acuteSpontO2Wrap,
+#acuteHighFlowWrap,
+#acuteNivWrap,
+#acuteIntubWrap,
+#acuteTrachO2Wrap,
+#acuteTrachVentWrap{
+  margin-top:10px;
+  padding:12px 14px;
+
+  background:#2b2e34;
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;
+
+  max-width:560px;
+}
+
+/* Fjern store labels inne i detaljfelt */
+#spontO2Wrap label,
+#highFlowWrap label,
+#nivWrap label,
+#intubWrap label,
+#trachO2Wrap label,
+#trachVentWrap label,
+
+#acuteSpontO2Wrap label,
+#acuteHighFlowWrap label,
+#acuteNivWrap label,
+#acuteIntubWrap label,
+#acuteTrachO2Wrap label,
+#acuteTrachVentWrap label{
+  margin-top:0;
+  margin-bottom:5px;
+
+  font-size:12px;
+  font-weight:700;
+  color:#cfcfcf;
+
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+/* Tettere inputs */
+#spontO2Wrap input,
+#highFlowWrap input,
+#nivWrap input,
+#intubWrap input,
+#trachO2Wrap input,
+#trachVentWrap input,
+
+#acuteSpontO2Wrap input,
+#acuteHighFlowWrap input,
+#acuteNivWrap input,
+#acuteIntubWrap input,
+#acuteTrachO2Wrap input,
+#acuteTrachVentWrap input{
+  margin-bottom:8px;
+}
+
+/* Siste input uten ekstra luft */
+#spontO2Wrap input:last-child,
+#highFlowWrap input:last-child,
+#nivWrap input:last-child,
+#intubWrap input:last-child,
+#trachO2Wrap input:last-child,
+#trachVentWrap input:last-child,
+
+#acuteSpontO2Wrap input:last-child,
+#acuteHighFlowWrap input:last-child,
+#acuteNivWrap input:last-child,
+#acuteIntubWrap input:last-child,
+#acuteTrachO2Wrap input:last-child,
+#acuteTrachVentWrap input:last-child{
+  margin-bottom:0;
+}
+
+/* Roligere grupper – mindre Excel/tabellpreg */
+
+.table{
+  border:0;
+  background:transparent;
+}
+
+.table tr{
+  border:0;
+}
+
+.table td{
+  border-bottom:0;
+  padding:10px 0;
+}
+
+/* Myk gruppefølelse i stedet for tabell */
+.table{
+  display:block;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+}
+/* Litt luft mellom radene uten linjer */
+.table tr{
+  display:block;
+  padding:6px 0;
+}
+
+/* Beholder innholdet ryddig */
+.table td{
+  display:block;
+}
+
+/* Hvis label/valg ligger på samme rad */
+.table label{
+  margin-bottom:6px;
+}
+
+/* Smitte + CAVE som rolige infofelt */
+
+.infoGroup{
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
+}
+
+/* Overskrift */
+.infoGroup .section{
+  margin-top:0;
+  padding-top:0;
+  border-top:0;
+}
+
+/* Valg inni gruppen */
+.infoGroup .binaryRow,
+.infoGroup .toggleRow{
+  gap:14px;
+  margin-top:10px;
+}
+
+/* Fritekst */
+.infoGroup textarea,
+.infoGroup input{
+  margin-top:10px;
+}
+
+/* Tilganger – roligere kort/chip-følelse */
+
+.accessGroup{
+  margin-top:18px;
+  padding:14px 16px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.accessGroup .minorTitle{
+  margin-top:0;
+}
+
+.accessGrid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 12px;
+  margin-top:10px;
+}
+
+.accessGrid .clickableChoice,
+.accessGrid .radioOpt,
+.accessGrid label{
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.accessGrid input{
+  margin:0;
+}
+
+
+/* Tilganger / Utstyr – kompakt kort */
+
+.accessGroup{
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
+}
+
+.accessGroup .minorTitle{
+  margin-top:0;
+  margin-bottom:8px;
+}
+
+.accessGroup .table{
+  padding:4px 0;
+}
+
+.accessGroup .table tr{
+  padding:3px 0;
+}
+
+.accessGroup .table td{
+  padding:4px;
+}
+
+.accessGroup .toggleCell,
+.accessGroup .nonToggleRow{
+  border-radius:12px;
+  padding:6px 9px;
+  background:rgba(255,255,255,0.022);
+}
+
+/* Skjul checkbox uten å ødelegge klikk */
+
+.specialGroup .specCell input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+/* Standard chip */
+
+.specialGroup .specCell{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.05);
+  cursor:pointer;
+  transition:0.15s ease;
+}
+
+/* Hover */
+
+.specialGroup .specCell:hover{
+  background:rgba(255,255,255,0.055);
+}
+
+/* Valgt */
+
+.specialGroup .specCell.active{
+  background:rgba(255,255,255,0.12);
+  border-color:rgba(255,255,255,0.14);
+}
+
+.specialGroup .specCell input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.specialGroup .specCell.active{
+  background:var(--accent);
+  color:#111;
+  border-color:var(--accent);
+}
+
+.specialGroup .specCell.active span{
+  color:#111;
+}
+
+/* Tilganger / Utstyr – mer kompakte valgflater */
+
+.accessGroup .toggleCell,
+.accessGroup .nonToggleRow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:34px;
+  border-radius:12px;
+  padding:6px 10px;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.04);
+}
+
+.accessGroup .toggleInner,
+.accessGroup .clickableChoice{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.accessGroup input[type="checkbox"]{
+  margin:0;
+}
+
+.accessGroup select{
+  height:30px;
+  border-radius:10px;
+}
+
+/* Roligere input- og tekstfelt */
+
+input,
+textarea,
+select{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  outline:none;
+  border-color:rgba(255,255,255,0.16);
+}
+
+/* Strammere rytme mellom seksjoner */
+
+.bigSection{
+  display:block;
+
+  margin-top:30px;
+  margin-bottom:14px;
+
+  font-size:20px;
+  font-weight:850;
+
+  letter-spacing:.01em;
+
+  color:#ffffff;
+}
+
+.binaryRow,
+.nonToggleRow,
+.smLine,
+.airwayRow{
+  margin-top:4px;
+  margin-bottom:4px;
+}
+
+/* Mykere global linjestil */
+
+:root{
+  --line: rgba(255,255,255,0.05);
+}
+
+/* Fjern harde interne linjer */
+
+.table td,
+.table tr,
+.toggleCell,
+.nonToggleRow{
+  border-color:rgba(255,255,255,0.04);
+}
+
+/* Mindre aggressive bokser */
+
+input,
+textarea,
+select{
+  box-shadow:none;
+}
+
+/* Tydeligere valgt status uten hard border */
+
+.toggleCell.active,
+.binaryOpt:has(input:checked){
+  background:rgba(70,130,180,0.85);
+  color:#111;
+  border-color:rgba(70,130,180,0.9);
+}
+
+.toggleCell.active span,
+.binaryOpt:has(input:checked) span{
+  color:#111;
+}
+
+.toggleCell.active span,
+.binaryOpt:has(input:checked) span,
+.radioOpt:has(input:checked) span,
+.clickableChoice:has(input:checked) span{
+  color:#111;
+}
+
+/* Luftveier som moderne valggruppe */
+
+.airwayRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+
+.airwayRow .binaryOpt{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.airwayRow .binaryOpt:has(input:checked) span{
+  color:#111;
+}
+
+.chipOption{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* Medikamenter – mer raffinert chip-layout */
+
+.medGroup{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:var(--surface);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.medGroupTitle{
+  font-size:13px;
+  font-weight:600;
+  opacity:0.72;
+  margin-bottom:8px;
+}
+
+.chipRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.medChip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+/* skjul checkbox visuelt */
+
+.medChip input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+/* valgt */
+
+.medChip:has(input:checked){
+  background:rgba(70,130,180,0.88);
+  border-color:rgba(70,130,180,0.95);
+  color:#111;
+}
+
+.medChip:has(input:checked) span{
+  color:#111;
+}
+
+/* Fjern blå valgtmarkering kun på disse */
+.radioOpt:has(#spedbarn_ja:checked),
+.radioOpt:has(#spedbarn_nei:checked),
+.radioOpt:has(#cave_ja:checked),
+.radioOpt:has(#cave_nei:checked),
+.clickableChoice:has(#til_cvk:checked),
+.clickableChoice:has(#til_pvk:checked),
+.clickableChoice:has(#utst_pumper:checked),
+.clickableChoice:has(#acutePumperChk:checked){
+  background:transparent !important;
+  color:#f1f1f1 !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+
+/* Behold hvit tekst */
+.radioOpt:has(#spedbarn_ja:checked) span,
+.radioOpt:has(#spedbarn_nei:checked) span,
+.radioOpt:has(#cave_ja:checked) span,
+.radioOpt:has(#cave_nei:checked) span,
+.clickableChoice:has(#til_cvk:checked) span,
+.clickableChoice:has(#til_pvk:checked) span,
+.clickableChoice:has(#utst_pumper:checked) span,
+.clickableChoice:has(#acutePumperChk:checked) span{
+  color:#f1f1f1 !important;
+}
+
+.binaryOpt:has(#transport_kuvose:checked),
+.binaryOpt:has(#transport_pedimate:checked),
+.binaryOpt:has(#transport_barnibag:checked),
+.binaryOpt:has(#transport_kengufix:checked){
+  background:transparent !important;
+  color:#f1f1f1 !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+
+.binaryOpt:has(#transport_kuvose:checked) span,
+.binaryOpt:has(#transport_pedimate:checked) span,
+.binaryOpt:has(#transport_barnibag:checked) span,
+.binaryOpt:has(#transport_kengufix:checked) span{
+  color:#f1f1f1 !important;
+}
+
+.feedbackBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:44px;
+  padding:0 16px;
+
+  border-radius:12px;
+
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+
+  color:#d1d5db;
+  text-decoration:none;
+
+  font-size:13px;
+  font-weight:600;
+
+  transition:.15s ease;
+}
+
+.feedbackBtn:hover{
+  background:rgba(255,255,255,0.035);
+  color:#f3f4f6;
+}
+
+.doctorGroup{
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
+}
+
+.flowDivider{
+  margin-top:30px;
+  margin-bottom:12px;
+  padding:8px 12px;
+
+  border-left:4px solid rgba(143,176,255,0.55);
+  border-radius:10px;
+
+  background:rgba(255,255,255,0.025);
+
+  color:#e5e7eb;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+
+.flowDivider.subtle{
+  border-left-color:rgba(255,255,255,0.18);
+  color:#cfcfcf;
+  background:transparent;
+}
+
+.hasteGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-top:10px;
+  margin-bottom:24px;
+}
+
+.hasteCard{
+  min-height:118px;
+  padding:14px 14px 12px;
+
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.10);
+
+  display:flex !important;
+  flex-direction:column !important;
+
+  align-items:flex-start;
+  justify-content:flex-start;
+
+  gap:8px;
+
+  text-align:left;
+
+  white-space:normal !important;
+
+  color:#111;
+
+  box-shadow:0 4px 14px rgba(0,0,0,0.22);
+}
+
+.hasteCardTitle,
+.hasteCardText{
+  display:block;
+  width:100%;
+}
+
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.10);
+
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:8px;
+
+  text-align:left;
+  color:#111;
+
+  box-shadow:0 4px 14px rgba(0,0,0,0.22);
+}
+
+.hasteCardTitle{
+  font-size:17px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.hasteCardText{
+  font-size:12px;
+  font-weight:650;
+  line-height:1.35;
+  opacity:.88;
+}
+
+.hasteCard.active{
+  transform:translateY(-2px);
+  filter:brightness(0.92) saturate(1.12);
+  box-shadow:
+    0 9px 24px rgba(0,0,0,0.35),
+    inset 0 0 0 2px rgba(0,0,0,0.18);
+}
+
+@media(max-width:900px){
+  .hasteGrid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:560px){
+  .hasteGrid{
+    grid-template-columns:1fr;
+  }
+}
+
+.hasteCard{
+  position:relative;
+}
+
+.hasteCard{
+  position:relative;
+
+  transition:
+    transform .08s ease,
+    filter .12s ease,
+    box-shadow .12s ease,
+    border-color .12s ease;
+
+  border:1px solid rgba(255,255,255,0.10);
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.22);
+}
+
+.hasteCard.active{
+  transform:translateY(2px);
+
+  filter:
+    brightness(0.82)
+    saturate(1.12);
+
+  border-color:rgba(0,0,0,0.28);
+
+  box-shadow:
+    inset 0 4px 10px rgba(0,0,0,0.28),
+    inset 0 0 0 2px rgba(0,0,0,0.10);
+}
+
+.formGroup{
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  border:0;
+}
+
+.formGroup .section,
+.formGroup .minorTitle,
+.formGroup label:first-child{
+  margin-top:0;
+}
+

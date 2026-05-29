@@ -16,103 +16,116 @@
 
 <h1 id="pageTitle">Intensiv- og helikoptertransport</h1>
 <div class="hasteLabel">Rekvirert hastegrad</div>
-<div class="hasteBar">
-  <button type="button" class="hasteBtn haste-akutt" data-haste="Akutt">Akutt</button>
-  <button type="button" class="hasteBtn haste-haster" data-haste="Haster">Haster<br>0-45minutter</button>
-  <button type="button" class="hasteBtn haste-samme" data-haste="Samme døgn (V1)">Samme døgn<br>(V1)</button>
-  <button type="button" class="hasteBtn haste-planlagt" data-haste="Planlagt transport (V2)">Planlagt tidspunkt<br>V2</button>
-</div>
 
-<div class="hasteSupport">
-  <div class="hasteSupportTitle">Kort beslutningsstøtte for rekvirert hastegrad</div>
-  <div class="hasteSupportGrid">
-    <div class="hasteSupportItem akutt">
-      <strong>Akutt</strong>
-      <span>Iverksettes umiddelbart.<br>Pasient som skal til umiddelbar intervensjon eller har et kritisk tidsvindu.</span>
-    </div>
-    <div class="hasteSupportItem haster">
-      <strong>Haster:</strong>
-      <span>Iverksettes uten forsinkelser med første ledige ressurs. Vi forsøker å gjennomføre oppdraget innen 30minutter. <br>Pasient med behov for rask overføring til høyere omsorgsnivå, for eksempel vurdering for intervensjon.</span>
-    </div>
-    <div class="hasteSupportItem samme">
-      <strong>Vanlig 1:</strong>
-      <span>Transport til høyere eller lavere omsorgsnivå som bør gjennomføres samme dag. Vi forsøker å gjennomføre oppdraget innen en time.</span>
-    </div>
-    <div class="hasteSupportItem planlagt">
-      <strong>Vanlig 2 (Planlagt tid):</strong>
-      <span>Transport til høyere eller lavere omsorgsnivå som kan planlegges frem i tid.</span>
-    </div>
-  </div>
+<div class="hasteGrid">
+
+  <button type="button" class="hasteCard haste-akutt" data-haste="Akutt">
+    <span class="hasteCardTitle">Akutt</span>
+    <span class="hasteCardText">Umiddelbar intervensjon eller kritisk tidsvindu.</span>
+  </button>
+
+  <button type="button" class="hasteCard haste-haster" data-haste="Haster">
+    <span class="hasteCardTitle">Haster</span>
+    <span class="hasteCardText">Vurdering for intervensjon. Transport så raskt som mulig.</span>
+  </button>
+
+  <button type="button" class="hasteCard haste-samme" data-haste="Samme døgn (V1)">
+    <span class="hasteCardTitle">Samme døgn</span>
+    <span class="hasteCardText">Transport bør gjennomføres samme dag.</span>
+  </button>
+
+  <button type="button" class="hasteCard haste-planlagt" data-haste="Planlagt transport (V2)">
+    <span class="hasteCardTitle">Planlagt</span>
+    <span class="hasteCardText">Transport som kan planlegges frem i tid.</span>
+  </button>
+
 </div>
 
 <div id="mainContent" class="hidden">
 
-<div class="section">Spedbarn</div>
-<div class="binaryRow">
-  <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja"><span>Ja</span></label>
-  <label class="radioOpt"><input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei"><span>Nei</span></label>
-</div>
-<div id="spedbarnExtraWrap" class="hidden">
-<label class="specLabel" data-tooltip="Gestasjonsalder">GA</label>
-<div class="gestWrap">
-  <div class="gestField">
-    <span>Uker</span>
-    <input id="gestasjonsUker" type="text" inputmode="numeric" maxlength="2">
+
+<div class="formGroup">
+
+<div class="formGroup">
+
+  <div class="section">Spedbarn</div>
+
+  <div class="binaryRow">
+    <label class="radioOpt">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja">
+      <span>Ja</span>
+    </label>
+
+    <label class="radioOpt">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei">
+      <span>Nei</span>
+    </label>
   </div>
 
-  <div class="gestField">
-    <span>Dager</span>
-    <input id="gestasjonsDager" type="text" inputmode="numeric" maxlength="1">
-  </div>
-</div>
+  <div id="spedbarnExtraWrap" class="hidden">
 
-  <div id="transportWrap" class="hidden">
-    <label>Transport</label>
-    <div class="binaryRow">
-      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Kuvøse" id="transport_kuvose"><span>Kuvøse</span></label>
-      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Pedimate" id="transport_pedimate"><span>Pedimate</span></label>
-      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Barn i bag" id="transport_barnibag"><span>Barn i bag</span></label>
-      <label class="binaryOpt"><input type="radio" name="transport" class="chk binOpt" data-group="transport" data-value="Kengufix" id="transport_kengufix"><span>Kengufix</span></label>
+    <label class="specLabel" data-tooltip="Gestasjonsalder">GA</label>
+
+    <div class="gestWrap">
+
+      <div class="gestField">
+        <span>Uker</span>
+        <input id="gestasjonsUker" type="text" inputmode="numeric" maxlength="2">
+      </div>
+
+      <div class="gestField">
+        <span>Dager</span>
+        <input id="gestasjonsDager" type="text" inputmode="numeric" maxlength="1">
+      </div>
+
     </div>
+
   </div>
+
 </div>
+</div> <!-- avslutter spedbarn/formGroup -->
+
 <div id="weightWrap">
-    <label id="vektLabel" for="vekt">Vekt (kg)</label>
-<input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="">
+  <label id="vektLabel" for="vekt">Vekt (kg)</label>
+  <input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="">
 </div>
-<div class="section">Spesialtransport</div>
 
-<div class="table spesialtransportRow">
+<div class="formGroup specialGroup">
+  <label class="minorTitle">Spesialtransport</label>
 
-  <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
-    <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
-    <span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span>
+  <div class="table spesialtransportRow">
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
+      <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
+      <span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_iabp">
+      <input id="spec_iabp" class="chk spec specChoice" type="checkbox" value="IABP" data-spec="IABP">
+      <span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_impella">
+      <input id="spec_impella" class="chk spec specChoice" type="checkbox" value="Impella" data-spec="Impella">
+      <span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_no">
+      <input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO">
+      <span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span>
+    </div>
+
   </div>
-
-  <div class="specCell toggleCell toggleInner" data-toggle="spec_iabp">
-    <input id="spec_iabp" class="chk spec specChoice" type="checkbox" value="IABP" data-spec="IABP">
-    <span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span>
-  </div>
-
-  <div class="specCell toggleCell toggleInner" data-toggle="spec_impella">
-    <input id="spec_impella" class="chk spec specChoice" type="checkbox" value="Impella" data-spec="Impella">
-    <span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span>
-  </div>
-
-  <div class="specCell toggleCell toggleInner" data-toggle="spec_no">
-    <input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO">
-    <span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span>
-  </div>
-
 </div>
+
 <div id="acuteTop" class="hidden">
 
 <label class="bigSection">Aktuelt</label>
 <textarea id="acuteHovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
 
 <div class="section airwaySection">Luftveier</div>
-<div class="binaryRow">
-  <label class="binaryOpt">
+<div class="binaryRow airwayRow">
+    <label class="binaryOpt">
     <input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan uten O2" id="acute_air_spont_uten">
     <span>Spontan uten O2</span>
   </label>
@@ -214,7 +227,7 @@
   </table>
 
   <div id="acuteTrachO2Wrap" class="hidden">
-    <label>Antall liter O2</label>
+<label>O2 l/min</label>
     <input id="acuteTrachO2Liter" placeholder="Fritekst">
   </div>
 
@@ -237,19 +250,13 @@
 
 <div id="fullTop" class="hidden">
 
+<div class="formGroup">
   <label>Aktuelt</label>
   <textarea id="hovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
-  <label>Tidligere</label><textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
 
-<div class="section vpTitle">Vitalparametre</div>
-  <div class="inlineVitals">
-    <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
-    <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
-    <div class="vpField"><span>GCS</span><input id="gcs"></div>
-  </div>
+  <label>Tidligere</label>
+  <textarea id="tidligere" class="autoGrow" placeholder="Relevant sykehistorie"></textarea>
+</div>
 
 <div class="section airwaySection">Luftveier</div>
 <div class="binaryRow airwayRow">
@@ -275,127 +282,147 @@
     <div id="trachVentWrap" class="hidden"><label>Fio2</label><input id="trachVentFio2" placeholder="Fritekst"><label>Peep</label><input id="trachVentPeep" placeholder="Fritekst"><label>Topptrykk med peep</label><input id="trachVentTopp" placeholder="Fritekst"></div>
   </div>
 
+  <div class="section vpTitle">Vitalparametre</div>
+  <div class="inlineVitals">
+    <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+    <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
+    <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
+    <div class="vpField"><span>GCS</span><input id="gcs"></div>
+  </div>
+
+
 </div> <!-- fullTop -->
 
-<label class="minorTitle">Medikamenter og infusjoner</label>
-<table class="table medUnifiedTable">
-  <thead>
-    <tr>
-      <th>Sedasjon</th>
-      <th>Pressor</th>
-      <th>Andre medikamenter/infusjoner</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="toggleCell" data-toggle="sed_fentanyl">
-        <div class="toggleInner">
-          <input id="sed_fentanyl" class="chk sed" type="checkbox" data-name="Fentanyl">
-          <span>Fentanyl</span>
-        </div>
-      </td>
-      <td class="toggleCell" data-toggle="pre_adrenalin">
-        <div class="toggleInner">
-          <input id="pre_adrenalin" class="chk pre" type="checkbox" data-name="Adrenalin">
-          <span>Adrenalin</span>
-        </div>
-      </td>
-      <td id="andreInfCell" rowspan="6">
-        <div id="andreInfBody"></div>
-      </td>
-    </tr>
-    <tr>
-      <td class="toggleCell" data-toggle="sed_ketamin">
-        <div class="toggleInner">
-          <input id="sed_ketamin" class="chk sed" type="checkbox" data-name="Ketamin">
-          <span>Ketamin</span>
-        </div>
-      </td>
-      <td class="toggleCell" data-toggle="pre_noradrenalin">
-        <div class="toggleInner">
-          <input id="pre_noradrenalin" class="chk pre" type="checkbox" data-name="Noradrenalin">
-          <span>Noradrenalin</span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td class="toggleCell" data-toggle="sed_midazolam">
-        <div class="toggleInner">
-          <input id="sed_midazolam" class="chk sed" type="checkbox" data-name="Midazolam">
-          <span>Midazolam</span>
-        </div>
-      </td>
-      <td class="toggleCell" data-toggle="pre_dobutamin">
-        <div class="toggleInner">
-          <input id="pre_dobutamin" class="chk pre" type="checkbox" data-name="Dobutamin">
-          <span>Dobutamin</span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td class="toggleCell" data-toggle="sed_sufentanil">
-        <div class="toggleInner">
-          <input id="sed_sufentanil" class="chk sed" type="checkbox" data-name="Sufentanil">
-          <span>Sufentanil</span>
-        </div>
-      </td>
-      <td class="toggleCell" data-toggle="pre_vasopressin">
-        <div class="toggleInner">
-          <input id="pre_vasopressin" class="chk pre" type="checkbox" data-name="Vasopressin">
-          <span>Vasopressin</span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td class="toggleCell" data-toggle="sed_propofol">
-        <div class="toggleInner">
-          <input id="sed_propofol" class="chk sed" type="checkbox" data-name="Propofol">
-          <span>Propofol</span>
-        </div>
-      </td>
-      <td id="pressorDynamicCell" rowspan="2">
-        <div id="pressorDynamicBody"></div>
-      </td>
-    </tr>
-    <tr>
-      <td id="sedDynamicCell">
-        <div id="sedDynamicBody"></div>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="medSection">
+  <div class="minorTitle">Medikamenter og infusjoner</div>
 
+  <div class="medGroup">
+    <div class="medGroupTitle">Sedasjon</div>
+    <div class="chipRow">
+      <label class="medChip"><input id="sed_fentanyl" class="sed" type="checkbox" data-name="Fentanyl"><span>Fentanyl</span></label>
+      <label class="medChip"><input id="sed_ketamin" class="sed" type="checkbox" data-name="Ketamin"><span>Ketamin</span></label>
+      <label class="medChip"><input id="sed_midazolam" class="sed" type="checkbox" data-name="Midazolam"><span>Midazolam</span></label>
+      <label class="medChip"><input id="sed_sufentanil" class="sed" type="checkbox" data-name="Sufentanil"><span>Sufentanil</span></label>
+      <label class="medChip"><input id="sed_propofol" class="sed" type="checkbox" data-name="Propofol"><span>Propofol</span></label>
+    </div>
+    <div id="sedDynamicBody" class="medDynamic"></div>
+  </div>
+
+  <div class="medGroup">
+    <div class="medGroupTitle">Pressor</div>
+    <div class="chipRow">
+      <label class="medChip"><input id="pre_adrenalin" class="pre" type="checkbox" data-name="Adrenalin"><span>Adrenalin</span></label>
+      <label class="medChip"><input id="pre_noradrenalin" class="pre" type="checkbox" data-name="Noradrenalin"><span>Noradrenalin</span></label>
+      <label class="medChip"><input id="pre_dobutamin" class="pre" type="checkbox" data-name="Dobutamin"><span>Dobutamin</span></label>
+      <label class="medChip"><input id="pre_vasopressin" class="pre" type="checkbox" data-name="Vasopressin"><span>Vasopressin</span></label>
+    </div>
+    <div id="pressorDynamicBody" class="medDynamic"></div>
+  </div>
+
+  <div class="medGroup">
+    <div class="medGroupTitle">Andre medikamenter / infusjoner</div>
+    <div id="andreInfBody" class="medDynamic"></div>
+  </div>
+</div>
 <div id="acuteBottom" class="hidden">
   <label>Antall sprøytepumper</label>
-  <div class="nonToggleRow"><label class="clickableChoice" for="acutePumperChk"><input id="acutePumperChk" class="chk" type="checkbox"><span>Sprøytepumper</span></label>
-    <select id="acutePumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select>
+
+  <div class="nonToggleRow">
+    <label class="clickableChoice" for="acutePumperChk">
+      <input id="acutePumperChk" class="chk" type="checkbox">
+      <span>Sprøytepumper</span>
+    </label>
+
+    <select id="acutePumperAntall" class="pumperSelect">
+      <option value=""></option>
+      <option value="1">1 stk</option>
+      <option value="2">2 stk</option>
+      <option value="3">3 stk</option>
+      <option value="4">4 stk</option>
+      <option value="5">5 stk</option>
+      <option value="6">6 stk</option>
+      <option value="7">7 stk</option>
+      <option value="8">8 stk</option>
+      <option value="9">9 stk</option>
+      <option value="10">10 stk</option>
+    </select>
   </div>
-  <div class="section">Rekvirerende lege</div>
-  <div class="dualRow"><input id="acuteRekNavn" placeholder="Navn"><input id="acuteRekTlf" placeholder="Nummer"></div>
+
+  <div class="doctorGroup">
+    <label class="minorTitle">Rekvirerende lege</label>
+    <div class="doctorRow">
+      <input id="acuteRekNavn" placeholder="Navn">
+      <input id="acuteRekTlf" class="phoneInput" placeholder="Tlf">
+    </div>
+  </div>
 </div>
 
-<label class="minorTitle">
-  Smitte <span class="hint">Ett alternativ + ev. blodsmitte</span>
-</label>
-<div class="smLine">
-  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen"><span>Ingen kjente</span></label>
-  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt"><span>Kontaktsmitte</span></label>
-  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Dråpesmitte" id="sm_draape"><span>Dråpesmitte</span></label>
-  <label class="smOpt"><input type="radio" class="chk smitteBase" name="smitteBase" data-name="Luftsmitte" id="sm_luft"><span>Luftsmitte</span></label>
-  <label class="smOpt"><input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod"><span>Blodsmitte</span></label>
+<div class="infoGroup">
+  <label class="minorTitle">
+    Smitte <span class="hint">Ett alternativ + ev. blodsmitte</span>
+  </label>
+
+  <div class="smLine">
+    <label class="smOpt">
+      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen">
+      <span>Ingen kjente</span>
+    </label>
+
+    <label class="smOpt">
+      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt">
+      <span>Kontaktsmitte</span>
+    </label>
+
+    <label class="smOpt">
+      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Dråpesmitte" id="sm_draape">
+      <span>Dråpesmitte</span>
+    </label>
+
+    <label class="smOpt">
+      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Luftsmitte" id="sm_luft">
+      <span>Luftsmitte</span>
+    </label>
+
+    <label class="smOpt">
+      <input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod">
+      <span>Blodsmitte</span>
+    </label>
+  </div>
+
+  <div id="smitteSpesWrap" class="hidden">
+    <input id="smitteSpes" placeholder="Spesifiser smitte">
+  </div>
 </div>
-<div id="smitteSpesWrap" class="hidden">
-  <input id="smitteSpes" placeholder="Spesifiser smitte">
+
+<div class="infoGroup">
+  <label class="minorTitle">CAVE?</label>
+
+  <div class="binaryRow spedbarnRow">
+    <label class="radioOpt">
+      <input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei">
+      <span>Nei</span>
+    </label>
+
+    <label class="radioOpt">
+      <input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja">
+      <span>Ja</span>
+    </label>
+  </div>
+
+  <div id="caveTextWrap" class="hidden">
+    <input id="caveText" placeholder="Spesifiser CAVE">
+  </div>
 </div>
-<label class="minorTitle">CAVE?</label>
-<div class="binaryRow spedbarnRow"><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Nei" id="cave_nei"><span>Nei</span></label><label class="radioOpt"><input type="radio" class="chk caveRadio" name="caveBase" data-value="Ja" id="cave_ja"><span>Ja</span></label></div>
-<div id="caveTextWrap" class="hidden">
-  <input id="caveText" placeholder="Spesifiser CAVE">
-</div>
+
 <div id="fullBottom" class="hidden">
 
+<div class="accessGroup">
+
 <label class="minorTitle">Tilganger</label>
-  <table class="table"><tbody>
+
+<table class="table">
 <tr>
   <td>
     <div class="nonToggleRow">
@@ -417,12 +444,20 @@
 </tr>    <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="til_pvk"><input id="til_pvk" class="chk til" type="checkbox" data-name="PVK"><span>PVK</span></label><select id="pvkAntall" class="pvkSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option></select></div></td></tr>
   </tbody><tbody id="tilgangerDynamicBody"></tbody></table>
 
+  </div>
+
+<div class="accessGroup">
+
 <label class="minorTitle">Utstyr</label>
-  <table class="table"><tbody>
+
+<table class="table">
     <tr><td class="toggleCell" data-toggle="utst_arterie"><div class="toggleInner"><input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran"><span>Arteriekran</span></div></td><td class="toggleCell" data-toggle="dren_thorax"><div class="toggleInner"><input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren"><span>Thoraxdren</span></div></td></tr>
     <tr><td><div class="nonToggleRow"><label class="clickableChoice" for="utst_pumper"><input id="utst_pumper" class="chk dren" type="checkbox" data-name="Sprøytepumper"><span>Sprøytepumper</span></label><select id="utstPumperAntall" class="pumperSelect"><option value=""></option><option value="1">1 stk</option><option value="2">2 stk</option><option value="3">3 stk</option><option value="4">4 stk</option><option value="5">5 stk</option><option value="6">6 stk</option><option value="7">7 stk</option><option value="8">8 stk</option><option value="9">9 stk</option><option value="10">10 stk</option></select></div></td><td class="toggleCell" data-toggle="dren_vent"><div class="toggleInner"><input id="dren_vent" class="chk dren" type="checkbox" data-name="Ventrikkelsonde"><span>Ventrikkelsonde</span></div></td></tr>
     <tr><td id="dren_annet_container" colspan="2"></td></tr>
   </tbody></table>
+
+  </div>
+
 
 <label class="minorTitle">Rekvirerende lege</label>
 <div class="doctorRow">
@@ -465,6 +500,14 @@
 </div> <!-- mainContent -->
 
 </div></div>
+
+<a
+  class="feedbackBtn"
+  target="_blank"
+  href="https://outlook.office.com/mail/deeplink/compose?to=b32838@ous-hf.no&subject=Tilbakemelding%20intensiv-%20og%20helikoptertransport%20skjema"
+>
+  Tilbakemelding i outlook web løsning
+</a>
 
 <script src="script.js"></script>
 </body>
