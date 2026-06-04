@@ -1561,6 +1561,7 @@ select{
   max-width:100%;
 }
 
+<<<<<<< HEAD
 .trachInline{
   margin-top:10px;
   padding:10px 0 0;
@@ -2001,3 +2002,20 @@ label.spedChip span{
 .spedRespArbeidRow .medChip span{
   line-height:1 !important;
 }
+=======
+.spedChip input{
+  display:none;
+}
+
+.spedChip{
+  min-width:90px;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.spedChip:has(input:checked){
+  background:#1f4f7a;
+  border-color:#4f9fe0;
+  color:#fff;
+}
+>>>>>>> bc80b6a (Store endringer i hele skjema.)

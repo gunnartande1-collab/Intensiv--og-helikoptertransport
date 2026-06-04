@@ -1388,9 +1388,14 @@ function buildSmitteLines() {
 
       return [line];
     }
+<<<<<<< HEAD
 
     return ["Smitte: Ikke kjent"];
   }
+=======
+    
+    return ["Smitte: Ikke kjent"];  }
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
 
   let line = "Smitte: " + base.dataset.name;
 
@@ -1437,9 +1442,653 @@ function buildHlrLines() {
     return ["HLR-status: Ja"];
   }
 
+<<<<<<< HEAD
   return [
     "HLR-status: Nei" +
     (txt ? " (" + txt + ")" : "")
+=======
+  if (a === "Trakeostomi") {
+    setHidden(acuteTrachWrap, false);
+
+    const trachVent = $("acute_tr_vent")?.checked;
+
+    setHidden(acuteTrachVentWrap, !trachVent);
+  }
+}
+function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
+function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
+function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
+function syncVisibleSharedFieldsBeforeSwitch(){if(forrigeHastegrad==="Akutt"&&valgtHastegrad!=="Akutt")syncAcuteToFull();else if(forrigeHastegrad!=="Akutt"&&valgtHastegrad==="Akutt")syncFullToAcute()}
+function updateMainVisibility(){const h=getBinaryValue("hast");setHidden(mainContent,!h);if(!h){rapport.value="";return}const acute=isAcute();setHidden(acuteTop,!acute);setHidden(acuteBottom,!acute);setHidden(fullTop,acute);setHidden(fullBottom,acute);acute?updateAcuteAirwayDetails():handleAirwayChange();updateTitle()}
+/* ======================================================
+   EVENT BINDING
+====================================================== */
+function bindHastegradEvents() {
+
+  document
+    .querySelectorAll(".hasteCard")
+    .forEach(btn =>
+      btn.addEventListener("click", () => {
+
+        forrigeHastegrad = valgtHastegrad;
+        valgtHastegrad = btn.dataset.haste;
+
+        syncVisibleSharedFieldsBeforeSwitch();
+
+        document
+          .querySelectorAll(".hasteCard")
+          .forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        updateMainVisibility();
+        lagRapport();
+      })
+    );
+}
+
+function bindVitalEvents() {
+
+  ["btSys", "btDia"].forEach(id => {
+    const el = $(id);
+
+    if (el) {
+      el.addEventListener("input", () => {
+        updateMapField();
+        handleVitalInput({ target: el });
+      });
+
+      el.addEventListener("keydown", handleVitalSpace);
+    }
+  });
+
+  $("map").addEventListener("input", handleVitalInput);
+  $("map").addEventListener("keydown", handleVitalSpace);
+
+  ["rf", "spo2", "puls", "temp"].forEach(id => {
+    const el = $(id);
+
+    if (el) {
+      el.addEventListener("input", handleVitalInput);
+      el.addEventListener("keydown", handleVitalSpace);
+    }
+  });
+}
+
+function bindAutoGrowEvents() {
+
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(el =>
+      el.addEventListener("input", () =>
+        autoGrowTextarea(el)
+      )
+    );
+}
+
+function bindPvkEvents() {
+
+  pvkAntall.addEventListener("input", () => {
+    pvkChk.checked = !!pvkAntall.value;
+    lagRapport();
+  });
+
+  pvkChk.addEventListener("change", () => {
+
+    if (!pvkChk.checked) {
+      pvkAntall.value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindCvkEvents() {
+
+  $("cvkLumen")?.addEventListener("input", () => {
+
+    $("til_cvk").checked = !!$("cvkLumen").value;
+
+    lagRapport();
+  });
+
+  $("til_cvk")?.addEventListener("change", () => {
+
+    if (!$("til_cvk").checked) {
+      $("cvkLumen").value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindUtstyrPumpeEvents() {
+
+utstPumperAntall.addEventListener("input", () => {    utstPumperChk.checked = !!utstPumperAntall.value;
+    lagRapport();
+  });
+
+  utstPumperChk.addEventListener("change", () => {
+
+    if (!utstPumperChk.checked) {
+      utstPumperAntall.value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindAcutePumpeEvents() {
+
+acutePumperAntall.addEventListener("input", () => {    acutePumperChk.checked = !!acutePumperAntall.value;
+    lagRapport();
+  });
+
+  acutePumperChk.addEventListener("change", () => {
+
+    if (!acutePumperChk.checked) {
+      acutePumperAntall.value = "";
+    }
+
+    lagRapport();
+  });
+}
+
+function bindToggleEvents() {
+
+  document.addEventListener("change", e => {
+    if (!e.target.classList.contains("specChoice")) return;
+    e.stopPropagation();
+
+    const specName = e.target.dataset.spec;
+    const checked = e.target.checked;
+
+    document
+      .querySelectorAll('.specChoice[data-spec="' + specName + '"]')
+      .forEach(cb => {
+        cb.checked = checked;
+      });
+
+    lagRapport();
+  }, true);
+
+  document.addEventListener("click", e => {
+    const cell = e.target.closest(".toggleCell");
+    if (!cell) return;
+
+    const tag = (e.target.tagName || "").toLowerCase();
+
+    if (
+      tag === "select" ||
+      tag === "textarea" ||
+      e.target.closest(".clickableChoice")
+    ) {
+      return;
+    }
+
+    if (cell.classList.contains("specCell")) {
+      if (tag === "input") return;
+
+      const cb = cell.querySelector(".specChoice");
+      if (!cb) return;
+
+      setSpecChoice(cb.dataset.spec, !cb.checked);
+      return;
+    }
+
+    if (tag === "input") return;
+
+    const id = cell.dataset.toggle;
+    if (!id) return;
+
+    const master = $(id);
+    if (!master) return;
+
+    if (
+      master.classList.contains("binOpt") ||
+      master.classList.contains("trachOpt") ||
+      master.classList.contains("acuteTrachOpt")
+    ) {
+      return;
+    }
+
+    if (master.type === "radio") {
+      master.checked = true;
+    } else {
+      master.checked = !master.checked;
+    }
+
+    lagRapport();
+  });
+}
+
+function bindSpedbarnEvents() {
+
+  document.querySelectorAll(".spedRadio").forEach(radio => {
+
+    const label = radio.closest(".spedChip");
+
+    if (!label) return;
+
+    label.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
+    });
+
+    label.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = radio.dataset.wasChecked === "true";
+
+      document.querySelectorAll(".spedRadio").forEach(r => {
+        r.checked = false;
+        r.dataset.wasChecked = "false";
+      });
+
+      if (!wasChecked) {
+        radio.checked = true;
+      }
+
+      updateSpedbarnUI();
+      lagRapport();
+    });
+  });
+}
+
+function bindCaveEvents() {
+  document.querySelectorAll(".caveRadio").forEach(r =>
+    r.addEventListener("change", () => {
+      updateCaveUI();
+      lagRapport();
+    })
+  );
+}
+
+function bindBinaryOptionEvents() {
+
+  document.querySelectorAll(".binOpt").forEach(chk => {
+    const label = chk.closest("label");
+
+    if (!label) return;
+
+    label.addEventListener("pointerdown", () => {
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
+    });
+
+    label.addEventListener("click", e => {
+      e.preventDefault();
+
+      const g = chk.dataset.group;
+      const wasChecked = chk.dataset.wasChecked === "true";
+
+      const canToggleOff =
+        g === "airwayMain" ||
+        g === "acuteAirway";
+
+      document
+        .querySelectorAll('.binOpt[data-group="' + g + '"]')
+        .forEach(o => {
+          o.checked = false;
+          o.dataset.wasChecked = "false";
+        });
+
+      if (!wasChecked || !canToggleOff) {
+        chk.checked = true;
+      }
+
+      if (g === "transport") {
+        updateTitle();
+      }
+
+      if (g === "airwayMain") {
+        handleAirwayChange();
+      }
+
+      if (g === "acuteAirway") {
+        updateAcuteAirwayDetails();
+      }
+
+      lagRapport();
+    });
+  });
+}
+
+function bindTrachEvents() {
+
+  document.querySelectorAll(".trachOpt").forEach(chk => {
+    const cell = chk.closest(".toggleCell");
+
+    if (!cell) return;
+
+    cell.addEventListener("pointerdown", () => {
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
+    });
+
+    cell.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = chk.dataset.wasChecked === "true";
+
+      document.querySelectorAll(".trachOpt").forEach(o => {
+        o.checked = false;
+        o.dataset.wasChecked = "false";
+      });
+
+      if (!wasChecked) {
+        chk.checked = true;
+      }
+
+      refreshTrachDeps();
+      lagRapport();
+    });
+  });
+}
+
+function bindAcuteTrachEvents() {
+
+  document.querySelectorAll(".acuteTrachOpt").forEach(chk => {
+    const cell = chk.closest(".toggleCell");
+
+    if (!cell) return;
+
+    cell.addEventListener("pointerdown", () => {
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
+    });
+
+    cell.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = chk.dataset.wasChecked === "true";
+
+      document.querySelectorAll(".acuteTrachOpt").forEach(o => {
+        o.checked = false;
+        o.dataset.wasChecked = "false";
+      });
+
+      if (!wasChecked) {
+        chk.checked = true;
+      }
+
+      updateAcuteAirwayDetails();
+      lagRapport();
+    });
+  });
+}
+
+function bindSmitteEvents() {
+
+  document.querySelectorAll(".smitteBase").forEach(radio => {
+    const label = radio.closest(".smChip");
+
+    if (!label) return;
+
+    label.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
+    });
+
+    label.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = radio.dataset.wasChecked === "true";
+
+      document.querySelectorAll(".smitteBase").forEach(r => {
+        r.checked = false;
+        r.dataset.wasChecked = "false";
+      });
+
+      if (!wasChecked) {
+        radio.checked = true;
+      }
+
+      updateSmitteSpes();
+      lagRapport();
+    });
+  });
+
+  $("sm_blod").addEventListener("change", () => {
+    updateSmitteSpes();
+    lagRapport();
+  });
+}
+
+function bindAcuteAirwayInputEvents() {
+
+  [
+    "acuteSpontO2Liter",
+    "acuteHighFlowFio2",
+    "acuteHighFlowFlow",
+    "acuteNivFio2",
+    "acuteIntubFio2",
+    "acuteIntubPeep",
+    "acuteIntubTopp",
+    "acuteTrachO2Liter",
+    "acuteTrachVentFio2",
+    "acuteTrachVentPeep",
+    "acuteTrachVentTopp"
+  ].forEach(id =>
+
+    $(id)?.addEventListener("input", () => {
+
+      updateAcuteAirwayDetails();
+      lagRapport();
+    })
+  );
+}
+
+
+function bindEvents() {
+
+  bindHastegradEvents(); 
+  bindFollowNeedNoneEvents();
+
+  bindAutoGrowEvents();
+  bindVitalEvents();
+  bindPvkEvents();
+  bindCvkEvents();
+  bindUtstyrPumpeEvents();
+  bindAcutePumpeEvents();
+
+  bindSpedbarnEvents();
+  bindCaveEvents();
+  bindSmitteEvents();
+
+  bindBinaryOptionEvents();
+
+  bindTrachEvents();
+  bindAcuteTrachEvents();
+
+  bindAcuteAirwayInputEvents();
+  bindToggleEvents();
+
+  $("copyBtn")?.addEventListener("click", kopierRapport);
+  $("resetBtn")?.addEventListener("click", nullstillSkjema);
+
+  document.addEventListener("input", () => {
+    lagRapport();
+  });
+
+  document.addEventListener("change", () => {
+    lagRapport();
+  });
+}
+
+/* ======================================================
+   DYNAMISKE FELTER
+====================================================== */
+function cleanupDynamicTextRows(container, textClass, checkboxClass) {
+  const rows = Array.from(
+    container.querySelectorAll(".dynamicRow")
+  );
+
+  const blanks = rows.filter(row => {
+    const txt = row.querySelector("." + textClass);
+    const chk = row.querySelector("." + checkboxClass);
+    const val = clean(txt?.value);
+
+    return !val && (!chk || !chk.checked);
+  });
+
+  if (blanks.length <= 1) return;
+
+  blanks.slice(0, -1).forEach(row => {
+    const tr = row.closest("tr");
+
+    if (tr) {
+      tr.remove();
+    } else {
+      row.remove();
+    }
+  });
+}
+
+function addDynamicTextRow(container, placeholder, checkboxClass, textClass) {  const row=document.createElement("div");
+  row.className="dynamicRow";
+  row.innerHTML='<input type="checkbox" class="chk '+checkboxClass+'"><input type="text" class="'+textClass+'" placeholder="'+placeholder+'">';
+  container.appendChild(row);
+  const chk=row.querySelector("."+checkboxClass),txt=row.querySelector("."+textClass);
+  txt.addEventListener("input",()=>{
+    chk.checked=!!clean(txt.value);
+    cleanupDynamicTextRows(container,textClass,checkboxClass);
+    if(textClass==="sedText")ensureSedBlankRow();
+    if(textClass==="pressorText")ensurePressorBlankRow();
+    if(textClass==="andreInfText")ensureAndreInfBlankRow();
+    lagRapport();
+  });
+  chk.addEventListener("change",lagRapport);
+}
+function ensureBlankByClass(textClass,addFn){const texts=Array.from(document.querySelectorAll("."+textClass));if(!texts.length||!texts.some(t=>!clean(t.value)))addFn()}
+function addSedRow(){
+  addDynamicTextRow(
+    sedDynamicBody,
+    "Annet sedativ",
+    "sedDynChk",
+    "sedText"
+  )
+}
+function resetSedRows(){sedDynamicBody.innerHTML="";addSedRow()}
+function addPressorRow(){
+  addDynamicTextRow(
+    pressorDynamicBody,
+    "Annen pressor",
+    "pressorDynChk",
+    "pressorText"
+  )
+}
+function ensurePressorBlankRow(){ensureBlankByClass("pressorText",addPressorRow)}function resetPressorRows(){pressorDynamicBody.innerHTML="";addPressorRow()}
+function addAndreInfRow(){
+  addDynamicTextRow(
+    andreInfBody,
+    "Annet medikament / infusjon",
+    "andreInfChk",
+    "andreInfText"
+  )
+}
+function ensureAndreInfBlankRow(){ensureBlankByClass("andreInfText",addAndreInfRow)}
+function resetAndreInfRows(){
+  andreInfBody.innerHTML="";
+  addAndreInfRow();
+}
+function addTilgangRow() {
+  const row = document.createElement("tr");
+
+row.innerHTML =
+  '<td class="dynamicTableCell"><div class="dynamicRow"><input type="checkbox" class="chk tilgangDynChk"><input type="text" class="tilgangText" placeholder="Annen tilgang"></div></td>';
+
+  tilgangerDynamicBody.appendChild(row);
+
+  const chk = row.querySelector(".tilgangDynChk");
+  const txt = row.querySelector(".tilgangText");
+
+  txt.addEventListener("input", () => {
+    chk.checked = !!clean(txt.value);
+
+    cleanupDynamicTextRows(
+      tilgangerDynamicBody,
+      "tilgangText",
+      "tilgangDynChk"
+    );
+
+    ensureTilgangBlankRow();
+    lagRapport();
+  });
+
+  chk.addEventListener("change", lagRapport);
+}
+function ensureTilgangBlankRow(){const texts=Array.from(document.querySelectorAll(".tilgangText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addTilgangRow()}
+function resetTilgangRows(){tilgangerDynamicBody.innerHTML="";addTilgangRow()}
+function addDrenAnnetField(){const row=document.createElement("div");row.className="dynamicRow";row.innerHTML='<input type="checkbox" class="chk drenAnnetChk"><input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';const cb=row.querySelector(".drenAnnetChk"),txt=row.querySelector(".drenAnnetText");txt.addEventListener("input", () => {
+
+  cb.checked = !!clean(txt.value);
+
+  cleanupDynamicTextRows(
+    drenAnnetContainer,
+    "drenAnnetText",
+    "drenAnnetChk"
+  );
+
+  ensureDrenAnnetBlankField();
+
+  lagRapport();
+});cb.addEventListener("change",lagRapport);drenAnnetContainer.appendChild(row)}
+function ensureDrenAnnetBlankField(){const texts=Array.from(document.querySelectorAll(".drenAnnetText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addDrenAnnetField()}
+function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetField()}
+function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
+function linesFixedMeds(selector){const out=[];document.querySelectorAll(selector).forEach(chk=>{if(chk.checked&&chk.dataset.name)out.push(chk.dataset.name)});return out}
+function formatGcsValue(raw){if(!raw)return"";const match=raw.match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);if(match){const sum=Number(match[1])+Number(match[2])+Number(match[3]);return"GCS: "+match[1]+"+"+match[2]+"+"+match[3]+"="+sum}return"GCS: "+raw}
+function lagRapport() {
+  syncSpecMirrors();
+  updateTitle();
+
+  const h = getBinaryValue("hast");
+
+  if (!h) {
+    rapport.value = "";
+    return;
+  }
+
+  const lines = [];
+
+  addHeader(lines);
+  addSpesialtransport(lines);
+  addHastegrad(lines);
+  addFollowNeed(lines);
+
+  buildCaveLines().forEach(l => lines.push(l));
+  buildSmitteLines().forEach(l => lines.push(l));
+
+
+  const sped = buildSpedbarnLine();
+  if (sped) lines.push(sped);
+
+  if (getSpedbarnValue() === "Ja") {
+    addTransportform(lines);
+  }
+
+  if (isAcute()) {
+    buildAcuteReport(lines);
+  } else {
+    buildFullReport(lines);
+  }
+
+rapport.value = lines.join("\n");
+autoGrowTextarea(rapport);
+}
+function addHeader(lines) {
+  const transportVal = getBinaryValue("transport");
+
+  lines.push(
+    transportVal === "Kuvøse"
+      ? "KUVØSETRANSPORT"
+      : "INTENSIV"
+  );
+}
+function addSpesialtransport(lines) {
+  const specs = [
+    ...new Set(
+      Array.from(document.querySelectorAll(".specChoice"))
+        .filter(x => x.checked)
+        .map(x => x.dataset.spec || x.value)
+    )
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
   ];
 }
 
@@ -2802,6 +3451,7 @@ document.addEventListener("click", e => {
 
 }, true);
 
+<<<<<<< HEAD
 /* ======================================================
    EVENT BINDING - SAMLET
 ====================================================== */
@@ -2870,10 +3520,45 @@ function bindAcutePumpeEvents() {
 
     if (!acutePumperChk.checked) {
       acutePumperAntall.value = "";
+=======
+function addFollowNeed(lines) {
+
+  const follow = Array.from(
+    document.querySelectorAll('input[name="followNeed"]:checked')
+  ).map(x => x.value);
+
+  if (follow.length) {
+
+    lines.push(
+      "Følgebehov: " + follow.join(", ")
+    );
+  }
+}
+
+function bindFollowNeedNoneEvents() {
+  const none = $("follow_none");
+
+  const followChoices = document.querySelectorAll(
+    'input[name="followNeed"]:not(#follow_none)'
+  );
+
+  if (!none) return;
+
+  none.closest("label")?.addEventListener("click", e => {
+    e.preventDefault();
+
+    none.checked = !none.checked;
+
+    if (none.checked) {
+      followChoices.forEach(chk => {
+        chk.checked = false;
+      });
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
     }
 
     lagRapport();
   });
+<<<<<<< HEAD
 }
 
 /* ======================================================
@@ -2912,3 +3597,20 @@ function init() {
 }
 
 init();
+=======
+
+  followChoices.forEach(chk => {
+    chk.closest("label")?.addEventListener("click", e => {
+      e.preventDefault();
+
+      chk.checked = !chk.checked;
+
+      if (chk.checked) {
+        none.checked = false;
+      }
+
+      lagRapport();
+    });
+  });
+}
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
