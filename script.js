@@ -1389,6 +1389,7 @@ function buildSmitteLines() {
       return [line];
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     return ["Smitte: Ikke kjent"];
   }
@@ -1396,6 +1397,11 @@ function buildSmitteLines() {
     
     return ["Smitte: Ikke kjent"];  }
 >>>>>>> bc80b6a (Store endringer i hele skjema.)
+=======
+
+    return ["Smitte: Ikke kjent"];
+  }
+>>>>>>> 6f2de8e (test)
 
   let line = "Smitte: " + base.dataset.name;
 
@@ -1442,6 +1448,7 @@ function buildHlrLines() {
     return ["HLR-status: Ja"];
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   return [
     "HLR-status: Nei" +
@@ -2089,6 +2096,11 @@ function addSpesialtransport(lines) {
         .map(x => x.dataset.spec || x.value)
     )
 >>>>>>> bc80b6a (Store endringer i hele skjema.)
+=======
+  return [
+    "HLR-status: Nei" +
+    (txt ? " (" + txt + ")" : "")
+>>>>>>> 6f2de8e (test)
   ];
 }
 
@@ -3025,6 +3037,7 @@ function bindGestasjonsalderEvents() {
 }
 
 function bindSpedRespArbeidEvents() {
+<<<<<<< HEAD
 
   const checks =
     document.querySelectorAll('input[name="spedRespArbeid"]');
@@ -3436,6 +3449,544 @@ document.addEventListener("click", e => {
   const cell = e.target.closest(".specialGroup .specCell");
 
   if (!cell) return;
+=======
+
+  const checks =
+    document.querySelectorAll('input[name="spedRespArbeid"]');
+>>>>>>> 6f2de8e (test)
+
+  checks.forEach(chk => {
+
+<<<<<<< HEAD
+  const input = cell.querySelector("input");
+
+  if (!input) return;
+=======
+    chk.addEventListener("change", () => {
+>>>>>>> 6f2de8e (test)
+
+      if (chk.value === "Normal" && chk.checked) {
+
+<<<<<<< HEAD
+  lagRapport();
+
+}, true);
+
+<<<<<<< HEAD
+/* ======================================================
+   EVENT BINDING - SAMLET
+====================================================== */
+function bindEvents() {
+
+  bindHastegradEvents(); 
+  bindFollowNeedNoneEvents();
+
+  bindAutoGrowEvents();
+  bindVitalEvents();
+
+  bindPvkEvents();
+  bindCvkEvents();
+  bindTilgangerIngenEvents();
+
+  bindUtstyrPumpeEvents();
+  bindUtstyrIngenEvents();
+  bindUtstyrChipEvents();
+
+  bindSedasjonNeiEvents();
+  bindPressorNeiEvents();
+  bindMedicationOtherEvents();
+
+  bindAcutePumpeEvents();
+
+  bindSpedbarnEvents();
+  bindGestasjonsalderEvents();
+  bindSpedRespArbeidEvents();
+
+  bindCaveEvents();
+  bindHlrEvents();
+  bindRespEvents();
+  bindSmitteEvents();
+
+  bindBinaryOptionEvents();
+  bindTrachEvents();
+  bindAcuteTrachEvents();
+  bindAcuteAirwayInputEvents();
+
+  bindToggleEvents();
+
+  $("copyBtn")?.addEventListener("click", kopierRapport);
+  $("resetBtn")?.addEventListener("click", nullstillSkjema);
+
+  document.addEventListener("input", () => {
+    lagRapport();
+  });
+
+  document.addEventListener("change", () => {
+=======
+        checks.forEach(other => {
+          if (other !== chk) other.checked = false;
+        });
+      }
+
+      if (chk.value !== "Normal" && chk.checked) {
+
+        const normal =
+          document.querySelector(
+            'input[name="spedRespArbeid"][value="Normal"]'
+          );
+
+        if (normal) normal.checked = false;
+      }
+
+      lagRapport();
+    });
+  });
+}
+
+/* ======================================================
+   EVENT BINDING - CAVE / HLR / RESP
+====================================================== */
+function bindCaveEvents() {
+
+  document.querySelectorAll(".caveRadio").forEach(r =>
+    r.addEventListener("change", () => {
+      updateCaveUI();
+      lagRapport();
+    })
+  );
+}
+
+function bindHlrEvents() {
+
+  document.querySelectorAll(".hlrRadio").forEach(radio => {
+
+    radio.addEventListener("change", () => {
+      updateHlrUI();
+      lagRapport();
+    });
+  });
+
+  hlrText?.addEventListener("input", lagRapport);
+}
+
+function bindRespEvents() {
+
+  document.querySelectorAll(".respRadio").forEach(radio => {
+
+    radio.addEventListener("change", () => {
+      updateRespUI();
+      lagRapport();
+    });
+  });
+
+  respText?.addEventListener("input", lagRapport);
+}
+
+/* ======================================================
+   EVENT BINDING - SMITTE
+====================================================== */
+function bindSmitteEvents() {
+
+  document.querySelectorAll(".smitteBase").forEach(radio => {
+
+    const label = radio.closest(".smChip");
+
+    if (!label) return;
+
+    label.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked =
+        radio.checked ? "true" : "false";
+    });
+
+    label.addEventListener("click", e => {
+
+      e.preventDefault();
+
+      const wasChecked =
+        radio.dataset.wasChecked === "true";
+
+      document.querySelectorAll(".smitteBase").forEach(r => {
+        r.checked = false;
+        r.dataset.wasChecked = "false";
+      });
+
+      if (!wasChecked) {
+        radio.checked = true;
+      }
+
+      updateSmitteSpes();
+      lagRapport();
+    });
+  });
+
+  $("sm_blod").addEventListener("change", () => {
+    updateSmitteSpes();
+>>>>>>> 6f2de8e (test)
+    lagRapport();
+  });
+}
+
+/* ======================================================
+<<<<<<< HEAD
+   EVENT BINDING - AKUTT SPRØYTEPUMPER
+====================================================== */
+function bindAcutePumpeEvents() {
+
+  acutePumperAntall.addEventListener("input", () => {
+
+    acutePumperChk.checked = !!acutePumperAntall.value;
+    lagRapport();
+  });
+
+  acutePumperChk.addEventListener("change", () => {
+
+    if (!acutePumperChk.checked) {
+      acutePumperAntall.value = "";
+=======
+=======
+   EVENT BINDING - FØLGEBEHOV
+====================================================== */
+>>>>>>> 6f2de8e (test)
+function addFollowNeed(lines) {
+
+  const follow = Array.from(
+    document.querySelectorAll(
+      'input[name="followNeed"]:checked'
+    )
+  ).map(x => x.value);
+
+  if (follow.length) {
+
+    lines.push(
+      "Følgebehov: " + follow.join(", ")
+    );
+  }
+}
+
+function bindFollowNeedNoneEvents() {
+
+  const none = $("follow_none");
+
+  const followChoices = document.querySelectorAll(
+    'input[name="followNeed"]:not(#follow_none)'
+  );
+
+  if (!none) return;
+
+  none.closest("label")?.addEventListener("click", e => {
+
+    e.preventDefault();
+
+    none.checked = !none.checked;
+
+    if (none.checked) {
+
+      followChoices.forEach(chk => {
+        chk.checked = false;
+      });
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
+    }
+
+    lagRapport();
+  });
+<<<<<<< HEAD
+}
+
+/* ======================================================
+   INIT
+====================================================== */
+function init() {
+
+  resetSedRows();
+  resetPressorRows();
+  resetAndreInfRows();
+  resetTilgangRows();
+  resetUtstyrRows();
+
+  bindEvents();
+
+  updateSpedbarnUI();
+  updateCaveUI();
+  updateHlrUI();
+  updateRespUI();
+  updateSmitteSpes();
+
+  handleAirwayChange();
+  updateAcuteAirwayDetails();
+
+  updateMapField();
+  syncSpecMirrors();
+  updateMainVisibility();
+  updateTitle();
+  updateTilgangUI();
+
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(autoGrowTextarea);
+
+  lagRapport();
+}
+
+init();
+=======
+
+  followChoices.forEach(chk => {
+
+    chk.closest("label")?.addEventListener("click", e => {
+
+      e.preventDefault();
+
+      chk.checked = !chk.checked;
+
+      if (chk.checked) {
+        none.checked = false;
+      }
+
+      lagRapport();
+    });
+  });
+}
+<<<<<<< HEAD
+>>>>>>> bc80b6a (Store endringer i hele skjema.)
+=======
+
+/* ======================================================
+   EVENT BINDING - SEDASJON / PRESSOR
+====================================================== */
+function bindSedasjonNeiEvents() {
+
+  const nei = $("sed_nei");
+
+  const sedChoices =
+    document.querySelectorAll(".sed:not(#sed_nei)");
+
+  if (!nei) return;
+
+  nei.closest("label")?.addEventListener("click", e => {
+
+    e.preventDefault();
+
+    nei.checked = !nei.checked;
+
+    if (nei.checked) {
+
+      sedChoices.forEach(chk => {
+        chk.checked = false;
+      });
+    }
+
+    lagRapport();
+  });
+
+  sedChoices.forEach(chk => {
+
+    chk.closest("label")?.addEventListener("click", () => {
+
+      if (chk.checked) {
+        nei.checked = false;
+      }
+    });
+  });
+}
+
+function bindPressorNeiEvents() {
+
+  const nei = $("pre_nei");
+
+  const pressorChoices = document.querySelectorAll(
+    '.pre:not(#pre_nei)'
+  );
+
+  if (!nei) return;
+
+  nei.closest("label")?.addEventListener("click", e => {
+
+    e.preventDefault();
+
+    nei.checked = !nei.checked;
+
+    if (nei.checked) {
+
+      pressorChoices.forEach(chk => {
+        chk.checked = false;
+      });
+    }
+
+    lagRapport();
+  });
+
+  pressorChoices.forEach(chk => {
+
+    chk.closest("label")?.addEventListener("click", () => {
+
+      if (chk.checked) {
+        nei.checked = false;
+      }
+    });
+  });
+}
+
+/* ======================================================
+   EVENT BINDING - ANDRE MEDIKAMENTER
+====================================================== */
+function bindAndreMedNeiEvents() {
+
+  const nei = $("andre_nei");
+
+  if (!nei) return;
+
+  nei.closest("label")?.addEventListener("click", e => {
+
+    e.preventDefault();
+
+    nei.checked = !nei.checked;
+
+    if (nei.checked) {
+
+      document.querySelectorAll(".andreInfChk").forEach(chk => {
+        chk.checked = false;
+      });
+
+      document.querySelectorAll(".andreInfText").forEach(txt => {
+        txt.value = "";
+      });
+    }
+
+    ensureAndreInfBlankRow();
+    lagRapport();
+  });
+
+  andreInfBody?.addEventListener("input", () => {
+
+    if(clean(document.querySelector(".andreInfText")?.value)){
+      nei.checked = false;
+    }
+  });
+}
+
+function bindMedicationOtherEvents() {
+
+  const checks =
+    document.querySelectorAll('input[name="medicationOther"]');
+
+  checks.forEach(chk => {
+
+    chk.addEventListener("change", () => {
+
+      if (chk.value === "Nei" && chk.checked) {
+
+        checks.forEach(other => {
+          if (other !== chk) other.checked = false;
+        });
+      }
+
+      if (chk.value !== "Nei" && chk.checked) {
+
+        const nei =
+          document.querySelector(
+            'input[name="medicationOther"][value="Nei"]'
+          );
+
+        if (nei) nei.checked = false;
+      }
+
+      lagRapport();
+    });
+  });
+
+  $("andreMedikamenterText")?.addEventListener(
+    "input",
+    lagRapport
+  );
+}
+
+/* ======================================================
+   EVENT BINDING - TOGGLECELL / SPESIALTRANSPORT
+====================================================== */
+function bindToggleEvents() {
+
+  document.addEventListener("change", e => {
+
+    if (!e.target.classList.contains("specChoice")) return;
+
+    e.stopPropagation();
+
+    const specName = e.target.dataset.spec;
+    const checked = e.target.checked;
+
+    document
+      .querySelectorAll(
+        '.specChoice[data-spec="' + specName + '"]'
+      )
+      .forEach(cb => {
+        cb.checked = checked;
+      });
+
+    lagRapport();
+
+  }, true);
+
+  document.addEventListener("click", e => {
+
+    const cell = e.target.closest(".toggleCell");
+
+    if (!cell) return;
+
+    const tag = (e.target.tagName || "").toLowerCase();
+
+    if (
+      tag === "select" ||
+      tag === "textarea" ||
+      e.target.closest(".clickableChoice")
+    ) {
+      return;
+    }
+
+    if (cell.classList.contains("specCell")) {
+
+      if (tag === "input") return;
+
+      const cb = cell.querySelector(".specChoice");
+
+      if (!cb) return;
+
+      setSpecChoice(cb.dataset.spec, !cb.checked);
+      return;
+    }
+
+    if (tag === "input") return;
+
+    const id = cell.dataset.toggle;
+
+    if (!id) return;
+
+    const master = $(id);
+
+    if (!master) return;
+
+    if (
+      master.classList.contains("binOpt") ||
+      master.classList.contains("trachOpt") ||
+      master.classList.contains("acuteTrachOpt")
+    ) {
+      return;
+    }
+
+    if (master.type === "radio") {
+      master.checked = true;
+    } else {
+      master.checked = !master.checked;
+    }
+
+    lagRapport();
+  });
+}
+
+document.addEventListener("click", e => {
+
+  const cell = e.target.closest(".specialGroup .specCell");
+
+  if (!cell) return;
 
   e.preventDefault();
   e.stopPropagation();
@@ -3451,7 +4002,6 @@ document.addEventListener("click", e => {
 
 }, true);
 
-<<<<<<< HEAD
 /* ======================================================
    EVENT BINDING - SAMLET
 ====================================================== */
@@ -3520,45 +4070,10 @@ function bindAcutePumpeEvents() {
 
     if (!acutePumperChk.checked) {
       acutePumperAntall.value = "";
-=======
-function addFollowNeed(lines) {
-
-  const follow = Array.from(
-    document.querySelectorAll('input[name="followNeed"]:checked')
-  ).map(x => x.value);
-
-  if (follow.length) {
-
-    lines.push(
-      "Følgebehov: " + follow.join(", ")
-    );
-  }
-}
-
-function bindFollowNeedNoneEvents() {
-  const none = $("follow_none");
-
-  const followChoices = document.querySelectorAll(
-    'input[name="followNeed"]:not(#follow_none)'
-  );
-
-  if (!none) return;
-
-  none.closest("label")?.addEventListener("click", e => {
-    e.preventDefault();
-
-    none.checked = !none.checked;
-
-    if (none.checked) {
-      followChoices.forEach(chk => {
-        chk.checked = false;
-      });
->>>>>>> bc80b6a (Store endringer i hele skjema.)
     }
 
     lagRapport();
   });
-<<<<<<< HEAD
 }
 
 /* ======================================================
@@ -3597,20 +4112,4 @@ function init() {
 }
 
 init();
-=======
-
-  followChoices.forEach(chk => {
-    chk.closest("label")?.addEventListener("click", e => {
-      e.preventDefault();
-
-      chk.checked = !chk.checked;
-
-      if (chk.checked) {
-        none.checked = false;
-      }
-
-      lagRapport();
-    });
-  });
-}
->>>>>>> bc80b6a (Store endringer i hele skjema.)
+>>>>>>> 6f2de8e (test)

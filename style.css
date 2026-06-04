@@ -1562,6 +1562,7 @@ select{
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .trachInline{
   margin-top:10px;
   padding:10px 0 0;
@@ -2005,17 +2006,450 @@ label.spedChip span{
 =======
 .spedChip input{
   display:none;
+=======
+.trachInline{
+  margin-top:10px;
+  padding:10px 0 0;
+>>>>>>> 6f2de8e (test)
 }
 
-.spedChip{
-  min-width:90px;
-  justify-content:center;
+.trachChoiceRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.trachChoice{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:0;
+  font-weight:400;
   cursor:pointer;
 }
 
-.spedChip:has(input:checked){
-  background:#1f4f7a;
-  border-color:#4f9fe0;
+.trachChoice input{
+  margin:0;
+}
+
+.caveRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.caveChip{
+  cursor:pointer;
+}
+
+.caveChip input{
+  display:none;
+}
+
+.caveChip span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:#2f3238;
   color:#fff;
+<<<<<<< HEAD
 }
 >>>>>>> bc80b6a (Store endringer i hele skjema.)
+=======
+  font-weight:700;
+}
+
+.caveChip input:checked + span{
+  background:#1f4f7a;
+  border-color:#3f8fd2;
+  color:#fff;
+}
+
+.accessChipRow{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+
+.accessChip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:0 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:#2f3238;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.accessChip input{
+  display:none;
+}
+
+.accessChip:has(input:checked){
+  background:#1f4f7a;
+  border-color:#3f8fd2;
+  color:#fff;
+}
+
+.accessChip:has(input:checked) span{
+  color:#fff;
+}
+
+.accessChipRow select{
+  width:120px;
+  margin:0;
+}
+
+.accessDynamic{
+  margin-top:12px;
+  max-width:570px;
+}
+
+.accessDynamic .dynamicRow{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:nowrap !important;
+  gap:8px !important;
+  width:100% !important;
+  margin-top:8px !important;
+}
+
+.accessDynamic .dynamicRow .chk{
+  flex:0 0 18px !important;
+  width:18px !important;
+  height:18px !important;
+  margin:0 !important;
+}
+
+.accessDynamic .dynamicRow input[type="text"]{
+  flex:1 1 auto !important;
+  width:auto !important;
+  margin:0 !important;
+}
+
+.utstyrGroup{
+  margin-top:8px;
+}
+
+.utstyrChipRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+
+.utstyrChip{
+  display:inline-flex;
+  align-items:center;
+  cursor:pointer;
+}
+
+.utstyrChip input{
+  display:none;
+}
+
+.utstyrChip span{
+  padding:9px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#2f3238;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+}
+
+.utstyrChip input:checked + span{
+  background:#1f4f73;
+  border-color:#3478a8;
+  color:#fff;
+}
+
+.utstyrExtra{
+  margin-top:10px;
+}
+
+.utstyrExtra textarea{
+  width:100%;
+  min-height:42px;
+  resize:none;
+}
+
+.pumpRow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:nowrap;
+}
+
+.inlineSelect{
+  width:90px;
+  min-width:90px;
+  margin:0;
+}
+
+.utstyrExtra{
+  margin-top:12px;
+  max-width:580px;
+}
+
+#utstyrFritekst{
+  width:100%;
+  min-height:44px;
+  resize:none;
+  border-radius:12px;
+}
+
+#utstyrDynamicBody{
+  margin-top:12px;
+  max-width:580px;
+}
+
+#utstyrDynamicBody .dynamicRow{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:nowrap !important;
+  gap:8px !important;
+  width:100% !important;
+  margin-top:8px !important;
+}
+
+#utstyrDynamicBody .dynamicRow .chk{
+  flex:0 0 18px !important;
+  width:18px !important;
+  height:18px !important;
+  margin:0 !important;
+}
+
+#utstyrDynamicBody .dynamicRow input[type="text"]{
+  flex:1 1 auto !important;
+  width:auto !important;
+  margin:0 !important;
+}
+
+#caveTextWrap{
+  max-width:580px;
+}
+
+#caveText{
+  width:100%;
+  box-sizing:border-box;
+}
+
+#smitteSpesWrap{
+  max-width:580px;
+}
+
+#smitteSpes{
+  width:100%;
+  box-sizing:border-box;
+}
+
+#andreMedikamenterText{
+  max-width:580px;
+  width:100%;
+  box-sizing:border-box;
+}
+
+#hlrTextWrap,
+#respTextWrap{
+  max-width:580px;
+}
+
+#hlrText,
+#respText{
+  width:100%;
+  box-sizing:border-box;
+}
+
+/* ===============================
+   FELLES CHIP-STIL FOR HELE SKJEMA
+   Legges helt nederst i style.css
+================================ */
+
+.followChip,
+.medChip,
+.caveChip span,
+.accessChip,
+.utstyrChip span,
+.airwayRow .binaryOpt,
+.specialGroup .specCell,
+#trachWrap .toggleCell,
+#acuteTrachWrap .toggleCell{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:40px !important;
+  padding:0 14px !important;
+
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,0.10) !important;
+
+  background:#2f3238 !important;
+  color:#f1f1f1 !important;
+
+  font-size:14px !important;
+  font-weight:650 !important;
+  line-height:1.2 !important;
+
+  cursor:pointer !important;
+  user-select:none !important;
+  box-shadow:none !important;
+  transition:.15s ease !important;
+}
+
+/* Hover */
+.followChip:hover,
+.medChip:hover,
+.caveChip:hover span,
+.accessChip:hover,
+.utstyrChip:hover span,
+.airwayRow .binaryOpt:hover,
+.specialGroup .specCell:hover,
+#trachWrap .toggleCell:hover,
+#acuteTrachWrap .toggleCell:hover{
+  background:#3a3e46 !important;
+}
+
+/* Skjul input inni chips */
+.followChip input,
+.medChip input,
+.caveChip input,
+.accessChip input,
+.utstyrChip input,
+.airwayRow .binaryOpt input,
+.specialGroup .specCell input,
+#trachWrap .toggleCell input,
+#acuteTrachWrap .toggleCell input{
+  position:absolute !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+/* Valgt chip */
+.followChip:has(input:checked),
+.medChip:has(input:checked),
+.caveChip input:checked + span,
+.accessChip:has(input:checked),
+.utstyrChip input:checked + span,
+.airwayRow .binaryOpt:has(input:checked),
+.specialGroup .specCell:has(input:checked),
+.specialGroup .specCell.active,
+#trachWrap .toggleCell:has(input:checked),
+#acuteTrachWrap .toggleCell:has(input:checked){
+  background:#8fb0ff !important;
+  border-color:#8fb0ff !important;
+  color:#111 !important;
+  box-shadow:0 0 0 2px rgba(143,176,255,0.18) !important;
+}
+
+/* Tekstfarge valgt */
+.followChip:has(input:checked) span,
+.medChip:has(input:checked) span,
+.caveChip input:checked + span,
+.accessChip:has(input:checked) span,
+.utstyrChip input:checked + span,
+.airwayRow .binaryOpt:has(input:checked) span,
+.specialGroup .specCell:has(input:checked) span,
+.specialGroup .specCell.active span,
+#trachWrap .toggleCell:has(input:checked) span,
+#acuteTrachWrap .toggleCell:has(input:checked) span{
+  color:#111 !important;
+}
+
+.smLine .spedChip{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+
+  min-width:72px !important;
+  width:auto !important;
+  min-height:40px !important;
+  padding:0 14px !important;
+}
+
+.smLine .spedChip span{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  color:inherit !important;
+}
+
+.smLine .spedChip input{
+  display:none !important;
+}
+.smLine{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:10px !important;
+}
+
+label.spedChip{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:72px !important;
+  min-height:40px !important;
+  padding:0 14px !important;
+  border-radius:999px !important;
+  background:#2f3238 !important;
+  border:1px solid rgba(255,255,255,0.10) !important;
+  color:#f1f1f1 !important;
+}
+
+label.spedChip input{
+  position:absolute !important;
+  opacity:0 !important;
+  width:1px !important;
+  height:1px !important;
+  margin:0 !important;
+}
+
+label.spedChip:has(input:checked){
+  background:#8fb0ff !important;
+  border-color:#8fb0ff !important;
+  color:#111 !important;
+}
+
+label.spedChip{
+  margin:0 !important;
+  height:40px !important;
+  min-height:40px !important;
+  max-height:40px !important;
+  padding:0 14px !important;
+  line-height:1 !important;
+}
+
+label.spedChip span{
+  line-height:1 !important;
+}
+
+.spedRespArbeidRow .medChip{
+  margin:0 !important;
+  min-height:40px !important;
+  height:40px !important;
+  max-height:40px !important;
+
+  padding:0 14px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  line-height:1 !important;
+}
+
+.spedRespArbeidRow .medChip span{
+  line-height:1 !important;
+}
+>>>>>>> 6f2de8e (test)
