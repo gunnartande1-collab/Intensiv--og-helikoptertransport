@@ -2243,3 +2243,14 @@ label.spedChip span{
   border-color:#93c5fd;
   color:#1e3a8a;
 }
+
+.hudRow{
+  display:grid !important;
+  grid-template-columns:repeat(4, max-content);
+  gap:10px;
+  justify-content:start;
+}
+
+.hudRow .medChip{
+  margin:0 !important;
+}

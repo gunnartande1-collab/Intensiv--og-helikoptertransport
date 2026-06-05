@@ -171,11 +171,6 @@
         <span>Apnéepisoder</span>
       </label>
 
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Cyanotisk">
-        <span>Cyanotisk</span>
-      </label>
-
     </div>
 
   </div>
@@ -191,6 +186,16 @@
   <label class="minorTitle">Spesialtransport</label>
 
   <div class="table spesialtransportRow">
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_ingen">
+  <input id="spec_ingen"
+         class="chk spec specChoice"
+         type="checkbox"
+         value="Ikke aktuelt"
+         data-spec="Ikke aktuelt">
+
+  <span class="specLabel">Ikke aktuelt</span>
+</div>
 
     <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
       <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
@@ -589,21 +594,29 @@
   </div>
 </div>
 <div id="acuteBottom" class="hidden">
-  <!-- akutt-spesifikke felt -->
-</div>
+  <label>Antall sprøytepumper</label>
 
-<!-- FELLES FOR ALLE HASTEGRADER -->
-<div class="accessGroup">
-  <!-- Tilganger -->
-</div>
+<div class="chipRow">
 
-<div class="accessGroup">
-  <!-- Utstyr -->
-</div>
+  <label class="medChip">
+    <input id="acutePumperChk" class="chk" type="checkbox">
+    <span>Sprøytepumper</span>
+  </label>
 
-<div id="fullBottom" class="hidden">
-  <!-- kun felt som bare skal vises på ikke-akutt -->
-</div>
+    <select id="acutePumperAntall" class="pumperSelect">
+      <option value=""></option>
+      <option value="1">1 stk</option>
+      <option value="2">2 stk</option>
+      <option value="3">3 stk</option>
+      <option value="4">4 stk</option>
+      <option value="5">5 stk</option>
+      <option value="6">6 stk</option>
+      <option value="7">7 stk</option>
+      <option value="8">8 stk</option>
+      <option value="9">9 stk</option>
+      <option value="10">10 stk</option>
+    </select>
+  </div>
 
   <div class="doctorGroup">
     <label class="minorTitle">Rekvirerende lege</label>
