@@ -883,12 +883,37 @@ function bindSpedbarnEvents() {
 }
 
 function bindCaveEvents() {
-  document.querySelectorAll(".caveRadio").forEach(r =>
-    r.addEventListener("change", () => {
+
+  document.querySelectorAll(".caveRadio").forEach(radio => {
+
+    const chip = radio.closest(".medChip");
+    if (!chip) return;
+
+    chip.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
+    });
+
+    chip.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = radio.dataset.wasChecked === "true";
+
+      if (wasChecked) {
+        radio.checked = false;
+      } else {
+        document.querySelectorAll(".caveRadio").forEach(r => {
+          r.checked = false;
+        });
+
+        radio.checked = true;
+      }
+
       updateCaveUI();
       lagRapport();
-    })
-  );
+    });
+
+  });
+
 }
 
 function bindBinaryOptionEvents() {
@@ -1063,15 +1088,34 @@ function updateHlrRespUI() {
 
 
 function bindHlrRespEvents() {
-  document.querySelectorAll(".hlrRadio, .respRadio").forEach(r => {
-    r.addEventListener("change", () => {
+
+  document.querySelectorAll(".hlrRadio, .respRadio").forEach(radio => {
+
+    const chip = radio.closest(".medChip");
+    if (!chip) return;
+
+    chip.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
+    });
+
+    chip.addEventListener("click", e => {
+      e.preventDefault();
+
+      const wasChecked = radio.dataset.wasChecked === "true";
+
+      if (wasChecked) {
+        radio.checked = false;
+      } else {
+        radio.checked = true;
+      }
+
       updateHlrRespUI();
       lagRapport();
     });
+
   });
+
 }
-
-
 
 function bindEvents() {
 
@@ -1083,6 +1127,7 @@ bindPvkEvents();
 bindCvkEvents();
 bindUtstyrPumpeEvents();
 bindAcutePumpeEvents();
+bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
   bindCaveEvents();
@@ -1179,7 +1224,11 @@ function addAndreInfRow(){
     "andreInfText"
   )
 }
-function ensureAndreInfBlankRow(){ensureBlankByClass("andreInfText",addAndreInfRow)}function resetAndreInfRows(){andreInfBody.innerHTML="";addAndreInfRow();addAndreInfRow()}
+function ensureAndreInfBlankRow(){ensureBlankByClass("andreInfText",addAndreInfRow)}function resetAndreInfRows(){
+  andreInfBody.innerHTML="";
+  addAndreInfRow();
+}
+
 function addTilgangRow() {
   const row = document.createElement("tr");
 
@@ -1620,3 +1669,87 @@ function updateTilgangerUI() {
   setHidden($("pvkWrap"), !$("til_pvk")?.checked);
 }
 
+function bindMedicationNeiLogic(groupSelector, neiSelector, dynamicBody, textClass) {
+
+  const nei = document.querySelector(neiSelector);
+  if (!nei) return;
+
+  const alle = document.querySelectorAll(groupSelector);
+
+  nei.addEventListener("change", () => {
+
+    if (nei.checked) {
+
+      alle.forEach(chk => {
+        if (chk !== nei) chk.checked = false;
+      });
+
+      if (dynamicBody) {
+        dynamicBody.innerHTML = "";
+
+        if (textClass === "sedText") addSedRow();
+        if (textClass === "pressorText") addPressorRow();
+        if (textClass === "andreInfText") addAndreInfRow();
+      }
+    }
+
+    lagRapport();
+  });
+
+  alle.forEach(chk => {
+
+    if (chk === nei) return;
+
+    chk.addEventListener("change", () => {
+
+      if (chk.checked) {
+        nei.checked = false;
+      }
+
+      lagRapport();
+    });
+
+  });
+
+  if (dynamicBody) {
+
+    dynamicBody.addEventListener("input", () => {
+
+      const harTekst = Array.from(
+        dynamicBody.querySelectorAll("input[type='text']")
+      ).some(txt => clean(txt.value));
+
+      if (harTekst) {
+        nei.checked = false;
+      }
+
+      lagRapport();
+    });
+
+  }
+
+}
+
+function bindMedicationNeiEvents() {
+
+  bindMedicationNeiLogic(
+    ".sed",
+    "#sed_nei",
+    sedDynamicBody,
+    "sedText"
+  );
+
+  bindMedicationNeiLogic(
+    ".pre",
+    "#pre_nei",
+    pressorDynamicBody,
+    "pressorText"
+  );
+
+  bindMedicationNeiLogic(
+    'input[name="medicationOther"]',
+    'input[name="medicationOther"][value="Nei"]',
+    andreInfBody,
+    "andreInfText"
+  );
+}
