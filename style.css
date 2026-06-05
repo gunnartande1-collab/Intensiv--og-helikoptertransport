@@ -2446,3 +2446,34 @@ label.spedChip span{
 .spedRespArbeidRow .medChip span{
   line-height:1 !important;
 }
+
+/* Smitte / CAVE / HLR / Respirator innenfor samme bredde som resten */
+
+.infoGroup{
+  max-width:580px;
+}
+
+.infoGroup .smLine,
+.infoGroup .caveRow{
+  width:100%;
+}
+
+.infoGroup .followChip,
+.infoGroup .caveChip{
+  max-width:100%;
+}
+
+/* Tving sikkerhetsradene inn i samme bredde som resten */
+
+.infoGroup{
+  width:100%;
+}
+
+.infoGroup .smLine,
+.infoGroup .caveRow{
+  max-width:580px;
+  width:100%;
+
+  margin-left:0;
+  padding-left:0;
+}
