@@ -6,8 +6,8 @@ const pageTitle=$("pageTitle"),mainContent=$("mainContent"),acuteTop=$("acuteTop
 const spontO2Wrap=$("spontO2Wrap"),highFlowWrap=$("highFlowWrap"),nivWrap=$("nivWrap"),intubWrap=$("intubWrap"),trachWrap=$("trachWrap"),trO2=$("tr_o2"),trVent=$("tr_vent"),trachO2Wrap=$("trachO2Wrap"),trachVentWrap=$("trachVentWrap");
 const acuteSpontO2Wrap=$("acuteSpontO2Wrap"),acuteHighFlowWrap=$("acuteHighFlowWrap"),acuteNivWrap=$("acuteNivWrap"),acuteIntubWrap=$("acuteIntubWrap"),acuteTrachWrap=$("acuteTrachWrap"),acuteTrachO2Wrap=$("acuteTrachO2Wrap"),acuteTrachVentWrap=$("acuteTrachVentWrap");
 const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("smitteSpesWrap"),smitteSpes=$("smitteSpes");
-const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("dren_annet_container");
-const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumperAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
+const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("utstyrDynamicBody");
+const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
 let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
 /* ======================================================
    GENERELLE HJELPEFUNKSJONER
@@ -407,10 +407,6 @@ function buildUtstyrList() {
     out.push("Thoraxdren");
   }
 
-  if ($("dren_vent").checked) {
-    out.push("Ventrikkelsonde");
-  }
-
   document.querySelectorAll(".drenAnnetText").forEach(txt => {
     const row = txt.closest(".dynamicRow");
     const cb = row ? row.querySelector(".drenAnnetChk") : null;
@@ -474,14 +470,47 @@ function buildCaveLines() {
     (txt ? " (" + txt + ")" : "")
   ];
 }
+
+function buildHlrLines() {
+  const val = document.querySelector(".hlrRadio:checked")?.value || "";
+  const txt = clean($("hlrText")?.value);
+
+  if (!val) return [];
+
+  if (val === "Ja") {
+    return ["HLR-status: Ja"];
+  }
+
+  return [
+    "HLR-status: Nei" +
+    (txt ? " (" + txt + ")" : "")
+  ];
+}
+
+function buildRespLines() {
+  const val = document.querySelector(".respRadio:checked")?.value || "";
+  const txt = clean($("respText")?.value);
+
+  if (!val) return [];
+
+  if (val === "Ja") {
+    return ["Respiratorstatus: Ja"];
+  }
+
+  return [
+    "Respiratorstatus: Nei" +
+    (txt ? " (" + txt + ")" : "")
+  ];
+}
 /* ======================================================
    UI OPPDATERING
 ====================================================== */
 function updateSpedbarnUI() {
   const val = getSpedbarnValue();
+  const spedRespArbeidWrap = $("spedRespArbeidWrap");
 
   setHidden(spedbarnExtraWrap, val !== "Ja");
-  setHidden(transportWrap, val !== "Ja");
+  setHidden(spedRespArbeidWrap, val !== "Ja");
 
   vektLabel.textContent = val === "Ja"
     ? "Vekt (gram)"
@@ -493,6 +522,7 @@ function updateSpedbarnUI() {
 
   updateTitle();
 }
+
 function updateCaveUI() {
 
   const valgt =
@@ -529,9 +559,41 @@ function normalizeDecimalField(el,maxIntegerDigits,maxDecimals,decimalSep=','){l
   return {raw:out,int:intPart,dec:decPart};
 }
 function focusNextField(currentId){const next={rf:"spo2",spo2:"puls",puls:"btSys",btSys:"btDia",btDia:"map",map:"temp",temp:"gcs"}[currentId];const nextEl=next?$(next):null;if(nextEl){nextEl.focus();if(typeof nextEl.select==="function")nextEl.select()}}
-function handleVitalInput(evt){const id=evt.target.id;if(id==="rf"){const digits=normalizeNumericField(evt.target,3);if(digits.length>=3)focusNextField(id)}else if(id==="spo2"){const digits=normalizeNumericField(evt.target,3,100);if(digits.length>=3)focusNextField(id)}else if(id==="puls"){const digits=normalizeNumericField(evt.target,3);if(digits.length>=3)focusNextField(id)}else if(id==="btSys"){const digits=normalizeNumericField(evt.target,3);if(digits.length>=3)focusNextField(id)}else if(id==="btDia"){const digits=normalizeNumericField(evt.target,3);if(digits.length>=3)focusNextField(id)}else if(id==="map"){const digits=normalizeNumericField(evt.target,3);if(digits.length>=3)focusNextField(id)}else if(id==="temp"){const r=normalizeDecimalField(evt.target,2,1,','); // allow xx,x
-  // advance only when a decimal digit is present (e.g., 36,5)
-  if(r.dec.length>=1)focusNextField(id)}}
+function handleVitalInput(evt){
+
+  const id = evt.target.id;
+
+  if(id==="rf"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="spo2"){
+
+    normalizeNumericField(evt.target,3,100);
+
+  }else if(id==="puls"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="btSys"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="btDia"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="map"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="temp"){
+
+    normalizeDecimalField(evt.target,2,1,',');
+
+  }
+}
+
 function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
 function updateSmitteSpes() {
 
@@ -564,6 +626,18 @@ function updateAcuteAirwayDetails() {
     acuteTrachVentWrap
   ].forEach(el => setHidden(el, true));
 
+  if (a === "Spontan med O2") {
+    setHidden(acuteSpontO2Wrap, false);
+  }
+
+  if (a === "Spontant med high flow") {
+    setHidden(acuteHighFlowWrap, false);
+  }
+
+  if (a === "NIV (CPAP/BiPAP)") {
+    setHidden(acuteNivWrap, false);
+  }
+
   if (a === "Intubert") {
     setHidden(acuteIntubWrap, false);
   }
@@ -571,11 +645,14 @@ function updateAcuteAirwayDetails() {
   if (a === "Trakeostomi") {
     setHidden(acuteTrachWrap, false);
 
+    const trachO2 = $("acute_tr_o2")?.checked;
     const trachVent = $("acute_tr_vent")?.checked;
 
+    setHidden(acuteTrachO2Wrap, !trachO2);
     setHidden(acuteTrachVentWrap, !trachVent);
   }
 }
+
 function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
 function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
@@ -651,6 +728,7 @@ function bindPvkEvents() {
 
   pvkAntall.addEventListener("input", () => {
     pvkChk.checked = !!pvkAntall.value;
+    updateTilgangerUI();
     lagRapport();
   });
 
@@ -659,6 +737,8 @@ function bindPvkEvents() {
     if (!pvkChk.checked) {
       pvkAntall.value = "";
     }
+
+    updateTilgangerUI();
 
     lagRapport();
   });
@@ -669,7 +749,7 @@ function bindCvkEvents() {
   $("cvkLumen")?.addEventListener("input", () => {
 
     $("til_cvk").checked = !!$("cvkLumen").value;
-
+    updateTilgangerUI();
     lagRapport();
   });
 
@@ -678,14 +758,20 @@ function bindCvkEvents() {
     if (!$("til_cvk").checked) {
       $("cvkLumen").value = "";
     }
-
+    updateTilgangerUI();
     lagRapport();
   });
 }
 
+function updateUtstyrPumpeUI() {
+  setHidden(utstPumperAntall, !utstPumperChk?.checked);
+}
+
 function bindUtstyrPumpeEvents() {
 
-utstPumperAntall.addEventListener("input", () => {    utstPumperChk.checked = !!utstPumperAntall.value;
+  utstPumperAntall.addEventListener("input", () => {
+    utstPumperChk.checked = !!utstPumperAntall.value;
+    updateUtstyrPumpeUI();
     lagRapport();
   });
 
@@ -695,13 +781,15 @@ utstPumperAntall.addEventListener("input", () => {    utstPumperChk.checked = !!
       utstPumperAntall.value = "";
     }
 
+    updateUtstyrPumpeUI();
     lagRapport();
   });
 }
 
 function bindAcutePumpeEvents() {
 
-acutePumperAntall.addEventListener("input", () => {    acutePumperChk.checked = !!acutePumperAntall.value;
+  acutePumperAntall.addEventListener("input", () => {
+    acutePumperChk.checked = !!acutePumperAntall.value;
     lagRapport();
   });
 
@@ -853,9 +941,9 @@ function bindBinaryOptionEvents() {
 function bindTrachEvents() {
 
   document.querySelectorAll(".trachOpt").forEach(chk => {
-    const cell = chk.closest(".toggleCell");
+const cell = chk.closest("label");
 
-    if (!cell) return;
+if (!cell) return;
 
     cell.addEventListener("pointerdown", () => {
       chk.dataset.wasChecked = chk.checked ? "true" : "false";
@@ -955,6 +1043,46 @@ function bindAcuteAirwayInputEvents() {
   );
 }
 
+function updateHlrUI() {
+  const val = document.querySelector(".hlrRadio:checked")?.value || "";
+  const wrap = $("hlrTextWrap");
+  const txt = $("hlrText");
+
+  setHidden(wrap, val !== "Nei");
+
+  if (val !== "Nei" && txt) {
+    txt.value = "";
+  }
+}
+
+function updateRespUI() {
+  const val = document.querySelector(".respRadio:checked")?.value || "";
+  const wrap = $("respTextWrap");
+  const txt = $("respText");
+
+  setHidden(wrap, val !== "Nei");
+
+  if (val !== "Nei" && txt) {
+    txt.value = "";
+  }
+}
+
+function bindHlrRespEvents() {
+  document.querySelectorAll(".hlrRadio").forEach(r => {
+    r.addEventListener("change", () => {
+      updateHlrUI();
+      lagRapport();
+    });
+  });
+
+  document.querySelectorAll(".respRadio").forEach(r => {
+    r.addEventListener("change", () => {
+      updateRespUI();
+      lagRapport();
+    });
+  });
+}
+
 
 function bindEvents() {
 
@@ -970,7 +1098,7 @@ bindAcutePumpeEvents();
   bindSpedbarnEvents();
   bindCaveEvents();
   bindSmitteEvents();
-
+  bindHlrRespEvents();
   bindBinaryOptionEvents();
 
   bindTrachEvents();
@@ -1190,12 +1318,14 @@ function getMedicationData() {
       ...collectDynamicTexts(".pressorText", ".pressorDynChk")
     ],
 
-    andre: collectDynamicTexts(
-      ".andreInfText",
-      ".andreInfChk"
-    )
+    andre: [
+      ...Array.from(document.querySelectorAll('input[name="medicationOther"]:checked'))
+        .map(x => x.value),
+      ...collectDynamicTexts(".andreInfText", ".andreInfChk")
+    ]
   };
 }
+
 function addMedicationSections(lines) {
   const meds = getMedicationData();
 
@@ -1253,6 +1383,8 @@ function buildAcuteReport(lines) {
   }
 
   buildCaveLines().forEach(l => lines.push(l));
+  buildHlrLines().forEach(l => lines.push(l));
+  buildRespLines().forEach(l => lines.push(l));
   buildSmitteLines().forEach(l => lines.push(l));
 
   addAcuteDoctor(lines);
@@ -1315,6 +1447,8 @@ function buildFullReport(lines) {
   }
 
   buildCaveLines().forEach(l => lines.push(l));
+  buildHlrLines().forEach(l => lines.push(l));
+  buildRespLines().forEach(l => lines.push(l));
   buildSmitteLines().forEach(l => lines.push(l));
 
   addFullDoctors(lines);
@@ -1401,12 +1535,15 @@ function nullstillSkjema() {
   forrigeHastegrad = "";
 
   document
-    .querySelectorAll(".hasteBtn")
+    .querySelectorAll(".hasteCard")
+    
     .forEach(b => b.classList.remove("active"));
 
   updateMainVisibility();
   updateSpedbarnUI();
   updateCaveUI();
+  updateHlrUI();
+  updateRespUI();
   updateSmitteSpes();
   handleAirwayChange();
   updateAcuteAirwayDetails();
@@ -1425,8 +1562,6 @@ function init() {
   resetDrenAnnetFields();
 
   updateSpedbarnUI();
-  updateCaveUI();
-  updateSmitteSpes();
 
   handleAirwayChange();
   updateAcuteAirwayDetails();
@@ -1493,4 +1628,9 @@ document.addEventListener("click", e => {
 
   lagRapport();
 }, true);
+
+function updateTilgangerUI() {
+  setHidden($("cvkWrap"), !$("til_cvk")?.checked);
+  setHidden($("pvkWrap"), !$("til_pvk")?.checked);
+}
 
