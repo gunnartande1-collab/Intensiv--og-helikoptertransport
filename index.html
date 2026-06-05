@@ -660,8 +660,8 @@
   <label class="minorTitle">CAVE?</label>
 
 <div class="chipRow caveRow">
-  <label class="caveChip">
-    <input
+<label class="medChip">
+      <input
       type="radio"
       name="cave"
       value="Nei"
@@ -671,7 +671,7 @@
     <span>Nei</span>
   </label>
 
-  <label class="caveChip">
+  <label class="medChip">
     <input
       type="radio"
       name="cave"
@@ -693,31 +693,34 @@
   <label class="minorTitle">HLR og respirator</label>
 
   <div class="chipRow caveRow">
-    <label class="caveChip">
+
+    <label class="medChip">
       <input type="radio" name="hlrStatus" value="Ja" class="chk hlrRadio">
       <span>HLR +</span>
     </label>
 
-    <label class="caveChip">
+    <label class="medChip">
       <input type="radio" name="hlrStatus" value="Nei" class="chk hlrRadio">
       <span>HLR -</span>
     </label>
 
-    <label class="caveChip">
+    <label class="medChip">
       <input type="radio" name="respStatus" value="Ja" class="chk respRadio">
       <span>Respirator +</span>
     </label>
 
-    <label class="caveChip">
+    <label class="medChip">
       <input type="radio" name="respStatus" value="Nei" class="chk respRadio">
       <span>Respirator -</span>
     </label>
+
   </div>
 
-<div id="hlrRespTextWrap" class="hidden doctorRow">
-  <input id="hlrRespLege" placeholder="Lege">
-  <input id="hlrRespDato" placeholder="Dato">
-</div>
+  <div id="hlrRespTextWrap" class="hidden doctorRow">
+    <input id="hlrRespLege" placeholder="Lege">
+    <input id="hlrRespDato" placeholder="Dato">
+  </div>
+
 </div>
 
 <div id="fullBottom" class="hidden">
@@ -778,26 +781,26 @@
 <div class="utstyrGroup">
 
   <div class="chipRow utstyrChipRow">
-    <label class="utstyrChip">
-  <input id="utst_ingen"
+<label class="medChip">
+    <input id="utst_ingen"
          class="chk dren"
          type="checkbox"
          data-name="Ingen utstyr">
   <span>Ingen utstyr</span>
 </label>
 
-    <label class="utstyrChip">
-      <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
+<label class="medChip">
+        <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
       <span>Arteriekran</span>
     </label>
 
-    <label class="utstyrChip">
-      <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
+<label class="medChip">
+        <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
 <span>Thoraxdren</span>
 </label>
 
 <div class="pumpRow">
-  <label class="utstyrChip" for="utst_pumper">
+  <label class="utstyrChip">
     <input id="utst_pumper"
            class="chk dren"
            type="checkbox"
@@ -805,7 +808,8 @@
     <span>Sprøytepumper</span>
   </label>
 
-<select id="utstPumpeAntall" class="inlineSelect hidden" onclick="event.stopPropagation()">    <option value="">Antall</option>
+  <select id="utstPumpeAntall" class="inlineSelect hidden">
+    <option value="">Antall</option>
     <option>1</option>
     <option>2</option>
     <option>3</option>
@@ -817,7 +821,7 @@
     <option>9</option>
     <option>10</option>
   </select>
-</div>  
+</div>
 
   </div> <!-- chipRow -->
 

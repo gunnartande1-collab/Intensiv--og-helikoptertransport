@@ -467,39 +467,6 @@ input[type=number]{
   gap:8px;
 }
 
-.medChip{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:38px;
-  padding:0 14px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:#2f3238;
-  color:#f1f1f1;
-  cursor:pointer;
-  font-size:14px;
-  font-weight:650;
-  user-select:none;
-  transition:.15s ease;
-}
-
-.medChip:hover{
-  background:#3a3e46;
-}
-
-.medChip input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
-}
-
-.medChip:has(input:checked){
-  background:#8fb0ff;
-  color:#111;
-  border-color:#8fb0ff;
-  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
-}
 
 .medDynamic{
   margin-top:10px;
@@ -2048,4 +2015,231 @@ label.spedChip span{
 
   margin-left:0;
   padding-left:0;
+}
+
+/* ======================================================
+   UNIVERSELL CHIP-STANDARD
+====================================================== */
+
+.medChip,
+.followChip,
+.caveChip,
+.accessChip,
+.utstyrChip,
+.binaryOpt,
+.smChip,
+.spedChip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:42px;
+  padding:10px 16px;
+
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.08);
+
+  background:#2f333b;
+
+  font-size:14px;
+  font-weight:500;
+  line-height:1.2;
+
+  cursor:pointer;
+  transition:0.15s ease;
+
+  box-sizing:border-box;
+}
+
+.medChip span,
+.followChip span,
+.caveChip span,
+.accessChip span,
+.utstyrChip span,
+.binaryOpt span,
+.smChip span,
+.spedChip span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.medChip input,
+.followChip input,
+.caveChip input,
+.accessChip input,
+.utstyrChip input,
+.binaryOpt input,
+.smChip input,
+.spedChip input{
+  display:none;
+}
+
+.medChip:has(input:checked),
+.followChip:has(input:checked),
+.caveChip:has(input:checked),
+.accessChip:has(input:checked),
+.utstyrChip:has(input:checked),
+.binaryOpt:has(input:checked),
+.smChip:has(input:checked),
+.spedChip:has(input:checked){
+  background:#2b5cab;
+  border-color:#4f83d1;
+  color:#fff;
+}
+
+.medChip:hover,
+.followChip:hover,
+.caveChip:hover,
+.accessChip:hover,
+.utstyrChip:hover,
+.binaryOpt:hover,
+.smChip:hover,
+.spedChip:hover{
+  background:#3a404b;
+}
+
+.hudRow .medChip,
+.medicationOtherRow .medChip,
+.medGroup .medChip{
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1.2 !important;
+}
+
+.hudRow .medChip span,
+.medicationOtherRow .medChip span,
+.medGroup .medChip span{
+  line-height:1.2 !important;
+}
+
+/* ======================================================
+   TVING ALLE "NEI"-CHIPS LIKE
+====================================================== */
+
+.medChip,
+.followChip,
+.caveChip,
+.accessChip,
+.utstyrChip,
+.smChip,
+.spedChip{
+  min-height:40px !important;
+  height:40px !important;
+
+  padding:0 14px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  box-sizing:border-box !important;
+}
+
+.medChip span,
+.followChip span,
+.caveChip span,
+.accessChip span,
+.utstyrChip span,
+.smChip span,
+.spedChip span{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  line-height:1.1 !important;
+  height:100% !important;
+}
+
+/* Tving CAVE / HLR / Respirator lik alle andre chips */
+
+.caveChip{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,0.10) !important;
+
+  background:#2f3238 !important;
+  color:#f1f1f1 !important;
+
+  font-size:14px !important;
+  font-weight:650 !important;
+  line-height:1.2 !important;
+
+  cursor:pointer !important;
+  user-select:none !important;
+  box-shadow:none !important;
+}
+
+.caveChip span{
+  all:unset !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  height:100% !important;
+  line-height:1.2 !important;
+  color:inherit !important;
+}
+
+.caveChip input{
+  display:none !important;
+}
+
+.caveChip:has(input:checked){
+  background:#8fb0ff !important;
+  border-color:#8fb0ff !important;
+  color:#111 !important;
+  box-shadow:0 0 0 2px rgba(143,176,255,0.18) !important;
+}
+
+.pumpRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.pumpRow .utstyrChip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pumpRow .utstyrChip input{
+  display:none;
+}
+
+.pumpRow .utstyrChip span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:7px 14px;
+  border-radius:999px;
+  border:1px solid #cfd8e3;
+  background:#f8fafc;
+  color:#1f2937;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  user-select:none;
+}
+
+.pumpRow .utstyrChip input:checked + span{
+  background:#dbeafe;
+  border-color:#93c5fd;
+  color:#1e3a8a;
 }
