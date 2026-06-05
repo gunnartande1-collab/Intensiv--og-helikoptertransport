@@ -1561,8 +1561,6 @@ select{
   max-width:100%;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 .trachInline{
   margin-top:10px;
   padding:10px 0 0;
@@ -2003,14 +2001,13 @@ label.spedChip span{
 .spedRespArbeidRow .medChip span{
   line-height:1 !important;
 }
-=======
+
 .spedChip input{
   display:none;
-=======
-.trachInline{
+
+  .trachInline{
   margin-top:10px;
   padding:10px 0 0;
->>>>>>> 6f2de8e (test)
 }
 
 .trachChoiceRow{
@@ -2056,11 +2053,9 @@ label.spedChip span{
   border:1px solid rgba(255,255,255,0.14);
   background:#2f3238;
   color:#fff;
-<<<<<<< HEAD
 }
->>>>>>> bc80b6a (Store endringer i hele skjema.)
-=======
-  font-weight:700;
+
+font-weight:700;
 }
 
 .caveChip input:checked + span{
@@ -2273,7 +2268,6 @@ label.spedChip span{
 
 /* ===============================
    FELLES CHIP-STIL FOR HELE SKJEMA
-   Legges helt nederst i style.css
 ================================ */
 
 .followChip,
@@ -2452,4 +2446,3 @@ label.spedChip span{
 .spedRespArbeidRow .medChip span{
   line-height:1 !important;
 }
->>>>>>> 6f2de8e (test)
