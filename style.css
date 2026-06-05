@@ -1120,7 +1120,7 @@ select{
   margin-top:12px;
   padding:12px 14px;
   border-radius:14px;
-  background:var(--surface);
+  background:rgba(255,255,255,0.025);
   border:1px solid rgba(255,255,255,0.05);
 }
 
@@ -1588,7 +1588,8 @@ select{
 .caveRow{
   display:flex;
   gap:10px;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  align-items:center;
 }
 
 .caveChip{
@@ -2009,7 +2010,8 @@ label.spedChip span{
 /* Smitte / CAVE / HLR / Respirator innenfor samme bredde som resten */
 
 .infoGroup{
-  max-width:580px;
+  width:100%;
+  max-width:none;
 }
 
 .infoGroup .smLine,
@@ -2028,7 +2030,18 @@ label.spedChip span{
   width:100%;
 }
 
-.infoGroup .smLine,
+.infoGroup .smLine{
+  width:100%;
+  max-width:none;
+
+  display:flex;
+  flex-wrap:nowrap;
+  gap:10px;
+
+  margin-left:0;
+  padding-left:0;
+}
+
 .infoGroup .caveRow{
   max-width:580px;
   width:100%;

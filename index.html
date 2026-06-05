@@ -690,45 +690,35 @@
 </div> <!-- infoGroup CAVE -->
 
 <div class="infoGroup">
-  <label class="minorTitle">HLR-status</label>
+  <label class="minorTitle">HLR og respirator</label>
 
   <div class="chipRow caveRow">
     <label class="caveChip">
       <input type="radio" name="hlrStatus" value="Ja" class="chk hlrRadio">
-      <span>HLR Ja</span>
+      <span>HLR +</span>
     </label>
 
     <label class="caveChip">
       <input type="radio" name="hlrStatus" value="Nei" class="chk hlrRadio">
-      <span>HLR Nei</span>
+      <span>HLR -</span>
     </label>
-  </div>
 
-  <div id="hlrTextWrap" class="hidden">
-    <input id="hlrText" placeholder="Lege som har fattet beslutning og dato">
-  </div>
-</div>
-
-<div class="infoGroup">
-  <label class="minorTitle">Respiratorstatus</label>
-
-  <div class="chipRow caveRow">
     <label class="caveChip">
       <input type="radio" name="respStatus" value="Ja" class="chk respRadio">
-      <span>Respirator Ja</span>
+      <span>Respirator +</span>
     </label>
 
     <label class="caveChip">
       <input type="radio" name="respStatus" value="Nei" class="chk respRadio">
-      <span>Respirator Nei</span>
+      <span>Respirator -</span>
     </label>
   </div>
 
-  <div id="respTextWrap" class="hidden">
-    <input id="respText" placeholder="Lege som har fattet beslutning og dato">
-  </div>
+<div id="hlrRespTextWrap" class="hidden doctorRow">
+  <input id="hlrRespLege" placeholder="Lege">
+  <input id="hlrRespDato" placeholder="Dato">
 </div>
-
+</div>
 
 <div id="fullBottom" class="hidden">
 
@@ -835,9 +825,12 @@
 
 </div> <!-- utstyrGroup -->
 
+</div> <!-- accessGroup Utstyr -->
+
 <div class="accessGroup">
 
 <label class="minorTitle">Rekvirerende lege</label>
+
 <div class="doctorRow">
   <input id="rekNavn" placeholder="Navn">
   <input id="rekTlf" class="phoneInput" placeholder="Tlf">

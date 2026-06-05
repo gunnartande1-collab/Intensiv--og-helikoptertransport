@@ -471,37 +471,39 @@ function buildCaveLines() {
   ];
 }
 
-function buildHlrLines() {
-  const val = document.querySelector(".hlrRadio:checked")?.value || "";
-  const txt = clean($("hlrText")?.value);
+function buildHlrRespLines() {
+  const hlrVal = document.querySelector(".hlrRadio:checked")?.value || "";
+  const respVal = document.querySelector(".respRadio:checked")?.value || "";
 
-  if (!val) return [];
+  const lege = clean($("hlrRespLege")?.value);
+  const dato = clean($("hlrRespDato")?.value);
 
-  if (val === "Ja") {
-    return ["HLR-status: Ja"];
-  }
+  const dokumentasjon =
+    lege || dato
+      ? "satt av " + (lege || "lege ikke oppgitt") + (dato ? " den " + dato : "")
+      : "mangler dokumentasjon";
 
-  return [
-    "HLR-status: Nei" +
-    (txt ? " (" + txt + ")" : "")
-  ];
+  const out = [];
+
+  if (hlrVal === "Ja") {
+  out.push("HLR pluss");
 }
 
-function buildRespLines() {
-  const val = document.querySelector(".respRadio:checked")?.value || "";
-  const txt = clean($("respText")?.value);
-
-  if (!val) return [];
-
-  if (val === "Ja") {
-    return ["Respiratorstatus: Ja"];
-  }
-
-  return [
-    "Respiratorstatus: Nei" +
-    (txt ? " (" + txt + ")" : "")
-  ];
+if (hlrVal === "Nei") {
+  out.push("HLR minus " + dokumentasjon);
 }
+
+if (respVal === "Ja") {
+  out.push("Respirator pluss");
+}
+
+if (respVal === "Nei") {
+  out.push("Respirator minus " + dokumentasjon);
+}
+
+return out;
+}
+
 /* ======================================================
    UI OPPDATERING
 ====================================================== */
@@ -1043,45 +1045,32 @@ function bindAcuteAirwayInputEvents() {
   );
 }
 
-function updateHlrUI() {
-  const val = document.querySelector(".hlrRadio:checked")?.value || "";
-  const wrap = $("hlrTextWrap");
-  const txt = $("hlrText");
+function updateHlrRespUI() {
+  const hlrVal = document.querySelector(".hlrRadio:checked")?.value || "";
+  const respVal = document.querySelector(".respRadio:checked")?.value || "";
 
-  setHidden(wrap, val !== "Nei");
+  const wrap = $("hlrRespTextWrap");
+  const txt = $("hlrRespText");
 
-  if (val !== "Nei" && txt) {
+  const skalVises = hlrVal === "Nei" || respVal === "Nei";
+
+  setHidden(wrap, !skalVises);
+
+  if (!skalVises && txt) {
     txt.value = "";
   }
 }
 
-function updateRespUI() {
-  const val = document.querySelector(".respRadio:checked")?.value || "";
-  const wrap = $("respTextWrap");
-  const txt = $("respText");
-
-  setHidden(wrap, val !== "Nei");
-
-  if (val !== "Nei" && txt) {
-    txt.value = "";
-  }
-}
 
 function bindHlrRespEvents() {
-  document.querySelectorAll(".hlrRadio").forEach(r => {
+  document.querySelectorAll(".hlrRadio, .respRadio").forEach(r => {
     r.addEventListener("change", () => {
-      updateHlrUI();
-      lagRapport();
-    });
-  });
-
-  document.querySelectorAll(".respRadio").forEach(r => {
-    r.addEventListener("change", () => {
-      updateRespUI();
+      updateHlrRespUI();
       lagRapport();
     });
   });
 }
+
 
 
 function bindEvents() {
@@ -1383,8 +1372,7 @@ function buildAcuteReport(lines) {
   }
 
   buildCaveLines().forEach(l => lines.push(l));
-  buildHlrLines().forEach(l => lines.push(l));
-  buildRespLines().forEach(l => lines.push(l));
+  buildHlrRespLines().forEach(l => lines.push(l));  
   buildSmitteLines().forEach(l => lines.push(l));
 
   addAcuteDoctor(lines);
@@ -1447,8 +1435,7 @@ function buildFullReport(lines) {
   }
 
   buildCaveLines().forEach(l => lines.push(l));
-  buildHlrLines().forEach(l => lines.push(l));
-  buildRespLines().forEach(l => lines.push(l));
+  buildHlrRespLines().forEach(l => lines.push(l));
   buildSmitteLines().forEach(l => lines.push(l));
 
   addFullDoctors(lines);
@@ -1542,8 +1529,7 @@ function nullstillSkjema() {
   updateMainVisibility();
   updateSpedbarnUI();
   updateCaveUI();
-  updateHlrUI();
-  updateRespUI();
+  updateHlrRespUI(); 
   updateSmitteSpes();
   handleAirwayChange();
   updateAcuteAirwayDetails();
