@@ -1293,6 +1293,9 @@ function lagRapport() {
   addSpesialtransport(lines);
   addHastegrad(lines);
 
+  const follow = buildFollowNeedLine();
+if (follow) lines.push(follow);
+
   const sped = buildSpedbarnLine();
   if (sped) lines.push(sped);
 
@@ -1752,4 +1755,14 @@ function bindMedicationNeiEvents() {
     andreInfBody,
     "andreInfText"
   );
+}
+
+function buildFollowNeedLine() {
+  const valgt = Array.from(
+    document.querySelectorAll('input[name="followNeed"]:checked')
+  ).map(x => x.value);
+
+  if (!valgt.length) return "";
+
+  return "Følgebehov ifølge rekvirent: " + valgt.join(", ");
 }
