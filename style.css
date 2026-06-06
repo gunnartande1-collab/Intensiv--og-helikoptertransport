@@ -2292,7 +2292,7 @@ label.spedChip span{
     opacity .18s ease,
     visibility .18s ease;
 
-  transition-delay:1,5s;
+  transition-delay:1.5s;
 }
 
 .hudTooltip span:hover::after{
