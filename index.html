@@ -41,7 +41,7 @@
 
 </div>
 
-<label class="minorTitle">Følgebehov ifølge rekvirent</label>
+<label class="minorTitle">Anbefalt følgebehov fra rekvirent</label>
 
 <div class="followRow">
 
@@ -484,23 +484,33 @@
 <div class="chipRow hudRow">
 
   <label class="medChip">
-    <input type="checkbox" name="hud" value="Blekhet">
-    <span>Blekhet</span>
+    <input type="checkbox" name="hud" value="Blek">
+    <span>Blek</span>
   </label>
 
   <label class="medChip">
-    <input type="checkbox" name="hud" value="Rødme (Erytem)">
-    <span>Rødme (Erytem)</span>
+    <input type="checkbox" name="hud" value="Cyanotisk">
+    <span> Cyanotisk</span>
+  </label>
+
+<label class="medChip hudTooltip">
+  <input type="checkbox" name="hud" value="Erytem (Rødme)">
+  <span data-tooltip="Rødme">Erytem</span>
+</label>
+
+<label class="medChip hudTooltip">
+  <input type="checkbox" name="hud" value="Ikterus (Gulfarge)">
+  <span data-tooltip="Gulfarge">Ikterus</span>
+</label>
+
+ <label class="medChip">
+    <input type="checkbox" name="hud" value="Normal">
+    <span>Normal</span>
   </label>
 
   <label class="medChip">
-    <input type="checkbox" name="hud" value="Blåfarge (Cyanose)">
-    <span>Blåfarge (Cyanose)</span>
-  </label>
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Gulfarge (Ikterus)">
-    <span>Gulfarge (Ikterus)</span>
+    <input type="checkbox" name="hud" value="Tørr">
+    <span>Tørr</span>
   </label>
 
   <label class="medChip">
@@ -513,15 +523,8 @@
     <span>Klam</span>
   </label>
 
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Tørr">
-    <span>Tørr</span>
-  </label>
 
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Normal">
-    <span>Normal</span>
-  </label>
+
 
 </div>
 
@@ -856,7 +859,7 @@
 </div> <!-- fullBottom -->
 
 <div class="btnbar">
-  
+
 <button id="copyBtn" type="button" class="btn-copy actionBtn">
     <svg class="copyIcon" viewBox="0 0 24 24" aria-hidden="true">
       <path fill="currentColor" d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1z"/>
