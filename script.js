@@ -130,50 +130,53 @@ function buildFullAirwayLine() {
   if (main === "Spontan med O2") {
     const l = clean($("spontO2Liter").value);
 
-    return l
-      ? "Luftveier: Spontan med O2 " + l + " l/min"
-      : "Luftveier: Spontan med O2";
+    
+
+return l
+  ? "Luftveier: Spontan med " + l + " l/min O2"
+  : "Luftveier: Spontan med O2";
   }
 
-  if (main === "Spontant med high flow") {
-    const p = ["Luftveier: Spontant med high flow"];
-    const f = clean($("highFlowFio2").value);
-    const fl = clean($("highFlowFlow").value);
+if (main === "Spontant med high flow") {
 
-if (f) p.push("FiO2 " + f);
-if (fl) p.push("flow " + fl + " l/min");
+  const f = clean($("highFlowFio2").value);
+  const fl = clean($("highFlowFlow").value);
 
-return p.length > 1
-  ? p[0] + "; " + p.slice(1).join(" og ")
-  : p[0];
+  let tekst = "Luftveier: Spontant med high flow";
+
+  if (f) {
+    tekst += ", FiO2 " + f + " %";  }
+
+  if (fl) {
+    tekst += ", Flow " + fl + " L/min";
   }
 
-  if (main === "NIV (CPAP/BiPAP)") {
-    const p = ["Luftveier: NIV"];
-    const f = clean($("nivFio2").value);
+  return tekst;
+}
 
-    if (f) p.push("FiO2 " + f + " %");
+if (main === "NIV (CPAP/BiPAP)") {
+  const f = clean($("nivFio2").value);
 
-return p.length > 1
-  ? p[0] + "; " + p.slice(1).join(" og ")
-  : p[0];
-  }
+  return f
+    ? "Luftveier: NIV, FiO2 " + f + " %"
+    : "Luftveier: NIV";
+}
 
 if (main === "Intubert") {
 
-  const p = ["Luftveier: Intubert"];
+  const deler = [];
 
   const f = clean($("intubFio2").value);
   const pe = clean($("intubPeep").value);
   const t = clean($("intubTopp").value);
 
-  if (f) p.push("FiO2 " + f + " %");
-  if (pe) p.push("PEEP " + pe);
-  if (t) p.push("topptrykk " + t);
+  if (f) deler.push("FiO2 " + f + " %");
+  if (pe) deler.push("PEEP " + pe);
+  if (t) deler.push("topptrykk " + t);
 
-  return p.length > 1
-    ? p[0] + "; " + p.slice(1).join(", ").replace(/,([^,]*)$/, " og$1")
-    : p[0];
+  return deler.length
+    ? "Luftveier: Intubert, " + deler.join(", ")
+    : "Luftveier: Intubert";
 }
 
 if (main === "Trakeostomi") {
@@ -242,50 +245,51 @@ function buildAcuteAirwayLines() {
       clean($("acuteSpontO2Liter").value) ||
       clean($("spontO2Liter").value);
 
-    return [
-      l
-        ? "Luftveier: Spontan med O2, antall liter O2 " + l
-        : "Luftveier: Spontan med O2"
-    ];
+return [
+  l
+    ? "Luftveier: Spontan med " + l + " l/min O2"
+    : "Luftveier: Spontan med O2"
+];
   }
 
-  if (airway === "Spontant med high flow") {
+if (airway === "Spontant med high flow") {
 
-    const p = ["Luftveier: Spontant med high flow"];
+  const f =
+    clean($("acuteHighFlowFio2").value) ||
+    clean($("highFlowFio2").value);
 
-    const f =
-      clean($("acuteHighFlowFio2").value) ||
-      clean($("highFlowFio2").value);
+  const fl =
+    clean($("acuteHighFlowFlow").value) ||
+    clean($("highFlowFlow").value);
 
-    const fl =
-      clean($("acuteHighFlowFlow").value) ||
-      clean($("highFlowFlow").value);
+  let tekst = "Luftveier: Spontant med high flow";
 
-    if (f) p.push("Fio2 " + f);
-
-    if (fl) {
-      p.push("Flow " + fl + " liter/min");
-    }
-
-    return [p.join(", ")];
+  if (f) {
+    tekst += ", FiO2 " + f + " %";
   }
 
-  if (airway === "NIV (CPAP/BiPAP)") {
-
-    const p = ["Luftveier: NIV"];
-
-    const f =
-      clean($("acuteNivFio2").value) ||
-      clean($("nivFio2").value);
-
-    if (f) p.push("Fio2 " + f);
-
-    return [p.join(", ")];
+  if (fl) {
+    tekst += ", Flow " + fl + " L/min";
   }
+
+  return [tekst];
+}
+
+if (airway === "NIV (CPAP/BiPAP)") {
+  const f =
+    clean($("acuteNivFio2").value) ||
+    clean($("nivFio2").value);
+
+  return [
+    f
+      ? "Luftveier: NIV, FiO2 " + f + " %"
+      : "Luftveier: NIV"
+  ];
+}
 
 if (airway === "Intubert") {
 
-  const p = ["Luftveier: Intubert"];
+  const deler = [];
 
   const f =
     clean($("acuteIntubFio2").value) ||
@@ -299,14 +303,14 @@ if (airway === "Intubert") {
     clean($("acuteIntubTopp").value) ||
     clean($("intubTopp").value);
 
-  if (f) p.push("FiO2 " + f + " %");
-  if (pe) p.push("PEEP " + pe);
-  if (t) p.push("topptrykk " + t);
+  if (f) deler.push("FiO2 " + f + " %");
+  if (pe) deler.push("PEEP " + pe);
+  if (t) deler.push("topptrykk " + t);
 
   return [
-    p.length > 1
-      ? p[0] + "; " + p.slice(1).join(", ").replace(/,([^,]*)$/, " og$1")
-      : p[0]
+    deler.length
+      ? "Luftveier: Intubert, " + deler.join(", ")
+      : "Luftveier: Intubert"
   ];
 }
 
@@ -472,36 +476,60 @@ function buildCaveLines() {
 }
 
 function buildHlrRespLines() {
-  const hlrVal = document.querySelector(".hlrRadio:checked")?.value || "";
-  const respVal = document.querySelector(".respRadio:checked")?.value || "";
 
-  const lege = clean($("hlrRespLege")?.value);
-  const dato = clean($("hlrRespDato")?.value);
+  const hlrVal =
+    document.querySelector(".hlrRadio:checked")?.value || "";
 
-  const dokumentasjon =
-    lege || dato
-      ? "satt av " + (lege || "lege ikke oppgitt") + (dato ? " den " + dato : "")
-      : "mangler dokumentasjon";
+  const respVal =
+    document.querySelector(".respRadio:checked")?.value || "";
 
   const out = [];
 
   if (hlrVal === "Ja") {
-  out.push("HLR pluss");
-}
+    out.push("HLR pluss");
+  }
 
-if (hlrVal === "Nei") {
-  out.push("HLR minus " + dokumentasjon);
-}
+  if (hlrVal === "Nei") {
 
-if (respVal === "Ja") {
-  out.push("Respirator pluss");
-}
+    const lege =
+      clean($("hlrMinusLege")?.value);
 
-if (respVal === "Nei") {
-  out.push("Respirator minus " + dokumentasjon);
-}
+    const dato =
+      clean($("hlrMinusDato")?.value);
 
-return out;
+    const dok =
+      lege || dato
+        ? "satt av " +
+          (lege || "lege ikke oppgitt") +
+          (dato ? " den " + dato : "")
+        : "mangler dokumentasjon";
+
+    out.push("HLR minus " + dok);
+  }
+
+  if (respVal === "Ja") {
+    out.push("Respirator pluss");
+  }
+
+  if (respVal === "Nei") {
+
+    const lege =
+      clean($("respMinusLege")?.value);
+
+    const dato =
+      clean($("respMinusDato")?.value);
+
+    const dok =
+      lege || dato
+        ? "satt av " +
+          (lege || "lege ikke oppgitt") +
+          (dato ? " den " + dato : "")
+        : "mangler dokumentasjon";
+
+    out.push("Respirator minus " + dok);
+  }
+
+  return out;
 }
 
 /* ======================================================
@@ -628,9 +656,9 @@ function updateAcuteAirwayDetails() {
     acuteTrachVentWrap
   ].forEach(el => setHidden(el, true));
 
-  if (a === "Spontan med O2") {
-    setHidden(acuteSpontO2Wrap, false);
-  }
+if (a === "Spontan med O2") {
+  setHidden(acuteSpontO2Wrap, false);
+}
 
   if (a === "Spontant med high flow") {
     setHidden(acuteHighFlowWrap, false);
@@ -1069,20 +1097,48 @@ function bindAcuteAirwayInputEvents() {
     })
   );
 }
+function buildSpedRespArbeidLine() {
+  if (getSpedbarnValue() !== "Ja") {
+    return "";
+  }
+
+  const valgt = Array.from(
+    document.querySelectorAll('input[name="spedRespArbeid"]:checked')
+  ).map(x => x.value);
+
+  if (!valgt.length) {
+    return "";
+  }
+
+  return "Respirasjonsarbeid: " + valgt.join(", ");
+}
 
 function updateHlrRespUI() {
-  const hlrVal = document.querySelector(".hlrRadio:checked")?.value || "";
-  const respVal = document.querySelector(".respRadio:checked")?.value || "";
 
-  const wrap = $("hlrRespTextWrap");
-  const txt = $("hlrRespText");
+  const hlrVal =
+    document.querySelector(".hlrRadio:checked")?.value || "";
 
-  const skalVises = hlrVal === "Nei" || respVal === "Nei";
+  const respVal =
+    document.querySelector(".respRadio:checked")?.value || "";
 
-  setHidden(wrap, !skalVises);
+  setHidden(
+    $("hlrMinusTextWrap"),
+    hlrVal !== "Nei"
+  );
 
-  if (!skalVises && txt) {
-    txt.value = "";
+  setHidden(
+    $("respMinusTextWrap"),
+    respVal !== "Nei"
+  );
+
+  if (hlrVal !== "Nei") {
+    $("hlrMinusLege").value = "";
+    $("hlrMinusDato").value = "";
+  }
+
+  if (respVal !== "Nei") {
+    $("respMinusLege").value = "";
+    $("respMinusDato").value = "";
   }
 }
 
@@ -1127,14 +1183,17 @@ bindPvkEvents();
 bindCvkEvents();
 bindUtstyrPumpeEvents();
 bindAcutePumpeEvents();
+bindAcuteSpontO2NumberOnly();
+bindHighFlowNumberOnly();
 bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
+  bindFollowNeedEvents();
   bindCaveEvents();
   bindSmitteEvents();
   bindHlrRespEvents();
   bindBinaryOptionEvents();
-
+  bindSpontO2NumberOnly();
   bindTrachEvents();
   bindAcuteTrachEvents();
 
@@ -1206,7 +1265,14 @@ function addSedRow(){
     "sedText"
   )
 }
-function resetSedRows(){sedDynamicBody.innerHTML="";addSedRow()}
+function ensureSedBlankRow(){
+  ensureBlankByClass("sedText", addSedRow);
+}
+
+function resetSedRows(){
+  sedDynamicBody.innerHTML="";
+  addSedRow();
+}
 function addPressorRow(){
   addDynamicTextRow(
     pressorDynamicBody,
@@ -1298,6 +1364,9 @@ if (follow) lines.push(follow);
 
   const sped = buildSpedbarnLine();
   if (sped) lines.push(sped);
+
+  const respArbeid = buildSpedRespArbeidLine();
+if (respArbeid) lines.push(respArbeid);
 
   if (getSpedbarnValue() === "Ja") {
     addTransportform(lines);
@@ -1627,11 +1696,6 @@ function bindGestasjonsalderEvents() {
   uker.addEventListener("input", () => {
     uker.value = uker.value.replace(/\D/g, "").slice(0, 2);
 
-    if (uker.value.length === 2) {
-      dager.focus();
-      dager.select?.();
-    }
-
     lagRapport();
   });
 
@@ -1666,6 +1730,68 @@ document.addEventListener("click", e => {
 
   lagRapport();
 }, true);
+
+function bindSpontO2NumberOnly() {
+  const el = $("spontO2Liter");
+  if (!el) return;
+
+  el.addEventListener("input", () => {
+    el.value = el.value.replace(/\D/g, "").slice(0, 2);
+    lagRapport();
+  });
+}
+
+function bindAcuteSpontO2NumberOnly() {
+
+  const el = $("acuteSpontO2Liter");
+  if (!el) return;
+
+  el.addEventListener("input", () => {
+
+    el.value = el.value
+      .replace(/\D/g, "")
+      .slice(0, 2);
+
+    lagRapport();
+  });
+}
+
+function bindHighFlowNumberOnly() {
+
+  [
+    $("highFlowFlow"),
+    $("acuteHighFlowFlow")
+  ].forEach(el => {
+
+    if (!el) return;
+
+    el.addEventListener("input", () => {
+
+      el.value = el.value
+        .replace(/\D/g, "")
+        .slice(0, 3);
+
+      lagRapport();
+    });
+  });
+
+  [
+    $("highFlowFio2"),
+    $("acuteHighFlowFio2")
+  ].forEach(el => {
+
+    if (!el) return;
+
+    el.addEventListener("input", () => {
+
+      el.value = el.value
+        .replace(/[^0-9.,]/g, "")
+        .replace(",", ".");
+
+      lagRapport();
+    });
+  });
+}
 
 function updateTilgangerUI() {
   setHidden($("cvkWrap"), !$("til_cvk")?.checked);
@@ -1765,4 +1891,33 @@ function buildFollowNeedLine() {
   if (!valgt.length) return "";
 
   return "Følgebehov ifølge rekvirent: " + valgt.join(", ");
+}
+
+function bindFollowNeedEvents() {
+  const none = document.getElementById("follow_none");
+  const all = document.querySelectorAll('input[name="followNeed"]');
+
+  if (!none) return;
+
+  none.addEventListener("change", () => {
+    if (none.checked) {
+      all.forEach(chk => {
+        if (chk !== none) chk.checked = false;
+      });
+    }
+
+    lagRapport();
+  });
+
+  all.forEach(chk => {
+    if (chk === none) return;
+
+    chk.addEventListener("change", () => {
+      if (chk.checked) {
+        none.checked = false;
+      }
+
+      lagRapport();
+    });
+  });
 }

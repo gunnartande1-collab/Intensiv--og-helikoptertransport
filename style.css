@@ -671,14 +671,14 @@ input[type=number]{
 #acuteTrachO2Wrap,
 #acuteTrachVentWrap{
   margin-top:10px;
-  padding:12px 14px;
+  padding:8px 0;
 
-  background:#2b2e34;
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:12px;
+  background:transparent;
+  border:0;
 
   max-width:560px;
 }
+
 
 /* Fjern store labels inne i detaljfelt */
 #spontO2Wrap label,
@@ -2290,4 +2290,50 @@ label.spedChip span{
 .hudTooltip:hover::after{
   opacity:1;
   visibility:visible;
+}
+
+.unitInputWrap{
+  position:relative;
+  width:180px;
+  max-width:100%;
+}
+
+.unitInputWrap input{
+  width:100%;
+  padding-right:58px;
+}
+
+.unitInputWrap span{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#8c8c8c;
+  font-size:13px;
+  pointer-events:none;
+}
+
+.intubRow{
+  display:flex;
+  gap:14px;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+
+.intubRow .unitInputWrap{
+  width:160px;
+  flex:0 0 160px;
+}
+
+.intubRow{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  gap:14px;
+  flex-wrap:nowrap;
+}
+
+.intubRow .unitInputWrap{
+  width:150px;
+  flex:0 0 150px;
 }

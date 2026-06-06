@@ -41,12 +41,14 @@
 
 </div>
 
+<div id="mainContent" class="hidden">
+
 <label class="minorTitle">Anbefalt følgebehov fra rekvirent</label>
 
 <div class="followRow">
 
   <label class="followChip">
-<input type="checkbox" name="followNeed" id="follow_none" value="Ikke aktuelt">  <span>Ikke aktuelt</span>
+<input type="checkbox" name="followNeed" id="follow_none" value="Ikke behov">  <span>Ikke behov</span>
 </label>
 
   <label class="followChip">
@@ -87,10 +89,6 @@
 
 
 </div>
-
-<div id="mainContent" class="hidden">
-
-<div class="formGroup">
 
 <div class="formGroup">
 
@@ -259,34 +257,91 @@
 </div>
 
 <div id="acuteSpontO2Wrap" class="hidden">
+
   <div class="inlineRow" style="margin-top:10px;">
-    <span>Antall liter O2</span>
-    <input id="acuteSpontO2Liter" inputmode="decimal" placeholder="Kun tall (liter)">
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteSpontO2Liter"
+        type="text"
+        inputmode="numeric"      >
+      <span>l/min</span>
+    </div>
+
   </div>
+
 </div>
-
 <div id="acuteHighFlowWrap" class="hidden">
-  <label>Fio2</label>
-  <input id="acuteHighFlowFio2" placeholder="Fritekst">
 
-  <label>Flow (liter/min)</label>
-  <input id="acuteHighFlowFlow" placeholder="Fritekst">
+  <div class="inlineRow" style="margin-top:10px; gap:14px; flex-wrap:wrap;">
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteHighFlowFiO2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteHighFlowFlow"
+        type="text"
+        inputmode="numeric"
+      >
+      <span>l/min</span>
+    </div>
+
+  </div>
+
 </div>
 
 <div id="acuteNivWrap" class="hidden">
-  <label>Fio2</label>
-  <input id="acuteNivFio2" placeholder="Fritekst">
+  <div class="inlineRow" style="margin-top:10px;">
+    <div class="unitInputWrap">
+      <input
+        id="acuteNivFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+  </div>
 </div>
 
 <div id="acuteIntubWrap" class="hidden">
-    <label>Fio2</label>
-  <input id="acuteIntubFio2" placeholder="Fritekst">
 
-  <label>Peep</label>
-  <input id="acuteIntubPeep" placeholder="Fritekst">
+<div class="intubRow" style="margin-top:10px;">
+    <div class="unitInputWrap">
+      <input
+        id="acuteIntubFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
 
-  <label>Topptrykk med peep</label>
-  <input id="acuteIntubTopp" placeholder="Fritekst">
+    <div class="unitInputWrap">
+      <input
+        id="acuteIntubPeep"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>PEEP</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteIntubTopp"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>Topptrykk</span>
+    </div>
+
+  </div>
+
 </div>
 
 <div id="acuteTrachWrap" class="hidden">
@@ -324,23 +379,57 @@
     </tbody>
   </table>
 
-  <div id="acuteTrachO2Wrap" class="hidden">
-<label>O2 l/min</label>
-    <input id="acuteTrachO2Liter" placeholder="Fritekst">
-  </div>
+<div id="acuteTrachO2Wrap" class="hidden">
 
-  <div id="acuteTrachVentWrap" class="hidden">
+  <div class="inlineRow" style="margin-top:10px;">
 
-    <label>FiO2</label>
-    <input id="acuteTrachVentFio2" placeholder="Fritekst">
-
-    <label>PEEP</label>
-    <input id="acuteTrachVentPeep" placeholder="Fritekst">
-
-    <label>Topptrykk med PEEP</label>
-    <input id="acuteTrachVentTopp" placeholder="Fritekst">
+    <div class="unitInputWrap">
+      <input
+        id="acuteTrachO2Liter"
+        type="text"
+        inputmode="numeric"
+      >
+      <span>l/min</span>
+    </div>
 
   </div>
+
+</div>
+
+<div id="acuteTrachVentWrap" class="hidden">
+
+  <div class="intubRow" style="margin-top:10px;">
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteTrachVentFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteTrachVentPeep"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>PEEP</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="acuteTrachVentTopp"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>Topptrykk</span>
+    </div>
+
+  </div>
+
+</div>
 
 </div> <!-- acuteTrachWrap -->
 
@@ -368,34 +457,87 @@
 </div>
 
 <div id="spontO2Wrap" class="hidden">
-  <div class="inlineRow" style="margin-top:10px;">
-    <span>Antall liter O2</span>
-    <input id="spontO2Liter" inputmode="decimal" placeholder="Kun tall (liter)">
-  </div>
+<div class="intubRow" style="margin-top:10px;">
+      <span>Antall liter O2</span>
+<div class="unitInputWrap">
+  <input id="spontO2Liter" type="text" inputmode="numeric" placeholder=" ">
+  <span>l/min</span>
+</div>
+</div>
 </div>
 
-<div id="highFlowWrap" class="hidden">
-  <label>Fio2</label>
-  <input id="highFlowFio2" placeholder="Fritekst">
 
-  <label>Flow (liter/min)</label>
-  <input id="highFlowFlow" placeholder="Fritekst">
+<div id="highFlowWrap" class="hidden">
+
+  <div class="inlineRow" style="margin-top:10px; gap:14px; flex-wrap:wrap;">
+
+    <div class="unitInputWrap">
+      <input
+        id="highFlowFio2"        
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="highFlowFlow"
+        type="text"
+        inputmode="numeric"
+      >
+      <span>l/min</span>
+    </div>
+
+  </div>
+
 </div>
 
 <div id="nivWrap" class="hidden">
-  <label>Fio2</label>
-  <input id="nivFio2" placeholder="Fritekst">
+  <div class="inlineRow" style="margin-top:10px;">
+    <div class="unitInputWrap">
+      <input
+        id="nivFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+  </div>
 </div>
 
 <div id="intubWrap" class="hidden">
-  <label>Fio2</label>
-  <input id="intubFio2" placeholder="Fritekst">
 
-  <label>Peep</label>
-  <input id="intubPeep" placeholder="Fritekst">
+<div class="intubRow" style="margin-top:10px;">
+    <div class="unitInputWrap">
+      <input
+        id="intubFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
 
-  <label>Topptrykk med peep</label>
-  <input id="intubTopp" placeholder="Fritekst">
+    <div class="unitInputWrap">
+      <input
+        id="intubPeep"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>PEEP</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="intubTopp"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>Topptrykk</span>
+    </div>
+
+  </div>
+
 </div>
 
 <div id="trachWrap" class="hidden">
@@ -437,35 +579,57 @@
 
   </div>
 
-  <div id="trachO2Wrap" class="hidden">
-    <div class="inlineRow" style="margin-top:12px;">
-      <span>Antall liter O2</span>
-      <input id="trachO2Liter" placeholder="Fritekst">
-    </div>
-  </div>
+<div id="trachO2Wrap" class="hidden">
 
-  <div id="trachVentWrap" class="hidden">
+  <div class="inlineRow" style="margin-top:10px;">
 
-    <div class="inlineRow" style="margin-top:12px; gap:12px; flex-wrap:wrap;">
-
-      <div>
-        <label>FiO2</label>
-        <input id="trachVentFio2" placeholder="Fritekst">
-      </div>
-
-      <div>
-        <label>PEEP</label>
-        <input id="trachVentPeep" placeholder="Fritekst">
-      </div>
-
-      <div>
-        <label>Topptrykk</label>
-        <input id="trachVentTopp" placeholder="Fritekst">
-      </div>
-
+    <div class="unitInputWrap">
+      <input
+        id="trachO2Liter"
+        type="text"
+        inputmode="numeric"
+      >
+      <span>l/min</span>
     </div>
 
   </div>
+
+  </div>
+
+<div id="trachVentWrap" class="hidden">
+
+  <div class="intubRow" style="margin-top:10px;">
+
+    <div class="unitInputWrap">
+      <input
+        id="trachVentFio2"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>% FiO2</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="trachVentPeep"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>PEEP</span>
+    </div>
+
+    <div class="unitInputWrap">
+      <input
+        id="trachVentTopp"
+        type="text"
+        inputmode="decimal"
+      >
+      <span>Topptrykk</span>
+    </div>
+
+  </div>
+
+</div>
 
   </div>
 
@@ -529,6 +693,7 @@
 </div>
 
 </div> <!-- fullTop -->
+
 
 <div class="medSection">
   <div class="minorTitle">Medikamenter og infusjoner</div>
@@ -698,6 +863,7 @@
 
 </div> <!-- infoGroup CAVE -->
 
+
 <div class="infoGroup">
   <label class="minorTitle">HLR og respirator</label>
 
@@ -725,12 +891,19 @@
 
   </div>
 
-  <div id="hlrRespTextWrap" class="hidden doctorRow">
-    <input id="hlrRespLege" placeholder="Lege">
-    <input id="hlrRespDato" placeholder="Dato">
-  </div>
+<div id="hlrMinusTextWrap" class="hidden doctorRow">
+  <input id="hlrMinusLege" placeholder="Lege HLR -">
+  <input id="hlrMinusDato" placeholder="Dato">
+</div>
+
+<div id="respMinusTextWrap" class="hidden doctorRow">
+  <input id="respMinusLege" placeholder="Lege respirator -">
+  <input id="respMinusDato" placeholder="Dato">
+</div>
 
 </div>
+
+
 
 <div id="fullBottom" class="hidden">
 
@@ -840,7 +1013,8 @@
 
 </div> <!-- accessGroup Utstyr -->
 
-<div class="accessGroup">
+
+  <div class="accessGroup">
 
 <label class="minorTitle">Rekvirerende lege</label>
 
@@ -856,7 +1030,8 @@
 </div>
 
 </div> <!-- accessGroup lege -->
-</div> <!-- fullBottom -->
+
+
 
 <div class="btnbar">
 
