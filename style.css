@@ -2255,47 +2255,39 @@ label.spedChip span{
   margin:0 !important;
 }
 
-/* Tooltip på hudchips */
-
-.hudTooltip span{
+.hudTooltip{
   position:relative;
 }
 
-.hudTooltip span::after{
+.hudTooltip::after{
   content:attr(data-tooltip);
 
   position:absolute;
-
   left:50%;
-  bottom:calc(100% + 10px);
-
+  bottom:calc(100% + 8px);
   transform:translateX(-50%);
-
-  padding:6px 10px;
-
-  border-radius:10px;
 
   background:rgba(20,20,20,0.96);
   color:#fff;
 
   font-size:12px;
   font-weight:600;
-
   white-space:nowrap;
+
+  padding:6px 10px;
+  border-radius:10px;
 
   opacity:0;
   visibility:hidden;
-
   pointer-events:none;
 
-  transition:
-    opacity .18s ease,
-    visibility .18s ease;
+  transition:opacity .18s ease, visibility .18s ease;
+  transition-delay:.3s;
 
-  transition-delay:1.5s;
+  z-index:9999;
 }
 
-.hudTooltip span:hover::after{
+.hudTooltip:hover::after{
   opacity:1;
   visibility:visible;
 }
