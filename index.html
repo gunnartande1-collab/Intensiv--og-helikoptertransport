@@ -90,21 +90,60 @@
 
 </div>
 
+<div class="formGroup specialGroup">
+  <label class="minorTitle">Spesialtransport</label>
+
+  <div class="table spesialtransportRow">
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_ingen">
+  <input id="spec_ingen"
+         class="chk spec specChoice"
+         type="checkbox"
+         value="Ikke aktuelt"
+         data-spec="Ikke aktuelt">
+
+  <span class="specLabel">Ikke aktuelt</span>
+</div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
+      <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
+      <span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_iabp">
+      <input id="spec_iabp" class="chk spec specChoice" type="checkbox" value="IABP" data-spec="IABP">
+      <span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_impella">
+      <input id="spec_impella" class="chk spec specChoice" type="checkbox" value="Impella" data-spec="Impella">
+      <span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span>
+    </div>
+
+    <div class="specCell toggleCell toggleInner" data-toggle="spec_no">
+      <input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO">
+      <span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span>
+    </div>
+
+  </div>
+</div>
+
+
 <div class="formGroup">
 
   <div class="section">Spedbarn</div>
 
   <div class="smLine">
 
-    <label class="followChip spedChip">
-      <input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja">
-      <span>Ja</span>
-    </label>
+<label class="medChip spedChip">
+  <input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja">
+  <span>Ja</span>
+</label>
 
-    <label class="followChip spedChip">
-      <input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei">
-      <span>Nei</span>
-    </label>
+<label class="medChip spedChip">
+  <input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei">
+  <span>Nei</span>
+</label>
 
   </div>
 
@@ -180,43 +219,6 @@
   <input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="">
 </div>
 
-<div class="formGroup specialGroup">
-  <label class="minorTitle">Spesialtransport</label>
-
-  <div class="table spesialtransportRow">
-
-    <div class="specCell toggleCell toggleInner" data-toggle="spec_ingen">
-  <input id="spec_ingen"
-         class="chk spec specChoice"
-         type="checkbox"
-         value="Ikke aktuelt"
-         data-spec="Ikke aktuelt">
-
-  <span class="specLabel">Ikke aktuelt</span>
-</div>
-
-    <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
-      <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
-      <span class="specLabel" data-tooltip="Ekstrakorporal membranoksygeneringen">ECMO</span>
-    </div>
-
-    <div class="specCell toggleCell toggleInner" data-toggle="spec_iabp">
-      <input id="spec_iabp" class="chk spec specChoice" type="checkbox" value="IABP" data-spec="IABP">
-      <span class="specLabel" data-tooltip="Intra-Aorta ballongpumpe">IABP</span>
-    </div>
-
-    <div class="specCell toggleCell toggleInner" data-toggle="spec_impella">
-      <input id="spec_impella" class="chk spec specChoice" type="checkbox" value="Impella" data-spec="Impella">
-      <span class="specLabel" data-tooltip="Intrakardiell mekanisk sirkulasjonsstøtte">Impella</span>
-    </div>
-
-    <div class="specCell toggleCell toggleInner" data-toggle="spec_no">
-      <input id="spec_no" class="chk spec specChoice" type="checkbox" value="NO" data-spec="NO">
-      <span class="specLabel" data-tooltip="Nitrogenmonoksid">NO</span>
-    </div>
-
-  </div>
-</div>
 
 <div id="acuteTop" class="hidden">
 
@@ -695,8 +697,8 @@
 </div> <!-- fullTop -->
 
 
-<div class="medSection">
-  <div class="minorTitle">Medikamenter og infusjoner</div>
+<div id="acuteBottom" class="hidden">
+    <div class="minorTitle">Medikamenter og infusjoner</div>
 
   <div class="medGroup">
     <div class="medGroupTitle">Sedasjon</div>
@@ -759,32 +761,143 @@
 <div id="andreInfBody" class="medDynamic"></div>
 </div>
 
-  </div>
-</div>
-<div id="acuteBottom" class="hidden">
-  <label>Antall sprøytepumper</label>
+<label>Antall sprøytepumper</label>
 
 <div class="chipRow">
-
   <label class="medChip">
     <input id="acutePumperChk" class="chk" type="checkbox">
     <span>Sprøytepumper</span>
   </label>
 
-    <select id="acutePumperAntall" class="pumperSelect">
-      <option value=""></option>
-      <option value="1">1 stk</option>
-      <option value="2">2 stk</option>
-      <option value="3">3 stk</option>
-      <option value="4">4 stk</option>
-      <option value="5">5 stk</option>
-      <option value="6">6 stk</option>
-      <option value="7">7 stk</option>
-      <option value="8">8 stk</option>
-      <option value="9">9 stk</option>
-      <option value="10">10 stk</option>
-    </select>
+  <select id="acutePumperAntall" class="pumperSelect hidden">
+    <option value="">Antall</option>
+    <option value="1">1 stk</option>
+    <option value="2">2 stk</option>
+    <option value="3">3 stk</option>
+    <option value="4">4 stk</option>
+    <option value="5">5 stk</option>
+    <option value="6">6 stk</option>
+    <option value="7">7 stk</option>
+    <option value="8">8 stk</option>
+    <option value="9">9 stk</option>
+    <option value="10">10 stk</option>
+  </select>
+</div>
+
+</div> <!-- acuteBottom -->
+
+
+<div id="safetyBlock" class="hidden">
+
+  <div class="infoGroup">
+    <label class="minorTitle">Smitte</label>
+
+    <div class="smLine">
+      <label class="followChip smChip">
+        <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen">
+        <span>Ingen kjente</span>
+      </label>
+
+      <label class="followChip smChip">
+        <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt">
+        <span>Kontaktsmitte</span>
+      </label>
+
+      <label class="followChip smChip">
+        <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Dråpesmitte" id="sm_draape">
+        <span>Dråpesmitte</span>
+      </label>
+
+      <label class="followChip smChip">
+        <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Luftsmitte" id="sm_luft">
+        <span>Luftsmitte</span>
+      </label>
+
+      <label class="followChip smChip bloodChip">
+        <input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod">
+        <span>Blodsmitte</span>
+      </label>
+    </div>
+
+    <div id="smitteSpesWrap" class="hidden">
+      <input id="smitteSpes" placeholder="Spesifiser smitte">
+    </div>
   </div>
+
+  <div class="infoGroup">
+    <label class="minorTitle">CAVE?</label>
+
+    <div class="chipRow caveRow">
+      <label class="medChip">
+        <input
+          type="radio"
+          name="cave"
+          value="Nei"
+          data-value="Nei"
+          class="chk caveRadio"
+        >
+        <span>Nei</span>
+      </label>
+
+      <label class="medChip">
+        <input
+          type="radio"
+          name="cave"
+          value="Ja"
+          data-value="Ja"
+          class="chk caveRadio"
+        >
+        <span>Ja</span>
+      </label>
+    </div>
+
+    <div id="caveTextWrap" class="hidden">
+      <input id="caveText" placeholder="Spesifiser CAVE">
+    </div>
+  </div>
+
+  <div class="infoGroup">
+    <label class="minorTitle">HLR og respirator</label>
+
+    <div class="chipRow caveRow">
+
+      <label class="medChip">
+        <input type="radio" name="hlrStatus" value="Ja" class="chk hlrRadio">
+        <span>HLR +</span>
+      </label>
+
+      <label class="medChip">
+        <input type="radio" name="hlrStatus" value="Nei" class="chk hlrRadio">
+        <span>HLR -</span>
+      </label>
+
+      <label class="medChip">
+        <input type="radio" name="respStatus" value="Ja" class="chk respRadio">
+        <span>Respirator +</span>
+      </label>
+
+      <label class="medChip">
+        <input type="radio" name="respStatus" value="Nei" class="chk respRadio">
+        <span>Respirator -</span>
+      </label>
+
+    </div>
+
+    <div id="hlrMinusTextWrap" class="hidden doctorRow">
+      <input id="hlrMinusLege" placeholder="Lege HLR -">
+      <input id="hlrMinusDato" placeholder="Dato">
+    </div>
+
+    <div id="respMinusTextWrap" class="hidden doctorRow">
+      <input id="respMinusLege" placeholder="Lege respirator -">
+      <input id="respMinusDato" placeholder="Dato">
+    </div>
+
+  </div>
+
+</div>
+
+<div id="acuteDoctorBlock" class="hidden">
 
   <div class="doctorGroup">
     <label class="minorTitle">Rekvirerende lege</label>
@@ -793,119 +906,10 @@
       <input id="acuteRekTlf" class="phoneInput" placeholder="Tlf">
     </div>
   </div>
-</div>
-
-<div class="infoGroup">
-  <label class="minorTitle">Smitte</label>
-
-  <div class="smLine">
-    <label class="followChip smChip">
-      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen">
-      <span>Ingen kjente</span>
-    </label>
-
-    <label class="followChip smChip">
-      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Kontaktsmitte" id="sm_kontakt">
-      <span>Kontaktsmitte</span>
-    </label>
-
-    <label class="followChip smChip">
-      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Dråpesmitte" id="sm_draape">
-      <span>Dråpesmitte</span>
-    </label>
-
-    <label class="followChip smChip">
-      <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Luftsmitte" id="sm_luft">
-      <span>Luftsmitte</span>
-    </label>
-
-    <label class="followChip smChip bloodChip">
-      <input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod">
-      <span>Blodsmitte</span>
-    </label>
-  </div>
-
-  <div id="smitteSpesWrap" class="hidden">
-    <input id="smitteSpes" placeholder="Spesifiser smitte">
-  </div>
-</div>
-
-<div class="infoGroup">
-  <label class="minorTitle">CAVE?</label>
-
-<div class="chipRow caveRow">
-<label class="medChip">
-      <input
-      type="radio"
-      name="cave"
-      value="Nei"
-      data-value="Nei"
-      class="chk caveRadio"
-    >
-    <span>Nei</span>
-  </label>
-
-  <label class="medChip">
-    <input
-      type="radio"
-      name="cave"
-      value="Ja"
-      data-value="Ja"
-      class="chk caveRadio"
-    >
-    <span>Ja</span>
-  </label>
-</div>
-
-<div id="caveTextWrap" class="hidden">
-  <input id="caveText" placeholder="Spesifiser CAVE">
-</div>
-
-</div> <!-- infoGroup CAVE -->
-
-
-<div class="infoGroup">
-  <label class="minorTitle">HLR og respirator</label>
-
-  <div class="chipRow caveRow">
-
-    <label class="medChip">
-      <input type="radio" name="hlrStatus" value="Ja" class="chk hlrRadio">
-      <span>HLR +</span>
-    </label>
-
-    <label class="medChip">
-      <input type="radio" name="hlrStatus" value="Nei" class="chk hlrRadio">
-      <span>HLR -</span>
-    </label>
-
-    <label class="medChip">
-      <input type="radio" name="respStatus" value="Ja" class="chk respRadio">
-      <span>Respirator +</span>
-    </label>
-
-    <label class="medChip">
-      <input type="radio" name="respStatus" value="Nei" class="chk respRadio">
-      <span>Respirator -</span>
-    </label>
-
-  </div>
-
-<div id="hlrMinusTextWrap" class="hidden doctorRow">
-  <input id="hlrMinusLege" placeholder="Lege HLR -">
-  <input id="hlrMinusDato" placeholder="Dato">
-</div>
-
-<div id="respMinusTextWrap" class="hidden doctorRow">
-  <input id="respMinusLege" placeholder="Lege respirator -">
-  <input id="respMinusDato" placeholder="Dato">
-</div>
 
 </div>
 
-
-
-<div id="fullBottom" class="hidden">
+<div id="sharedBottom" class="hidden">
 
 <div class="accessGroup">
 
@@ -913,42 +917,42 @@
 
 <div class="accessChipRow">
 
-  <label class="accessChip">
+  <label class="medChip">
     <input id="til_ingen" class="chk til" type="checkbox" data-name="Ingen tilganger">
     <span>Ingen tilganger</span>
   </label>
 
-  <label class="accessChip">
+  <label class="medChip">
     <input id="til_cvk" class="chk til" type="checkbox" data-name="CVK">
     <span>CVK</span>
   </label>
 
-  <div id="cvkWrap" class="hidden">
-    <select id="cvkLumen" class="pvkSelect">
-      <option value=""></option>
-      <option value="1 lumen">1 lumen</option>
-      <option value="2 lumen">2 lumen</option>
-      <option value="3 lumen">3 lumen</option>
-      <option value="4 lumen">4 lumen</option>
-      <option value="5 lumen">5 lumen</option>
-    </select>
-  </div>
+<div id="cvkWrap" class="hidden">
+  <select id="cvkLumen" class="pvkSelect">
+    <option value="">Lumen</option>
+    <option value="1 lumen">1 lumen</option>
+    <option value="2 lumen">2 lumen</option>
+    <option value="3 lumen">3 lumen</option>
+    <option value="4 lumen">4 lumen</option>
+    <option value="5 lumen">5 lumen</option>
+  </select>
+</div>
 
-  <label class="accessChip">
+  <label class="medChip">
     <input id="til_pvk" class="chk til" type="checkbox" data-name="PVK">
     <span>PVK</span>
   </label>
 
-  <div id="pvkWrap" class="hidden">
-    <select id="pvkAntall" class="pvkSelect">
-      <option value=""></option>
-      <option value="1">1 stk</option>
-      <option value="2">2 stk</option>
-      <option value="3">3 stk</option>
-      <option value="4">4 stk</option>
-      <option value="5">5 stk</option>
-    </select> 
-  </div>
+<div id="pvkWrap" class="hidden">
+  <select id="pvkAntall" class="pvkSelect">
+    <option value="">Antall</option>
+    <option value="1">1 stk</option>
+    <option value="2">2 stk</option>
+    <option value="3">3 stk</option>
+    <option value="4">4 stk</option>
+    <option value="5">5 stk</option>
+  </select>
+</div>
 
 </div>
 
@@ -982,7 +986,7 @@
 </label>
 
 <div class="pumpRow">
-  <label class="utstyrChip">
+  <label class="medChip">
     <input id="utst_pumper"
            class="chk dren"
            type="checkbox"
@@ -1014,6 +1018,7 @@
 </div> <!-- accessGroup Utstyr -->
 
 
+
   <div class="accessGroup">
 
 <label class="minorTitle">Rekvirerende lege</label>
@@ -1031,9 +1036,9 @@
 
 </div> <!-- accessGroup lege -->
 
+</div> <!-- fullBottom -->
 
-
-<div class="btnbar">
+<div id="reportActions" class="btnbar">
 
 <button id="copyBtn" type="button" class="btn-copy actionBtn">
     <svg class="copyIcon" viewBox="0 0 24 24" aria-hidden="true">
@@ -1057,8 +1062,8 @@
 </button>
 </div>
 <textarea id="rapport" class="report" readonly placeholder="Rapportteksten oppdateres automatisk…"></textarea>
-<div class="feedbackWrap">
-  <a
+<div id="feedbackWrap" class="feedbackWrap">
+    <a
     class="feedbackBtn"
     target="_blank"
     href="https://outlook.office.com/mail/deeplink/compose?to=b32838@ous-hf.no&subject=Tilbakemelding%20intensiv-%20og%20helikoptertransport%20skjema"
@@ -1066,6 +1071,7 @@
     Send innspill og tilbakemeldinger
   </a>
 </div>
+
 
 </div> <!-- mainContent -->
 

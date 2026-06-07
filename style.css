@@ -32,17 +32,12 @@ textarea::-webkit-resizer{
 textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;overflow:auto}
 .section{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-weight:900;font-size:15px;color:#ffffff}
 .hidden{display:none!important}
-.table{width:100%;border-collapse:separate;border-spacing:0;margin-top:8px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#34373e}
-.table td{
-  padding:10px 8px;
-  vertical-align:top;
-}
 #rapport{
   min-height:180px;
   overflow-y:hidden;
   resize:none;
 }
-.table tr:last-child td{border-bottom:none}
+
 .medTable th{font-size:13px;color:#fff;text-align:left;background:#31343b;padding:8px}
 .chk{width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
 .binaryRow{
@@ -240,8 +235,6 @@ button:hover{opacity:.97}button:active{transform:translateY(1px)}
 .hasteSupportItem span{color:var(--muted);font-size:12px;line-height:1.35}
 
 @media(max-width:900px){.hasteSupportGrid{grid-template-columns:1fr 1fr}}
-
-.medCol.table,.medColWide.table{min-height:unset !important}
 
 .medCol,.medColWide{flex:1 1 100% !important;min-width:100% !important}
 
@@ -575,14 +568,13 @@ input[type=number]{
 
 #trachWrap .table,
 #acuteTrachWrap .table{
-  border:none;
-  background:transparent;
   margin-top:10px;
 }
 
 #trachWrap table,
 #acuteTrachWrap table{
   display:block;
+  width:100%;
 }
 
 #trachWrap tbody,
@@ -739,44 +731,6 @@ input[type=number]{
   margin-bottom:0;
 }
 
-/* Roligere grupper – mindre Excel/tabellpreg */
-
-.table{
-  border:0;
-  background:transparent;
-}
-
-.table tr{
-  border:0;
-}
-
-.table td{
-  border-bottom:0;
-  padding:10px 0;
-}
-
-/* Myk gruppefølelse i stedet for tabell */
-.table{
-  display:block;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-}
-/* Litt luft mellom radene uten linjer */
-.table tr{
-  display:block;
-  padding:6px 0;
-}
-
-/* Beholder innholdet ryddig */
-.table td{
-  display:block;
-}
-
-/* Hvis label/valg ligger på samme rad */
-.table label{
-  margin-bottom:6px;
-}
 
 /* Smitte + CAVE som rolige infofelt */
 
@@ -862,18 +816,6 @@ input[type=number]{
 .accessGroup .minorTitle{
   margin-top:0;
   margin-bottom:8px;
-}
-
-.accessGroup .table{
-  padding:4px 0;
-}
-
-.accessGroup .table tr{
-  padding:3px 0;
-}
-
-.accessGroup .table td{
-  padding:4px;
 }
 
 .accessGroup .toggleCell,
@@ -1010,10 +952,6 @@ select:focus{
   --line: rgba(255,255,255,0.05);
 }
 
-/* Fjern harde interne linjer */
-
-.table td,
-.table tr,
 .toggleCell,
 .nonToggleRow{
   border-color:rgba(255,255,255,0.04);
@@ -1272,21 +1210,6 @@ select{
 .hasteCardText{
   display:block;
   width:100%;
-}
-
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,0.10);
-
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  justify-content:flex-start;
-  gap:8px;
-
-  text-align:left;
-  color:#111;
-
-  box-shadow:0 4px 14px rgba(0,0,0,0.22);
 }
 
 .hasteCardTitle{
@@ -1788,235 +1711,6 @@ select{
   box-sizing:border-box;
 }
 
-/* ===============================
-   FELLES CHIP-STIL FOR HELE SKJEMA
-   Legges helt nederst i style.css
-================================ */
-
-.followChip,
-.medChip,
-.caveChip span,
-.accessChip,
-.utstyrChip span,
-.airwayRow .binaryOpt,
-.specialGroup .specCell,
-#trachWrap .toggleCell,
-#acuteTrachWrap .toggleCell{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  min-height:40px !important;
-  padding:0 14px !important;
-
-  border-radius:999px !important;
-  border:1px solid rgba(255,255,255,0.10) !important;
-
-  background:#2f3238 !important;
-  color:#f1f1f1 !important;
-
-  font-size:14px !important;
-  font-weight:650 !important;
-  line-height:1.2 !important;
-
-  cursor:pointer !important;
-  user-select:none !important;
-  box-shadow:none !important;
-  transition:.15s ease !important;
-}
-
-/* Hover */
-.followChip:hover,
-.medChip:hover,
-.caveChip:hover span,
-.accessChip:hover,
-.utstyrChip:hover span,
-.airwayRow .binaryOpt:hover,
-.specialGroup .specCell:hover,
-#trachWrap .toggleCell:hover,
-#acuteTrachWrap .toggleCell:hover{
-  background:#3a3e46 !important;
-}
-
-/* Skjul input inni chips */
-.followChip input,
-.medChip input,
-.caveChip input,
-.accessChip input,
-.utstyrChip input,
-.airwayRow .binaryOpt input,
-.specialGroup .specCell input,
-#trachWrap .toggleCell input,
-#acuteTrachWrap .toggleCell input{
-  position:absolute !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-}
-
-/* Valgt chip */
-.followChip:has(input:checked),
-.medChip:has(input:checked),
-.caveChip input:checked + span,
-.accessChip:has(input:checked),
-.utstyrChip input:checked + span,
-.airwayRow .binaryOpt:has(input:checked),
-.specialGroup .specCell:has(input:checked),
-.specialGroup .specCell.active,
-#trachWrap .toggleCell:has(input:checked),
-#acuteTrachWrap .toggleCell:has(input:checked){
-  background:#8fb0ff !important;
-  border-color:#8fb0ff !important;
-  color:#111 !important;
-  box-shadow:0 0 0 2px rgba(143,176,255,0.18) !important;
-}
-
-/* Tekstfarge valgt */
-.followChip:has(input:checked) span,
-.medChip:has(input:checked) span,
-.caveChip input:checked + span,
-.accessChip:has(input:checked) span,
-.utstyrChip input:checked + span,
-.airwayRow .binaryOpt:has(input:checked) span,
-.specialGroup .specCell:has(input:checked) span,
-.specialGroup .specCell.active span,
-#trachWrap .toggleCell:has(input:checked) span,
-#acuteTrachWrap .toggleCell:has(input:checked) span{
-  color:#111 !important;
-}
-
-.smLine .spedChip{
-  display:inline-flex !important;
-  visibility:visible !important;
-  opacity:1 !important;
-
-  min-width:72px !important;
-  width:auto !important;
-  min-height:40px !important;
-  padding:0 14px !important;
-}
-
-.smLine .spedChip span{
-  display:inline-flex !important;
-  visibility:visible !important;
-  opacity:1 !important;
-  color:inherit !important;
-}
-
-.smLine .spedChip input{
-  display:none !important;
-}
-.smLine{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:10px !important;
-}
-
-label.spedChip{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  min-width:72px !important;
-  min-height:40px !important;
-  padding:0 14px !important;
-  border-radius:999px !important;
-  background:#2f3238 !important;
-  border:1px solid rgba(255,255,255,0.10) !important;
-  color:#f1f1f1 !important;
-}
-
-label.spedChip input{
-  position:absolute !important;
-  opacity:0 !important;
-  width:1px !important;
-  height:1px !important;
-  margin:0 !important;
-}
-
-label.spedChip:has(input:checked){
-  background:#8fb0ff !important;
-  border-color:#8fb0ff !important;
-  color:#111 !important;
-}
-
-label.spedChip{
-  margin:0 !important;
-  height:40px !important;
-  min-height:40px !important;
-  max-height:40px !important;
-  padding:0 14px !important;
-  line-height:1 !important;
-}
-
-label.spedChip span{
-  line-height:1 !important;
-}
-
-.spedRespArbeidRow .medChip{
-  margin:0 !important;
-  min-height:40px !important;
-  height:40px !important;
-  max-height:40px !important;
-
-  padding:0 14px !important;
-
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  line-height:1 !important;
-}
-
-.spedRespArbeidRow .medChip span{
-  line-height:1 !important;
-}
-
-.spedChip input{
-  display:none;
-}
-
-/* Smitte / CAVE / HLR / Respirator innenfor samme bredde som resten */
-
-.infoGroup{
-  width:100%;
-  max-width:none;
-}
-
-.infoGroup .smLine,
-.infoGroup .caveRow{
-  width:100%;
-}
-
-.infoGroup .followChip,
-.infoGroup .caveChip{
-  max-width:100%;
-}
-
-/* Tving sikkerhetsradene inn i samme bredde som resten */
-
-.infoGroup{
-  width:100%;
-}
-
-.infoGroup .smLine{
-  width:100%;
-  max-width:none;
-
-  display:flex;
-  flex-wrap:nowrap;
-  gap:10px;
-
-  margin-left:0;
-  padding-left:0;
-}
-
-.infoGroup .caveRow{
-  max-width:580px;
-  width:100%;
-
-  margin-left:0;
-  padding-left:0;
-}
-
 /* ======================================================
    UNIVERSELL CHIP-STANDARD
 ====================================================== */
@@ -2024,7 +1718,6 @@ label.spedChip span{
 .medChip,
 .followChip,
 .caveChip,
-.accessChip,
 .utstyrChip,
 .binaryOpt,
 .smChip,
@@ -2118,95 +1811,15 @@ label.spedChip span{
   line-height:1.2 !important;
 }
 
-/* ======================================================
-   TVING ALLE "NEI"-CHIPS LIKE
-====================================================== */
-
-.medChip,
-.followChip,
-.caveChip,
-.accessChip,
-.utstyrChip,
-.smChip,
-.spedChip{
-  min-height:40px !important;
-  height:40px !important;
-
-  padding:0 14px !important;
-
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  box-sizing:border-box !important;
-}
-
-.medChip span,
-.followChip span,
-.caveChip span,
-.accessChip span,
-.utstyrChip span,
-.smChip span,
-.spedChip span{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  line-height:1.1 !important;
-  height:100% !important;
-}
-
-/* Tving CAVE / HLR / Respirator lik alle andre chips */
-
-.caveChip{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-
-  border-radius:999px !important;
-  border:1px solid rgba(255,255,255,0.10) !important;
-
-  background:#2f3238 !important;
-  color:#f1f1f1 !important;
-
-  font-size:14px !important;
-  font-weight:650 !important;
-  line-height:1.2 !important;
-
-  cursor:pointer !important;
-  user-select:none !important;
-  box-shadow:none !important;
-}
-
-.caveChip span{
-  all:unset !important;
-
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  height:100% !important;
-  line-height:1.2 !important;
-  color:inherit !important;
-}
-
-.caveChip input{
-  display:none !important;
-}
-
-.caveChip:has(input:checked){
-  background:#8fb0ff !important;
-  border-color:#8fb0ff !important;
-  color:#111 !important;
-  box-shadow:0 0 0 2px rgba(143,176,255,0.18) !important;
+.pumpRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .pumpRow{
-  display:flex;
+  display:inline-flex;
   align-items:center;
   gap:10px;
   flex-wrap:wrap;
@@ -2216,6 +1829,23 @@ label.spedChip span{
   display:inline-flex;
   align-items:center;
   justify-content:center;
+
+  min-height:42px;
+  padding:10px 16px;
+
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.08);
+
+  background:#2f333b;
+  color:#f1f1f1;
+
+  font-size:14px;
+  font-weight:500;
+  line-height:1.2;
+
+  cursor:pointer;
+  transition:0.15s ease;
+  box-sizing:border-box;
 }
 
 .pumpRow .utstyrChip input{
@@ -2223,25 +1853,24 @@ label.spedChip span{
 }
 
 .pumpRow .utstyrChip span{
-  display:inline-flex;
+  display:flex;
   align-items:center;
   justify-content:center;
-  min-height:34px;
-  padding:7px 14px;
-  border-radius:999px;
-  border:1px solid #cfd8e3;
-  background:#f8fafc;
-  color:#1f2937;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  user-select:none;
+  padding:0;
+  background:transparent;
+  border:0;
+  color:inherit;
+  font:inherit;
 }
 
-.pumpRow .utstyrChip input:checked + span{
-  background:#dbeafe;
-  border-color:#93c5fd;
-  color:#1e3a8a;
+.pumpRow .utstyrChip:has(input:checked){
+  background:#2b5cab;
+  border-color:#4f83d1;
+  color:#fff;
+}
+
+.pumpRow .utstyrChip:hover{
+  background:#3a404b;
 }
 
 .hudRow{
@@ -2337,3 +1966,250 @@ label.spedChip span{
   width:150px;
   flex:0 0 150px;
 }
+
+/* Midtstill benevning inni luftveisfeltene */
+.unitInputWrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+.unitInputWrap input{
+  height:42px;
+  margin:0 !important;
+  padding-right:70px;
+}
+
+.unitInputWrap span{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  height:100%;
+
+  color:#8c8c8c;
+  font-size:13px;
+  line-height:1;
+  pointer-events:none;
+}
+
+.spedChip{
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  border-radius:999px !important;
+  background:#2f333b !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+
+  color:#f1f1f1 !important;
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+}
+
+.spedChip input{
+  display:none !important;
+}
+
+.spedChip:has(input:checked){
+  background:#2b5cab !important;
+  border-color:#4f83d1 !important;
+  color:#fff !important;
+}
+
+.spedChip:has(input:checked) span{
+  color:#fff !important;
+}
+
+/* Luftveier: samme chip-stil som øvrige valg */
+.airwayRow .binaryOpt{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+
+  background:#2f333b !important;
+  color:#f1f1f1 !important;
+
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+
+  cursor:pointer;
+  transition:0.15s ease;
+  box-sizing:border-box;
+}
+
+.airwayRow .binaryOpt input{
+  display:none !important;
+}
+
+.airwayRow .binaryOpt span{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:inherit !important;
+  line-height:1.2 !important;
+}
+
+.airwayRow .binaryOpt:hover{
+  background:#3a404b !important;
+}
+
+.airwayRow .binaryOpt:has(input:checked){
+  background:#2b5cab !important;
+  border-color:#4f83d1 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+.airwayRow .binaryOpt:has(input:checked) span{
+  color:#fff !important;
+}
+
+/* Spesialtransport: samme chip-stil som øvrige valg */
+.specialGroup .specCell{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+
+  background:#2f333b !important;
+  color:#f1f1f1 !important;
+
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+
+  cursor:pointer;
+  transition:0.15s ease;
+  box-sizing:border-box;
+}
+
+.specialGroup .specCell input{
+  display:none !important;
+}
+
+.specialGroup .specCell span,
+.specialGroup .specCell .specLabel{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:inherit !important;
+  font-size:inherit !important;
+  font-weight:inherit !important;
+  line-height:1.2 !important;
+}
+
+.specialGroup .specCell:hover{
+  background:#3a404b !important;
+}
+
+.specialGroup .specCell:has(input:checked),
+.specialGroup .specCell.active{
+  background:#2b5cab !important;
+  border-color:#4f83d1 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+.specialGroup .specCell:has(input:checked) span,
+.specialGroup .specCell.active span{
+  color:#fff !important;
+}
+
+.spesialtransportRow{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+  padding:0 !important;
+}
+
+/* Respirasjonsarbeid spedbarn – samme chip-standard */
+.spedRespArbeidRow{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  margin-top:10px !important;
+}
+
+.spedRespArbeidRow .medChip{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:40px !important;
+  height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+
+  background:#2f333b !important;
+  color:#f1f1f1 !important;
+
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+
+  cursor:pointer;
+  transition:0.15s ease;
+  box-sizing:border-box;
+}
+
+.spedRespArbeidRow .medChip input{
+  display:none !important;
+}
+
+.spedRespArbeidRow .medChip span{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:inherit !important;
+  font-size:inherit !important;
+  font-weight:inherit !important;
+  line-height:1.2 !important;
+}
+
+.spedRespArbeidRow .medChip:hover{
+  background:#3a404b !important;
+}
+
+.spedRespArbeidRow .medChip:has(input:checked){
+  background:#2b5cab !important;
+  border-color:#4f83d1 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+
+.spedRespArbeidRow .medChip:has(input:checked) span{
+  color:#fff !important;
+}
+
