@@ -1832,113 +1832,92 @@ function bindSmartChipLogic() {
 
   // Følgebehov: Ikke aktuelt slår av alle andre
   bindExclusiveChipGroup({
-    noneSelector: "#folge_ikke_aktuelt",
-    otherSelector: '.followNeedChip input[type="checkbox"]:not(#folge_ikke_aktuelt)'
+    noneSelector: "#follow_none",
+    otherSelector: 'input[name="followNeed"]:not(#follow_none)'
   });
 
+// Tilganger: Ingen tilganger slår av CVK/PVK/annet
+bindExclusiveChipGroup({
+  noneSelector: "#til_ingen",
+  otherSelector: '.accessChipRow input[type="checkbox"]:not(#til_ingen)',
+  clearSelectors: [
+    ".tilgangDynChk",
+    ".tilgangText"
+  ],
+  resetRows: () => {
+    $("cvkLumen").value = "";
+    $("pvkAntall").value = "";
 
-  // Tilganger: Ingen tilganger slår av CVK/PVK/annet
-  bindExclusiveChipGroup({
-    noneSelector: "#tilgang_ingen",
-    otherSelector: '.tilgangChip input[type="checkbox"]:not(#tilgang_ingen)',
-    clearSelectors: [
-      "#cvkLumen",
-      "#pvkAntall",
-      ".tilgangDynChk",
-      ".tilgangText"
-    ],
-    resetRows: () => {
-      if (typeof resetTilgangRows === "function") resetTilgangRows();
+    if (typeof resetTilgangRows === "function") {
+      resetTilgangRows();
     }
-  });
 
+    updateTilgangerUI();
+  },
+  onChange: () => {
+    updateTilgangerUI();
+  }
+});
 
   // Utstyr: Ingen utstyr slår av alt annet
   bindExclusiveChipGroup({
     noneSelector: "#utst_ingen",
-    otherSelector: '.utstyrChip input[type="checkbox"]:not(#utst_ingen)',
+    otherSelector: '.utstyrChipRow input[type="checkbox"]:not(#utst_ingen)',
     clearSelectors: [
       "#utstPumpeAntall",
-      ".utstyrDynChk",
-      ".utstyrText"
+      ".drenAnnetChk",
+      ".drenAnnetText"
     ],
     resetRows: () => {
-      if (typeof resetUtstyrRows === "function") resetUtstyrRows();
+      if (typeof resetDrenAnnetFields === "function") resetDrenAnnetFields();
     }
   });
-
 
   // Sedasjon: Nei slår av andre sedasjonsvalg og fritekst
   bindExclusiveChipGroup({
     noneSelector: "#sed_nei",
-    otherSelector: '.sedChip input[type="checkbox"]:not(#sed_nei)',
+    otherSelector: '.sed:not(#sed_nei)',
     clearSelectors: [
       ".sedDynChk",
       ".sedText"
     ],
     resetRows: () => {
       if (typeof resetSedRows === "function") resetSedRows();
-      else if (typeof addSedRow === "function") {
-        const body = document.querySelector("#sedDynamicBody");
-        if (body) {
-          body.innerHTML = "";
-          addSedRow();
-        }
-      }
     }
   });
 
-
   // Pressor: Nei slår av andre pressorvalg og fritekst
   bindExclusiveChipGroup({
-    noneSelector: "#pressor_nei",
-    otherSelector: '.pressorChip input[type="checkbox"]:not(#pressor_nei)',
+    noneSelector: "#pre_nei",
+    otherSelector: '.pre:not(#pre_nei)',
     clearSelectors: [
       ".pressorDynChk",
       ".pressorText"
     ],
     resetRows: () => {
       if (typeof resetPressorRows === "function") resetPressorRows();
-      else if (typeof addPressorRow === "function") {
-        const body = document.querySelector("#pressorDynamicBody");
-        if (body) {
-          body.innerHTML = "";
-          addPressorRow();
-        }
-      }
     }
   });
 
-
   // Andre medikamenter: Nei slår av Ringer/NaCl/Blod/Plasma/annet
   bindExclusiveChipGroup({
-    noneSelector: "#andreinf_nei",
-    otherSelector: '.andreInfChip input[type="checkbox"]:not(#andreinf_nei)',
+    noneSelector: 'input[name="medicationOther"][value="Nei"]',
+    otherSelector: 'input[name="medicationOther"]:not([value="Nei"])',
     clearSelectors: [
-      ".andreInfDynChk",
+      ".andreInfChk",
       ".andreInfText"
     ],
     resetRows: () => {
       if (typeof resetAndreInfRows === "function") resetAndreInfRows();
-      else if (typeof addAndreInfRow === "function") {
-        const body = document.querySelector("#andreInfDynamicBody");
-        if (body) {
-          body.innerHTML = "";
-          addAndreInfRow();
-        }
-      }
     }
   });
 
-
   // Spesialtransport: Ikke aktuelt slår av ECMO/IABP osv.
   bindExclusiveChipGroup({
-    noneSelector: "#spesial_ikke_aktuelt",
-    otherSelector: '.specialChip input[type="checkbox"]:not(#spesial_ikke_aktuelt)'
+    noneSelector: "#spec_ingen",
+    otherSelector: '.specialGroup .specChoice:not(#spec_ingen)'
   });
 }
-
-
 
 function init() {
 
@@ -2008,7 +1987,24 @@ document.addEventListener("click", e => {
   if (!input) return;
 
   input.checked = !input.checked;
-  cell.classList.toggle("active", input.checked);
+
+  const ikkeAktuelt = $("spec_ingen");
+  const alle = document.querySelectorAll(".specialGroup .specChoice");
+
+  if (input === ikkeAktuelt && input.checked) {
+    alle.forEach(chk => {
+      if (chk !== ikkeAktuelt) chk.checked = false;
+    });
+  }
+
+  if (input !== ikkeAktuelt && input.checked && ikkeAktuelt) {
+    ikkeAktuelt.checked = false;
+  }
+
+  document.querySelectorAll(".specialGroup .specCell").forEach(celle => {
+    const chk = celle.querySelector("input");
+    celle.classList.toggle("active", !!chk?.checked);
+  });
 
   lagRapport();
 }, true);
