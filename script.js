@@ -2072,8 +2072,14 @@ function bindHighFlowNumberOnly() {
 }
 
 function updateTilgangerUI() {
-  setHidden($("cvkWrap"), !$("til_cvk")?.checked);
-  setHidden($("pvkWrap"), !$("til_pvk")?.checked);
+  const cvkValgt = $("til_cvk")?.checked;
+  const pvkValgt = $("til_pvk")?.checked;
+
+  setHidden($("cvkWrap"), !cvkValgt);
+  setHidden($("pvkWrap"), !pvkValgt);
+
+  $("cvkLumen")?.classList.remove("hidden");
+  $("pvkAntall")?.classList.remove("hidden");
 }
 
 function bindMedicationNeiLogic(groupSelector, neiSelector, dynamicBody, textClass) {
