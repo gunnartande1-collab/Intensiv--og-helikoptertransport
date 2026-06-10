@@ -113,15 +113,20 @@ function buildVitalsLine() {
 function linesTilganger() {
   const out = [];
 
-const cvkLumen = clean($("cvkLumen")?.value);
+  if ($("til_ingen")?.checked) {
+    return ["Ingen tilganger"];
+  }
 
-if ($("til_cvk").checked) {
-  out.push(cvkLumen ? "CVK  " + cvkLumen : "CVK");
-}
+  const cvkLumen = clean($("cvkLumen")?.value);
+
+  if ($("til_cvk")?.checked) {
+    out.push(cvkLumen ? "CVK " + cvkLumen : "CVK");
+  }
+
   const n = clean(pvkAntall.value);
 
   if (pvkChk.checked) {
-    out.push(n ? "PVK " + n + "stk" : "PVK");
+    out.push(n ? "PVK " + n + " stk" : "PVK");
   }
 
   out.push(
@@ -1491,6 +1496,18 @@ if (respArbeid) lines.push(respArbeid);
 rapport.value = lines.join("\n");
 autoGrowTextarea(rapport);
 }
+
+function buildHudLine() {
+  const valgt = Array.from(
+    document.querySelectorAll('input[name="hud"]:checked')
+  ).map(x => x.value);
+
+  if (!valgt.length) {
+    return "";
+  }
+
+  return "Hud: " + valgt.join(", ");
+}
 function addHeader(lines) {
   const transportVal = getBinaryValue("transport");
 
@@ -1506,6 +1523,7 @@ function addSpesialtransport(lines) {
       Array.from(document.querySelectorAll(".specChoice"))
         .filter(x => x.checked)
         .map(x => x.dataset.spec || x.value)
+        .filter(x => x && x !== "Ikke aktuelt")
     )
   ];
 
@@ -1513,6 +1531,7 @@ function addSpesialtransport(lines) {
     lines.push("Spesialtransport: " + specs.join(", "));
   }
 }
+
 function addHastegrad(lines) {
   lines.push(
     "Rekvirentens hastegrad: " +
@@ -1656,7 +1675,13 @@ if (vit) {
   lines.push(vit);
 }
 
-  addMedicationSections(lines);
+const hud = buildHudLine();
+
+if (hud) {
+  lines.push(hud);
+}
+
+addMedicationSections(lines);
 
   const til = linesTilganger();
 
