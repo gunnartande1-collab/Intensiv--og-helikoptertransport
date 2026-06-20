@@ -9,6 +9,7 @@ fullTop=$("fullTop"),
 acuteBottom=$("acuteBottom"),
 fullBottom=$("fullBottom"),
 sharedBottom=$("sharedBottom"),
+sharedEquipmentBlock=$("sharedEquipmentBlock"),
 safetyBlock=$("safetyBlock"),
 acuteDoctorBlock=$("acuteDoctorBlock"),
 transportWrap=$("transportWrap"),
@@ -712,15 +713,17 @@ function updateMainVisibility() {
 
   setHidden(mainContent, !harHastegrad);
 
-  if (!harHastegrad) {
-    setHidden(acuteTop, true);
-    setHidden(acuteBottom, true);
-    setHidden(fullTop, true);
-    setHidden(fullBottom, true);
-    setHidden(safetyBlock, true);
-    setHidden(acuteDoctorBlock, true);
-    setHidden(sharedBottom, true);
+if (!harHastegrad) {
+  setHidden(acuteTop, true);
+  setHidden(acuteBottom, true);
+  setHidden(fullTop, true);
+  setHidden(fullBottom, true);
+  setHidden(sharedEquipmentBlock, true);
+  setHidden(safetyBlock, true);
+  setHidden(acuteDoctorBlock, true);
+  setHidden(sharedBottom, true);
 
+  
     setHidden($("reportActions"), true);
     setHidden($("rapport"), true);
     setHidden($("feedbackWrap"), true);
@@ -743,8 +746,11 @@ function updateMainVisibility() {
   // Rekvirerende lege for Akutt vises nederst i Akutt-flyten
   setHidden(acuteDoctorBlock, !acute);
 
-  // Tilganger, utstyr og full legeinfo skjules ved Akutt
-  setHidden(sharedBottom, acute);
+// Tilganger og utstyr skjules ved Akutt
+setHidden(sharedEquipmentBlock, acute);
+
+// Full legeinfo skjules ved Akutt
+setHidden(sharedBottom, acute);
 
   // Rapport og knapper skal alltid vises når hastegrad er valgt
   setHidden($("reportActions"), false);

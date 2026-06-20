@@ -787,6 +787,115 @@
 
 </div> <!-- acuteBottom -->
 
+<div id="sharedEquipmentBlock" class="hidden">
+
+<div class="accessGroup">
+
+<label class="minorTitle">Tilganger</label>
+
+<div class="accessChipRow">
+
+  <label class="medChip">
+    <input id="til_ingen" class="chk til" type="checkbox" data-name="Ingen tilganger">
+    <span>Ingen tilganger</span>
+  </label>
+
+  <label class="medChip">
+    <input id="til_cvk" class="chk til" type="checkbox" data-name="CVK">
+    <span>CVK</span>
+  </label>
+
+<div id="cvkWrap" class="hidden">
+  <select id="cvkLumen" class="pvkSelect">
+    <option value="">Lumen</option>
+    <option value="1 lumen">1 lumen</option>
+    <option value="2 lumen">2 lumen</option>
+    <option value="3 lumen">3 lumen</option>
+    <option value="4 lumen">4 lumen</option>
+    <option value="5 lumen">5 lumen</option>
+  </select>
+</div>
+
+  <label class="medChip">
+    <input id="til_pvk" class="chk til" type="checkbox" data-name="PVK">
+    <span>PVK</span>
+  </label>
+
+<div id="pvkWrap" class="hidden">
+  <select id="pvkAntall" class="pvkSelect">
+    <option value="">Antall</option>
+    <option value="1">1 stk</option>
+    <option value="2">2 stk</option>
+    <option value="3">3 stk</option>
+    <option value="4">4 stk</option>
+    <option value="5">5 stk</option>
+  </select>
+</div>
+
+</div>
+
+<div id="tilgangerDynamicBody" class="accessDynamic"></div>
+
+</div> <!-- accessGroup Tilganger -->
+
+<div class="accessGroup">
+
+<label class="minorTitle">Utstyr</label>
+
+<div class="utstyrGroup">
+
+  <div class="chipRow utstyrChipRow">
+<label class="medChip">
+    <input id="utst_ingen"
+         class="chk dren"
+         type="checkbox"
+         data-name="Ingen utstyr">
+  <span>Ingen utstyr</span>
+</label>
+
+<label class="medChip">
+        <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
+      <span>Arteriekran</span>
+    </label>
+
+<label class="medChip">
+        <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
+<span>Thoraxdren</span>
+</label>
+
+<div class="pumpRow">
+  <label class="medChip">
+    <input id="utst_pumper"
+           class="chk dren"
+           type="checkbox"
+           data-name="Sprøytepumper">
+    <span>Sprøytepumper</span>
+  </label>
+
+  <select id="utstPumpeAntall" class="inlineSelect hidden">
+    <option value="">Antall</option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+  </select>
+</div>
+
+  </div> <!-- chipRow -->
+
+<div id="utstyrDynamicBody" class="accessDynamic"></div>
+
+</div> <!-- utstyrGroup -->
+
+</div> <!-- accessGroup Utstyr -->
+
+</div> <!-- sharedEquipmentBlock -->
 
 <div id="safetyBlock" class="hidden">
 
@@ -910,117 +1019,10 @@
 
 </div>
 
+
 <div id="sharedBottom" class="hidden">
 
 <div class="accessGroup">
-
-<label class="minorTitle">Tilganger</label>
-
-<div class="accessChipRow">
-
-  <label class="medChip">
-    <input id="til_ingen" class="chk til" type="checkbox" data-name="Ingen tilganger">
-    <span>Ingen tilganger</span>
-  </label>
-
-  <label class="medChip">
-    <input id="til_cvk" class="chk til" type="checkbox" data-name="CVK">
-    <span>CVK</span>
-  </label>
-
-<div id="cvkWrap" class="hidden">
-  <select id="cvkLumen" class="pvkSelect">
-    <option value="">Lumen</option>
-    <option value="1 lumen">1 lumen</option>
-    <option value="2 lumen">2 lumen</option>
-    <option value="3 lumen">3 lumen</option>
-    <option value="4 lumen">4 lumen</option>
-    <option value="5 lumen">5 lumen</option>
-  </select>
-</div>
-
-  <label class="medChip">
-    <input id="til_pvk" class="chk til" type="checkbox" data-name="PVK">
-    <span>PVK</span>
-  </label>
-
-<div id="pvkWrap" class="hidden">
-  <select id="pvkAntall" class="pvkSelect">
-    <option value="">Antall</option>
-    <option value="1">1 stk</option>
-    <option value="2">2 stk</option>
-    <option value="3">3 stk</option>
-    <option value="4">4 stk</option>
-    <option value="5">5 stk</option>
-  </select>
-</div>
-
-</div>
-
-<div id="tilgangerDynamicBody" class="accessDynamic"></div>
-
-</div> <!-- accessGroup Tilganger -->
-
-<div class="accessGroup">
-
-<label class="minorTitle">Utstyr</label>
-
-<div class="utstyrGroup">
-
-  <div class="chipRow utstyrChipRow">
-<label class="medChip">
-    <input id="utst_ingen"
-         class="chk dren"
-         type="checkbox"
-         data-name="Ingen utstyr">
-  <span>Ingen utstyr</span>
-</label>
-
-<label class="medChip">
-        <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
-      <span>Arteriekran</span>
-    </label>
-
-<label class="medChip">
-        <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
-<span>Thoraxdren</span>
-</label>
-
-<div class="pumpRow">
-  <label class="medChip">
-    <input id="utst_pumper"
-           class="chk dren"
-           type="checkbox"
-           data-name="Sprøytepumper">
-    <span>Sprøytepumper</span>
-  </label>
-
-  <select id="utstPumpeAntall" class="inlineSelect hidden">
-    <option value="">Antall</option>
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
-    <option>4</option>
-    <option>5</option>
-    <option>6</option>
-    <option>7</option>
-    <option>8</option>
-    <option>9</option>
-    <option>10</option>
-  </select>
-</div>
-
-  </div> <!-- chipRow -->
-
-<div id="utstyrDynamicBody" class="accessDynamic"></div>
-
-</div> <!-- utstyrGroup -->
-
-</div> <!-- accessGroup Utstyr -->
-
-
-
-  <div class="accessGroup">
 
 <label class="minorTitle">Rekvirerende lege</label>
 
@@ -1037,7 +1039,7 @@
 
 </div> <!-- accessGroup lege -->
 
-</div> <!-- fullBottom -->
+</div> <!-- sharedBottom -->
 
 <div id="reportActions" class="btnbar">
 
