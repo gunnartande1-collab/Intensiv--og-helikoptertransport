@@ -2293,3 +2293,23 @@ select{
   opacity:1;
   visibility:visible;
 }
+
+
+/* CVK- og PVK-meny – bedre visning i Edge */
+#cvkLumen,
+#pvkAntall{
+  width:155px !important;
+  min-width:155px !important;
+
+  height:46px !important;
+  min-height:46px !important;
+
+  padding:0 38px 0 12px !important;
+  margin:0 !important;
+
+  font-size:15px !important;
+  line-height:normal !important;
+
+  box-sizing:border-box !important;
+  vertical-align:middle;
+}

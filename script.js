@@ -1049,12 +1049,38 @@ function bindToggleEvents() {
 }
 
 function bindSpedbarnEvents() {
-  document.querySelectorAll(".spedRadio").forEach(r =>
-    r.addEventListener("change", () => {
+  document.querySelectorAll(".spedRadio").forEach(radio => {
+    const chip = radio.closest(".spedChip");
+
+    if (!chip) return;
+
+    chip.addEventListener("pointerdown", () => {
+      radio.dataset.wasChecked =
+        radio.checked ? "true" : "false";
+    });
+
+    chip.addEventListener("click", event => {
+      event.preventDefault();
+
+      const wasChecked =
+        radio.dataset.wasChecked === "true";
+
+      // Slå av alle alternativer først
+      document.querySelectorAll(".spedRadio").forEach(otherRadio => {
+        otherRadio.checked = false;
+        otherRadio.dataset.wasChecked = "false";
+      });
+
+      // Hvis alternativet ikke allerede var valgt,
+      // velges det. Var det valgt, forblir alt avslått.
+      if (!wasChecked) {
+        radio.checked = true;
+      }
+
       updateSpedbarnUI();
       lagRapport();
-    })
-  );
+    });
+  });
 }
 
 function bindCaveEvents() {
