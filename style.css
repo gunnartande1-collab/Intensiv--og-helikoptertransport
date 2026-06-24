@@ -347,15 +347,6 @@ input[type=number]{
   width:150px;
 }
 
-#vekt{
-  width:140px;
-}
-
-#weightWrap{
-  margin-top:18px;
-  max-width:220px;
-}
-
 .section + .binaryRow{
   margin-top:12px;
 }
@@ -2211,5 +2202,32 @@ select{
 
 .spedRespArbeidRow .medChip:has(input:checked) span{
   color:#fff !important;
+}
+
+/* Fremhev vektfeltet */
+#weightWrap{
+  margin-top:18px;
+  max-width:240px;
+
+  padding:12px 14px;
+  border:2px solid rgba(239,68,68,0.75);
+  border-radius:14px;
+  background:rgba(239,68,68,0.06);
+}
+
+#weightWrap label{
+  margin-top:0;
+  color:#ffd7d7;
+}
+
+#weightWrap #vekt{
+  width:100%;
+  margin-bottom:0;
+  border:2px solid rgba(239,68,68,0.65);
+}
+
+#weightWrap #vekt:focus{
+  border-color:#ef4444;
+  box-shadow:0 0 0 3px rgba(239,68,68,0.16);
 }
 

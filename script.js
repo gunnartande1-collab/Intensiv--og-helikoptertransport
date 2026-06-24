@@ -560,6 +560,7 @@ function updateSpedbarnUI() {
 
   setHidden(spedbarnExtraWrap, val !== "Ja");
   setHidden(spedRespArbeidWrap, val !== "Ja");
+  setHidden(transportWrap, val !== "Ja");
 
   vektLabel.textContent = val === "Ja"
     ? "Vekt (gram)"
