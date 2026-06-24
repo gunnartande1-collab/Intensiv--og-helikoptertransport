@@ -603,12 +603,12 @@ function updateSpedbarnUI() {
   vektInput.dataset.unit = nyVektenhet;
 
   if (brukerGram) {
-    vektLabel.textContent = "Vekt (gram) – viktig";
+    vektLabel.textContent = "Vekt (gram)";
     vektInput.placeholder = "gram";
     vektInput.step = "1";
     vektInput.inputMode = "numeric";
   } else {
-    vektLabel.textContent = "Vekt (kg) – viktig";
+    vektLabel.textContent = "Vekt (kg)";
     vektInput.placeholder = "kg";
     vektInput.step = "0.1";
     vektInput.inputMode = "decimal";
