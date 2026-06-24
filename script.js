@@ -559,28 +559,73 @@ function buildHlrRespLines() {
 ====================================================== */
 function updateSpedbarnUI() {
   const val = getSpedbarnValue();
-  const erNyfodtEllerSpedbarn =
-    val === "Nyfødt" || val === "Spedbarn";
-  const erBarn = val && val !== "Nei";
 
-  setHidden(spedbarnExtraWrap, !erNyfodtEllerSpedbarn);
-  setHidden(transportWrap, !erBarn);
+  const brukerGram =
+    val === "Nyfødt" ||
+    val === "Spedbarn";
 
-  vektLabel.textContent = erNyfodtEllerSpedbarn
-    ? "Vekt (gram) – viktig"
-    : "Vekt (kg) – viktig";
+  const viserTransportform =
+    val === "Nyfødt" ||
+    val === "Spedbarn" ||
+    val === "Barn";
 
-  $("vekt").placeholder = erNyfodtEllerSpedbarn
-    ? "gram"
-    : "kg";
+  const vektInput = $("vekt");
 
-  if (!erNyfodtEllerSpedbarn) {
+  /*
+    Nyfødt og spedbarn bruker gram.
+    Nei og barn bruker kg.
+  */
+  const nyVektenhet = brukerGram ? "g" : "kg";
+  const gammelVektenhet =
+    vektInput.dataset.unit || nyVektenhet;
+
+  // GA vises bare ved nyfødt og spedbarn
+  setHidden(
+    spedbarnExtraWrap,
+    !brukerGram
+  );
+
+  // Transportform vises ved nyfødt, spedbarn og barn
+  setHidden(
+    transportWrap,
+    !viserTransportform
+  );
+
+  /*
+    Tøm vektfeltet dersom enheten endres.
+    Dette hindrer at for eksempel 3,5 kg blir
+    stående som 3,5 gram ved kategoribytte.
+  */
+  if (gammelVektenhet !== nyVektenhet) {
+    vektInput.value = "";
+  }
+
+  vektInput.dataset.unit = nyVektenhet;
+
+  if (brukerGram) {
+    vektLabel.textContent = "Vekt (gram) – viktig";
+    vektInput.placeholder = "gram";
+    vektInput.step = "1";
+    vektInput.inputMode = "numeric";
+  } else {
+    vektLabel.textContent = "Vekt (kg) – viktig";
+    vektInput.placeholder = "kg";
+    vektInput.step = "0.1";
+    vektInput.inputMode = "decimal";
+  }
+
+  /*
+    Tøm gestasjonsalder når kategorien
+    ikke er nyfødt eller spedbarn.
+  */
+  if (!brukerGram) {
     $("gestasjonsUker").value = "";
     $("gestasjonsDager").value = "";
   }
 
   updateTitle();
 }
+
 
 function updateCaveUI() {
 

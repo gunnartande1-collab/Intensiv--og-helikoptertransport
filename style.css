@@ -893,7 +893,10 @@ input[type=number]{
 }
 
 .accessGroup select{
-  height:30px;
+  height:42px;
+  min-height:42px;
+  padding:0 10px;
+  line-height:normal;
   border-radius:10px;
 }
 
