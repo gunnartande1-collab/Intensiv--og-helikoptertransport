@@ -2231,3 +2231,20 @@ select{
   box-shadow:0 0 0 3px rgba(239,68,68,0.16);
 }
 
+/* Transportform spedbarn – lik størrelse på alle knappene */
+.transportRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.transportRow .medChip{
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:120px !important;
+  height:40px !important;
+  min-height:40px !important;
+  padding:0 14px !important;
+  margin:0 !important;
+  border-radius:999px !important;
+}
