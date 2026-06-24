@@ -564,68 +564,47 @@ function updateSpedbarnUI() {
     val === "Nyfødt" ||
     val === "Spedbarn";
 
+  const viserGA = brukerGram;
+
   const viserTransportform =
     val === "Nyfødt" ||
     val === "Spedbarn" ||
     val === "Barn";
 
   const vektInput = $("vekt");
+  const weightWrap = $("weightWrap");
 
-  /*
-    Nyfødt og spedbarn bruker gram.
-    Nei og barn bruker kg.
-  */
-  const nyVektenhet = brukerGram ? "g" : "kg";
-  const gammelVektenhet =
-    vektInput.dataset.unit || nyVektenhet;
+  // Vektfeltet skal alltid være synlig
+  setHidden(weightWrap, false);
 
-  // GA vises bare ved nyfødt og spedbarn
-  setHidden(
-    spedbarnExtraWrap,
-    !brukerGram
-  );
+  // GA skal kun vises ved nyfødt og spedbarn
+  setHidden(spedbarnExtraWrap, !viserGA);
 
   // Transportform vises ved nyfødt, spedbarn og barn
-  setHidden(
-    transportWrap,
-    !viserTransportform
-  );
-
-  /*
-    Tøm vektfeltet dersom enheten endres.
-    Dette hindrer at for eksempel 3,5 kg blir
-    stående som 3,5 gram ved kategoribytte.
-  */
-  if (gammelVektenhet !== nyVektenhet) {
-    vektInput.value = "";
-  }
-
-  vektInput.dataset.unit = nyVektenhet;
+  setHidden(transportWrap, !viserTransportform);
 
   if (brukerGram) {
     vektLabel.textContent = "Vekt (gram)";
     vektInput.placeholder = "gram";
     vektInput.step = "1";
     vektInput.inputMode = "numeric";
+    vektInput.dataset.unit = "g";
   } else {
     vektLabel.textContent = "Vekt (kg)";
     vektInput.placeholder = "kg";
     vektInput.step = "0.1";
     vektInput.inputMode = "decimal";
+    vektInput.dataset.unit = "kg";
   }
 
-  /*
-    Tøm gestasjonsalder når kategorien
-    ikke er nyfødt eller spedbarn.
-  */
-  if (!brukerGram) {
+  // GA skal tømmes dersom Barn eller Nei velges
+  if (!viserGA) {
     $("gestasjonsUker").value = "";
     $("gestasjonsDager").value = "";
   }
 
   updateTitle();
 }
-
 
 function updateCaveUI() {
 
