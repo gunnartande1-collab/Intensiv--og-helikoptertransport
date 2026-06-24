@@ -2259,3 +2259,34 @@ select{
   padding:0 !important;
   line-height:1 !important;
 }
+
+/* Aldersforklaring for barn-kategorier */
+.childTooltip{
+  position:relative;
+}
+
+.childTooltip::after{
+  content:attr(data-tooltip);
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 8px);
+  transform:translateX(-50%);
+  white-space:nowrap;
+  background:rgba(20,20,20,0.96);
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:10px;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .18s ease, visibility .18s ease;
+  transition-delay:.3s;
+  z-index:9999;
+}
+
+.childTooltip:hover::after{
+  opacity:1;
+  visibility:visible;
+}

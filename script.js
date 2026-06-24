@@ -383,18 +383,20 @@ return ["Luftveier: " + airway];
 }
 
 function buildSpedbarnLine() {
+  const kategori = getSpedbarnValue();
 
-  if (getSpedbarnValue() !== "Ja") {
+  if (!kategori || kategori === "Nei") {
     return "";
   }
 
   const u = clean($("gestasjonsUker").value);
   const d = clean($("gestasjonsDager").value);
   const v = clean($("vekt").value);
+  const brukerGram = kategori === "Nyfødt" || kategori === "Spedbarn";
 
-  const p = ["Spedbarn"];
+  const p = [kategori];
 
-  if (u || d) {
+  if (brukerGram && (u || d)) {
     p.push(
       "GA " +
       (u || "?") +
@@ -403,12 +405,13 @@ function buildSpedbarnLine() {
     );
   }
 
-  if (v) {
+  if (brukerGram && v) {
     p.push("Vekt: " + v + " g");
   }
 
   return p.join(", ");
 }
+
 function buildUtstyrList() {
   const out = [];
 
@@ -556,19 +559,25 @@ function buildHlrRespLines() {
 ====================================================== */
 function updateSpedbarnUI() {
   const val = getSpedbarnValue();
-  const spedRespArbeidWrap = $("spedRespArbeidWrap");
+  const erNyfodtEllerSpedbarn =
+    val === "Nyfødt" || val === "Spedbarn";
+  const erBarn = val && val !== "Nei";
 
-  setHidden(spedbarnExtraWrap, val !== "Ja");
-  setHidden(spedRespArbeidWrap, val !== "Ja");
-  setHidden(transportWrap, val !== "Ja");
+  setHidden(spedbarnExtraWrap, !erNyfodtEllerSpedbarn);
+  setHidden(transportWrap, !erBarn);
 
-  vektLabel.textContent = val === "Ja"
-    ? "Vekt (gram)"
-    : "Vekt (kg)";
+  vektLabel.textContent = erNyfodtEllerSpedbarn
+    ? "Vekt (gram) – viktig"
+    : "Vekt (kg) – viktig";
 
-  $("vekt").placeholder = val === "Ja"
+  $("vekt").placeholder = erNyfodtEllerSpedbarn
     ? "gram"
     : "kg";
+
+  if (!erNyfodtEllerSpedbarn) {
+    $("gestasjonsUker").value = "";
+    $("gestasjonsDager").value = "";
+  }
 
   updateTitle();
 }
@@ -819,34 +828,6 @@ function bindVitalEvents() {
       el.addEventListener("input", handleVitalInput);
       el.addEventListener("keydown", handleVitalSpace);
     }
-  });
-}
-function bindSpedRespArbeidEvents() {
-  const normal = document.querySelector('input[name="spedRespArbeid"][value="Normal"]');
-  const alle = document.querySelectorAll('input[name="spedRespArbeid"]');
-
-  if (!normal) return;
-
-  normal.addEventListener("change", () => {
-    if (normal.checked) {
-      alle.forEach(chk => {
-        if (chk !== normal) chk.checked = false;
-      });
-    }
-
-    lagRapport();
-  });
-
-  alle.forEach(chk => {
-    if (chk === normal) return;
-
-    chk.addEventListener("change", () => {
-      if (chk.checked) {
-        normal.checked = false;
-      }
-
-      lagRapport();
-    });
   });
 }
 
@@ -1218,21 +1199,6 @@ function bindAcuteAirwayInputEvents() {
     })
   );
 }
-function buildSpedRespArbeidLine() {
-  if (getSpedbarnValue() !== "Ja") {
-    return "";
-  }
-
-  const valgt = Array.from(
-    document.querySelectorAll('input[name="spedRespArbeid"]:checked')
-  ).map(x => x.value);
-
-  if (!valgt.length) {
-    return "";
-  }
-
-  return "Respirasjonsarbeid: " + valgt.join(", ");
-}
 
 function updateHlrRespUI() {
 
@@ -1309,7 +1275,6 @@ bindHighFlowNumberOnly();
 bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
-  bindSpedRespArbeidEvents();
   bindFollowNeedEvents();
   bindCaveEvents();
   bindSmitteEvents();
@@ -1487,10 +1452,7 @@ if (follow) lines.push(follow);
   const sped = buildSpedbarnLine();
   if (sped) lines.push(sped);
 
-  const respArbeid = buildSpedRespArbeidLine();
-if (respArbeid) lines.push(respArbeid);
-
-  if (getSpedbarnValue() === "Ja") {
+  if (getSpedbarnValue() && getSpedbarnValue() !== "Nei") {
     addTransportform(lines);
   }
 
@@ -1504,17 +1466,7 @@ rapport.value = lines.join("\n");
 autoGrowTextarea(rapport);
 }
 
-function buildHudLine() {
-  const valgt = Array.from(
-    document.querySelectorAll('input[name="hud"]:checked')
-  ).map(x => x.value);
 
-  if (!valgt.length) {
-    return "";
-  }
-
-  return "Hud: " + valgt.join(", ");
-}
 function addHeader(lines) {
   const transportVal = getBinaryValue("transport");
 
@@ -1606,7 +1558,7 @@ function buildAcuteReport(lines) {
 
   if (
     clean($("vekt").value) &&
-    getSpedbarnValue() !== "Ja"
+    !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
   ) {
     lines.push(
       "Vekt: " +
@@ -1655,7 +1607,7 @@ function buildFullReport(lines) {
 
   if (
     clean($("vekt").value) &&
-    getSpedbarnValue() !== "Ja"
+    !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
   ) {
     lines.push(
       "Vekt: " +
@@ -1670,22 +1622,10 @@ if (airway) {
   lines.push(airway);
 }
 
-const respArbeid = buildSpedRespArbeidLine();
-
-if (respArbeid) {
-  lines.push(respArbeid);
-}
-
 const vit = buildVitalsLine();
 
 if (vit) {
   lines.push(vit);
-}
-
-const hud = buildHudLine();
-
-if (hud) {
-  lines.push(hud);
 }
 
 addMedicationSections(lines);

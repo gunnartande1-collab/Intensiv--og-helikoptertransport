@@ -131,19 +131,29 @@
 
 <div class="formGroup">
 
-  <div class="section">Spedbarn</div>
+  <div class="section">Barn</div>
 
   <div class="smLine">
 
-<label class="medChip spedChip">
-  <input type="radio" name="spedbarn" class="spedRadio" data-value="Ja" id="spedbarn_ja">
-  <span>Ja</span>
-</label>
+    <label class="medChip spedChip">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei">
+      <span>Nei</span>
+    </label>
 
-<label class="medChip spedChip">
-  <input type="radio" name="spedbarn" class="spedRadio" data-value="Nei" id="spedbarn_nei">
-  <span>Nei</span>
-</label>
+    <label class="medChip spedChip childTooltip" data-tooltip="0–4 uker">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Nyfødt" id="spedbarn_nyfodt">
+      <span>Nyfødt</span>
+    </label>
+
+    <label class="medChip spedChip childTooltip" data-tooltip="1 måned–1 år">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Spedbarn" id="spedbarn_spedbarn">
+      <span>Spedbarn</span>
+    </label>
+
+    <label class="medChip spedChip childTooltip" data-tooltip="1–18 år">
+      <input type="radio" name="spedbarn" class="spedRadio" data-value="Barn" id="spedbarn_barn">
+      <span>Barn</span>
+    </label>
 
   </div>
 
@@ -167,7 +177,7 @@
 
   </div>
 
-    <div id="transportWrap" class="hidden">
+  <div id="transportWrap" class="hidden">
 
     <div class="section">Transportform</div>
 
@@ -219,51 +229,6 @@
           id="transport_kengufix"
         >
         <span>Kengufix</span>
-      </label>
-
-    </div>
-
-  </div>
-
-  <div id="spedRespArbeidWrap" class="hidden">
-
-    <div class="section">Respirasjonsarbeid</div>
-
-    <div class="chipRow spedRespArbeidRow">
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Normal">
-        <span>Normal</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Takypné">
-        <span>Takypné</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Nesevingespill">
-        <span>Nesevingespill</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Inndragninger">
-        <span>Inndragninger</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Bruk av hjelpemuskulatur">
-        <span>Hjelpemuskulatur</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Stønning/grunting">
-        <span>Stønning/grunting</span>
-      </label>
-
-      <label class="medChip">
-        <input type="checkbox" name="spedRespArbeid" value="Apnéepisoder">
-        <span>Apnéepisoder</span>
       </label>
 
     </div>
@@ -703,54 +668,6 @@
     <div class="vpField"><span>GCS</span><input id="gcs"></div>
   </div>
 
-  <div class="section">Hud</div>
-
-<div class="chipRow hudRow">
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Blek">
-    <span>Blek</span>
-  </label>
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Cyanotisk">
-    <span> Cyanotisk</span>
-  </label>
-
-  <label class="medChip hudTooltip" data-tooltip="Rødme">
-  <input type="checkbox" name="hud" value="Erytem (Rødme)">
-  <span>Erytem</span>
-</label>
-
-<label class="medChip hudTooltip" data-tooltip="Gulfarge">
-  <input type="checkbox" name="hud" value="Ikterus (Gulfarge)">
-  <span>Ikterus</span>
-</label>
-
- <label class="medChip">
-    <input type="checkbox" name="hud" value="Normal">
-    <span>Normal</span>
-  </label>
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Tørr">
-    <span>Tørr</span>
-  </label>
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Svett">
-    <span>Svett</span>
-  </label>
-
-  <label class="medChip">
-    <input type="checkbox" name="hud" value="Klam">
-    <span>Klam</span>
-  </label>
-
-
-
-
-</div>
 
 </div> <!-- fullTop -->
 
@@ -1132,10 +1049,10 @@
     Send innspill og tilbakemeldinger
   </a>
 </div>
-
+  
 
 </div> <!-- mainContent -->
-
+ 
 </div></div>
 
 <script src="script.js"></script>
