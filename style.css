@@ -2231,20 +2231,31 @@ select{
   box-shadow:0 0 0 3px rgba(239,68,68,0.16);
 }
 
-/* Transportform spedbarn – lik størrelse på alle knappene */
-.transportRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
+/* Transportform – tving identisk størrelse */
+#transportWrap .transportRow > label{
+  flex:0 0 125px !important;
+  width:125px !important;
+  min-width:125px !important;
+  max-width:125px !important;
 
-.transportRow .medChip{
-  flex:0 0 auto !important;
-  width:auto !important;
-  min-width:120px !important;
   height:40px !important;
   min-height:40px !important;
-  padding:0 14px !important;
+  max-height:40px !important;
+
+  padding:0 !important;
   margin:0 !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  box-sizing:border-box !important;
   border-radius:999px !important;
+}
+
+#transportWrap .transportRow > label span{
+  width:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:1 !important;
 }
