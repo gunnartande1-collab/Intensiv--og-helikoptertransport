@@ -1940,7 +1940,50 @@ bindExclusiveChipGroup({
     otherSelector: '.specialGroup .specChoice:not(#spec_ingen)'
   });
 }
+function bindFeedbackModal() {
 
+  const feedbackBtn = $("feedbackBtn");
+  const feedbackModal = $("feedbackModal");
+  const feedbackModalClose = $("feedbackModalClose");
+  const feedbackModalOk = $("feedbackModalOk");
+
+  if (!feedbackBtn || !feedbackModal) return;
+
+  function openFeedbackModal() {
+    feedbackModal.classList.remove("hidden");
+  }
+
+  function closeFeedbackModal() {
+    feedbackModal.classList.add("hidden");
+  }
+
+  feedbackBtn.addEventListener("click", openFeedbackModal);
+
+  feedbackModalClose?.addEventListener(
+    "click",
+    closeFeedbackModal
+  );
+
+  feedbackModalOk?.addEventListener(
+    "click",
+    closeFeedbackModal
+  );
+
+  feedbackModal.addEventListener("click", e => {
+    if (e.target === feedbackModal) {
+      closeFeedbackModal();
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (
+      e.key === "Escape" &&
+      !feedbackModal.classList.contains("hidden")
+    ) {
+      closeFeedbackModal();
+    }
+  });
+}
 function init() {
 
   bindEvents();
