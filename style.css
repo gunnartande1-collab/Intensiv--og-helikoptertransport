@@ -2313,3 +2313,146 @@ select{
   box-sizing:border-box !important;
   vertical-align:middle;
 }
+/* ======================================================
+   TILBAKEMELDING POPUP
+====================================================== */
+
+.feedbackBtn{
+  border:1px solid rgba(255,255,255,0.06);
+  background:#3f4249;
+  color:#fff;
+
+  min-height:44px;
+  padding:0 16px;
+
+  border-radius:12px;
+
+  font-size:13px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    transform .15s ease;
+}
+
+.feedbackBtn:hover{
+  background:#494d55;
+  transform:translateY(-1px);
+}
+
+
+/* Mørkt bakteppe */
+
+.feedbackModal{
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,0.62);
+
+  z-index:9999;
+}
+
+
+/* Selve boksen */
+
+.feedbackModalBox{
+  position:relative;
+
+  width:100%;
+  max-width:480px;
+
+  padding:28px;
+
+  border-radius:18px;
+
+  background:#3a3d43;
+  border:1px solid rgba(255,255,255,0.09);
+
+  box-shadow:
+    0 22px 60px rgba(0,0,0,0.45);
+
+  color:#f1f1f1;
+}
+
+
+.feedbackModalBox h2{
+  margin:0 40px 14px 0;
+
+  font-size:20px;
+  font-weight:800;
+}
+
+
+.feedbackModalBox p{
+  margin:0;
+
+  color:#d6d8dc;
+
+  font-size:15px;
+  line-height:1.55;
+}
+
+
+/* Kryss øverst */
+
+.feedbackModalClose{
+  position:absolute;
+  top:12px;
+  right:14px;
+
+  width:36px;
+  height:36px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border-radius:10px;
+
+  background:transparent;
+  color:#cfd2d7;
+
+  font-size:26px;
+  font-weight:400;
+
+  cursor:pointer;
+}
+
+.feedbackModalClose:hover{
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+}
+
+
+/* Lukk-knapp nederst */
+
+.feedbackModalOk{
+  margin-top:22px;
+
+  min-height:42px;
+  padding:0 18px;
+
+  border-radius:12px;
+
+  background:#2b5cab;
+  color:#fff;
+
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.feedbackModalOk:hover{
+  background:#356bc2;
+}
