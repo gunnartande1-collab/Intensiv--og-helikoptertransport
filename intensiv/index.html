@@ -1042,15 +1042,44 @@
 </div>
 <textarea id="rapport" class="report" readonly placeholder="Rapportteksten oppdateres automatisk…"></textarea>
 <div id="feedbackWrap" class="feedbackWrap">
-    <a
+  <button
+    id="feedbackBtn"
+    type="button"
     class="feedbackBtn"
-    target="_blank"
-    href="https://outlook.office.com/mail/deeplink/compose?to=b32838@ous-hf.no&subject=Tilbakemelding%20intensiv-%20og%20helikoptertransport%20skjema"
   >
-    Send innspill og tilbakemeldinger
-  </a>
+    Tilbakemelding
+  </button>
 </div>
-  
+
+<div id="feedbackModal" class="feedbackModal hidden">
+  <div class="feedbackModalBox">
+
+    <button
+      id="feedbackModalClose"
+      type="button"
+      class="feedbackModalClose"
+      aria-label="Lukk"
+    >
+      ×
+    </button>
+
+    <h2>Tilbakemelding</h2>
+
+    <p>
+      Feil, innspill og andre tilbakemeldinger bes om å meldes i Teams
+      eller tas muntlig med Gunnar.
+    </p>
+
+    <button
+      id="feedbackModalOk"
+      type="button"
+      class="feedbackModalOk"
+    >
+      Lukk
+    </button>
+
+  </div>
+</div>
 
 </div> <!-- mainContent -->
  
