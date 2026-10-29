@@ -2456,3 +2456,79 @@ select{
 .feedbackModalOk:hover{
   background:#356bc2;
 }
+
+/* ==========================================
+   TILBAKEMELDING - POPUP
+   ========================================== */
+
+.feedbackModal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.65) !important;
+  z-index: 99999 !important;
+}
+
+.feedbackModal.hidden {
+  display: none !important;
+}
+
+.feedbackModalBox {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  padding: 28px;
+  border-radius: 16px;
+  background: #3a3d43 !important;
+  border: 1px solid #555a63;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  color: #ffffff;
+}
+
+.feedbackModalBox h2 {
+  margin: 0 40px 16px 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.feedbackModalBox p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #e2e2e2;
+}
+
+.feedbackModalClose {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.feedbackModalOk {
+  margin-top: 24px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #356ac3;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedbackModalOk:hover {
+  background: #447bd6;
+}
