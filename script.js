@@ -1309,20 +1309,19 @@ function bindHlrRespEvents() {
   });
 
 }
-
 function bindEvents() {
 
   bindHastegradEvents();
   bindAutoGrowEvents();
   bindVitalEvents();
 
-bindPvkEvents();
-bindCvkEvents();
-bindUtstyrPumpeEvents();
-bindAcutePumpeEvents();
-bindAcuteSpontO2NumberOnly();
-bindHighFlowNumberOnly();
-bindMedicationNeiEvents();
+  bindPvkEvents();
+  bindCvkEvents();
+  bindUtstyrPumpeEvents();
+  bindAcutePumpeEvents();
+  bindAcuteSpontO2NumberOnly();
+  bindHighFlowNumberOnly();
+  bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
   bindFollowNeedEvents();
@@ -1337,6 +1336,8 @@ bindMedicationNeiEvents();
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
 
+  bindFeedbackModal();
+
   $("copyBtn")?.addEventListener("click", kopierRapport);
   $("resetBtn")?.addEventListener("click", nullstillSkjema);
 
@@ -1348,7 +1349,6 @@ bindMedicationNeiEvents();
     lagRapport();
   });
 }
-
 /* ======================================================
    DYNAMISKE FELTER
 ====================================================== */
