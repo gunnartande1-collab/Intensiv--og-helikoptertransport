@@ -1,177 +1,69 @@
-
 /* ======================================================
    DOM ELEMENTER
 ====================================================== */
-
-const $ = id => document.getElementById(id);
-
-const pageTitle = $("pageTitle"),
-mainContent = $("mainContent"),
-acuteTop = $("acuteTop"),
-fullTop = $("fullTop"),
-acuteBottom = $("acuteBottom"),
-fullBottom = $("fullBottom"),
-sharedBottom = $("sharedBottom"),
-sharedEquipmentBlock = $("sharedEquipmentBlock"),
-safetyBlock = $("safetyBlock"),
-acuteDoctorBlock = $("acuteDoctorBlock"),
-transportWrap = $("transportWrap"),
-spedbarnExtraWrap = $("spedbarnExtraWrap"),
-rapport = $("rapport"),
-vektLabel = $("vektLabel"),
-copyMsg = $("copyMsg");
-
-const spontO2Wrap = $("spontO2Wrap"),
-highFlowWrap = $("highFlowWrap"),
-nivWrap = $("nivWrap"),
-intubWrap = $("intubWrap"),
-trachWrap = $("trachWrap"),
-trO2 = $("tr_o2"),
-trVent = $("tr_vent"),
-trachO2Wrap = $("trachO2Wrap"),
-trachVentWrap = $("trachVentWrap");
-
-const acuteSpontO2Wrap = $("acuteSpontO2Wrap"),
-acuteHighFlowWrap = $("acuteHighFlowWrap"),
-acuteNivWrap = $("acuteNivWrap"),
-acuteIntubWrap = $("acuteIntubWrap"),
-acuteTrachWrap = $("acuteTrachWrap"),
-acuteTrachO2Wrap = $("acuteTrachO2Wrap"),
-acuteTrachVentWrap = $("acuteTrachVentWrap");
-
-const caveTextWrap = $("caveTextWrap"),
-caveText = $("caveText"),
-smitteSpesWrap = $("smitteSpesWrap"),
-smitteSpes = $("smitteSpes");
-
-const sedDynamicBody = $("sedDynamicBody"),
-pressorDynamicBody = $("pressorDynamicBody"),
-andreInfBody = $("andreInfBody"),
-tilgangerDynamicBody = $("tilgangerDynamicBody"),
-drenAnnetContainer = $("utstyrDynamicBody");
-
-const pvkChk = $("til_pvk"),
-pvkAntall = $("pvkAntall"),
-utstPumperChk = $("utst_pumper"),
-utstPumperAntall = $("utstPumpeAntall"),
-acutePumperChk = $("acutePumperChk"),
-acutePumperAntall = $("acutePumperAntall");
-
-let valgtHastegrad = "";
-let forrigeHastegrad = "";
-let copyTimer = null;
-
-
+const $=id=>document.getElementById(id);
+const pageTitle=$("pageTitle"),
+mainContent=$("mainContent"),
+acuteTop=$("acuteTop"),
+fullTop=$("fullTop"),
+acuteBottom=$("acuteBottom"),
+fullBottom=$("fullBottom"),
+sharedBottom=$("sharedBottom"),
+sharedEquipmentBlock=$("sharedEquipmentBlock"),
+safetyBlock=$("safetyBlock"),
+acuteDoctorBlock=$("acuteDoctorBlock"),
+transportWrap=$("transportWrap"),
+spedbarnExtraWrap=$("spedbarnExtraWrap"),
+rapport=$("rapport"),
+vektLabel=$("vektLabel"),
+copyMsg=$("copyMsg");
+const spontO2Wrap=$("spontO2Wrap"),highFlowWrap=$("highFlowWrap"),nivWrap=$("nivWrap"),intubWrap=$("intubWrap"),trachWrap=$("trachWrap"),trO2=$("tr_o2"),trVent=$("tr_vent"),trachO2Wrap=$("trachO2Wrap"),trachVentWrap=$("trachVentWrap");
+const acuteSpontO2Wrap=$("acuteSpontO2Wrap"),acuteHighFlowWrap=$("acuteHighFlowWrap"),acuteNivWrap=$("acuteNivWrap"),acuteIntubWrap=$("acuteIntubWrap"),acuteTrachWrap=$("acuteTrachWrap"),acuteTrachO2Wrap=$("acuteTrachO2Wrap"),acuteTrachVentWrap=$("acuteTrachVentWrap");
+const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("smitteSpesWrap"),smitteSpes=$("smitteSpes");
+const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("utstyrDynamicBody");
+const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
+let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
 /* ======================================================
    GENERELLE HJELPEFUNKSJONER
 ====================================================== */
-
-const clean = v => (v ?? "").toString().trim();
-
-function setHidden(el, hide) {
-  if (el) {
-    el.classList.toggle("hidden", !!hide);
-  }
-}
-
-function formatPhone(raw) {
-  const d = (raw || "").replace(/\D/g, "");
-
-  return d.length === 8
-    ? d.slice(0, 3) + " " + d.slice(3, 5) + " " + d.slice(5)
-    : raw;
-}
-
-function getBinaryValue(group) {
-  if (group === "hast") {
-    return valgtHastegrad;
-  }
-
-  const el = document.querySelector(
-    '.binOpt[data-group="' + group + '"]:checked'
-  );
-
-  return el ? el.dataset.value : "";
-}
-
-function setBinaryValue(group, value) {
-  document.querySelectorAll(
-    '.binOpt[data-group="' + group + '"]'
-  ).forEach(el => {
-    el.checked = el.dataset.value === value;
-  });
-}
-
-function getSpedbarnValue() {
-  const el = document.querySelector(".spedRadio:checked");
-  return el ? el.dataset.value : "";
-}
-
-function getCaveValue() {
-  const el = document.querySelector(".caveRadio:checked");
-  return el ? el.dataset.value : "";
-}
-
-function isAcute() {
-  return valgtHastegrad === "Akutt";
-}
-
-function autoGrowTextarea(el) {
-  if (!el) return;
-
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function updateTitle() {
-  pageTitle.textContent =
-    getBinaryValue("transport") === "Kuvøse"
-      ? "KUVØSETRANSPORT"
-      : "Intensiv- og helikoptertransport";
-}
-
-function syncSpecChoices() {
+const clean=v=>(v??"").toString().trim();
+function setHidden(el,hide){if(el)el.classList.toggle("hidden",!!hide)}
+function formatPhone(raw){const d=(raw||"").replace(/\D/g,"");return d.length===8?d.slice(0,3)+" "+d.slice(3,5)+" "+d.slice(5):raw}
+function getBinaryValue(group){if(group==="hast")return valgtHastegrad;const el=document.querySelector('.binOpt[data-group="'+group+'"]:checked');return el?el.dataset.value:""}
+function setBinaryValue(group,value){document.querySelectorAll('.binOpt[data-group="'+group+'"]').forEach(el=>el.checked=el.dataset.value===value)}
+function getSpedbarnValue(){const el=document.querySelector(".spedRadio:checked");return el?el.dataset.value:""}
+function getCaveValue(){const el=document.querySelector(".caveRadio:checked");return el?el.dataset.value:""}
+function isAcute(){return valgtHastegrad==="Akutt"}
+function autoGrowTextarea(el){if(!el)return;el.style.height="auto";el.style.height=el.scrollHeight+"px"}
+function updateTitle(){pageTitle.textContent=getBinaryValue("transport")==="Kuvøse"?"KUVØSETRANSPORT":"Intensiv- og helikoptertransport"}
+function syncSpecChoices(){
   const state = {};
 
   document.querySelectorAll(".specChoice").forEach(cb => {
     const rowVisible = !!cb.offsetParent;
-
-    if (rowVisible) {
-      state[cb.dataset.spec] = cb.checked;
-    }
+    if (rowVisible) state[cb.dataset.spec] = cb.checked;
   });
 
   document.querySelectorAll(".specChoice").forEach(cb => {
-    if (
-      Object.prototype.hasOwnProperty.call(
-        state,
-        cb.dataset.spec
-      )
-    ) {
+    if (Object.prototype.hasOwnProperty.call(state, cb.dataset.spec)){
       cb.checked = !!state[cb.dataset.spec];
     }
   });
 }
 
-function setSpecChoice(specName, checked) {
-  document.querySelectorAll(
-    '.specChoice[data-spec="' + specName + '"]'
-  ).forEach(cb => {
+function setSpecChoice(specName, checked){
+  document.querySelectorAll('.specChoice[data-spec="' + specName + '"]').forEach(cb => {
     cb.checked = checked;
   });
-
   lagRapport();
 }
 
-function syncSpecMirrors() {
+function syncSpecMirrors(){
   syncSpecChoices();
 }
-
-
 /* ======================================================
-   RAPPORTBYGGING - VITALPARAMETRE
+   RAPPORTBYGGING
 ====================================================== */
-
 function buildVitalsLine() {
   const p = [];
 
@@ -200,9 +92,7 @@ function buildVitalsLine() {
   const map = clean($("map").value);
 
   if (sys || dia) {
-    p.push(
-      "BT: " + (sys || "?") + "/" + (dia || "?")
-    );
+    p.push("BT: " + (sys || "?") + "/" + (dia || "?"));
   }
 
   if (map) {
@@ -221,12 +111,6 @@ function buildVitalsLine() {
 
   return p.join(", ");
 }
-
-
-/* ======================================================
-   RAPPORTBYGGING - TILGANGER
-====================================================== */
-
 function linesTilganger() {
   const out = [];
 
@@ -237,33 +121,21 @@ function linesTilganger() {
   const cvkLumen = clean($("cvkLumen")?.value);
 
   if ($("til_cvk")?.checked) {
-    out.push(
-      cvkLumen ? "CVK " + cvkLumen : "CVK"
-    );
+    out.push(cvkLumen ? "CVK " + cvkLumen : "CVK");
   }
 
   const n = clean(pvkAntall.value);
 
   if (pvkChk.checked) {
-    out.push(
-      n ? "PVK " + n + " stk" : "PVK"
-    );
+    out.push(n ? "PVK " + n + " stk" : "PVK");
   }
 
   out.push(
-    ...collectDynamicTexts(
-      ".tilgangText",
-      ".tilgangDynChk"
-    )
+    ...collectDynamicTexts(".tilgangText", ".tilgangDynChk")
   );
 
   return out;
 }
-
-
-/* ======================================================
-   RAPPORTBYGGING - LUFTVEIER
-====================================================== */
 
 function buildFullAirwayLine() {
   const main = getBinaryValue("airwayMain");
@@ -277,111 +149,105 @@ function buildFullAirwayLine() {
   if (main === "Spontan med O2") {
     const l = clean($("spontO2Liter").value);
 
-    return l
-      ? "Luftveier: Spontan med " + l + " l/min O2"
-      : "Luftveier: Spontan med O2";
+    
+
+return l
+  ? "Luftveier: Spontan med " + l + " l/min O2"
+  : "Luftveier: Spontan med O2";
   }
 
-  if (main === "Spontant med high flow") {
-    const f = clean($("highFlowFio2").value);
-    const fl = clean($("highFlowFlow").value);
+if (main === "Spontant med high flow") {
 
-    let tekst = "Luftveier: Spontant med high flow";
+  const f = clean($("highFlowFio2").value);
+  const fl = clean($("highFlowFlow").value);
 
-    if (f) {
-      tekst += ", FiO2 " + f + " %";
-    }
+  let tekst = "Luftveier: Spontant med high flow";
 
-    if (fl) {
-      tekst += ", Flow " + fl + " L/min";
-    }
+  if (f) {
+    tekst += ", FiO2 " + f + " %";  }
 
-    return tekst;
+  if (fl) {
+    tekst += ", Flow " + fl + " L/min";
   }
 
-  if (main === "NIV (CPAP/BiPAP)") {
-    const f = clean($("nivFio2").value);
-
-    return f
-      ? "Luftveier: NIV, FiO2 " + f + " %"
-      : "Luftveier: NIV";
-  }
-
-  if (main === "Intubert") {
-    const deler = [];
-
-    const f = clean($("intubFio2").value);
-    const pe = clean($("intubPeep").value);
-    const t = clean($("intubTopp").value);
-
-    if (f) deler.push("FiO2 " + f + " %");
-    if (pe) deler.push("PEEP " + pe);
-    if (t) deler.push("topptrykk " + t);
-
-    return deler.length
-      ? "Luftveier: Intubert, " + deler.join(", ")
-      : "Luftveier: Intubert";
-  }
-
-  if (main === "Trakeostomi") {
-    const sel = [];
-
-    document.querySelectorAll(".trachOpt").forEach(cb => {
-      if (cb.checked) {
-        sel.push(cb.dataset.name);
-      }
-    });
-
-    const l = clean($("trachO2Liter").value);
-    const f = clean($("trachVentFio2").value);
-    const pe = clean($("trachVentPeep").value);
-    const t = clean($("trachVentTopp").value);
-
-    let tekst = "Luftveier: Trakeostomi";
-
-    if (sel.includes("Spontan pust via trakeostomi")) {
-      tekst += "; spontan";
-    }
-
-    if (sel.includes("O2 via trakeostomi")) {
-      tekst += l
-        ? "; O2 " + l + " l/min"
-        : "; O2";
-    }
-
-    if (
-      sel.includes("Koblet til respirator") ||
-      sel.includes(
-        "Trykkstøtte (NIV via trakeostomi)"
-      )
-    ) {
-      const vent = [];
-
-      if (f) vent.push("FiO2 " + f + " %");
-      if (pe) vent.push("PEEP " + pe);
-      if (t) vent.push("topptrykk " + t);
-
-      tekst += vent.length
-        ? "; respiratorbehandlet med " +
-          vent.join(", ").replace(
-            /,([^,]*)$/,
-            " og$1"
-          )
-        : "; respiratorbehandlet";
-    }
-
-    return tekst;
-  }
-
-  return "";
+  return tekst;
 }
 
+if (main === "NIV (CPAP/BiPAP)") {
+  const f = clean($("nivFio2").value);
 
-/* ======================================================
-   RAPPORTBYGGING - AKUTT LUFTVEIER
-====================================================== */
+  return f
+    ? "Luftveier: NIV, FiO2 " + f + " %"
+    : "Luftveier: NIV";
+}
 
+if (main === "Intubert") {
+
+  const deler = [];
+
+  const f = clean($("intubFio2").value);
+  const pe = clean($("intubPeep").value);
+  const t = clean($("intubTopp").value);
+
+  if (f) deler.push("FiO2 " + f + " %");
+  if (pe) deler.push("PEEP " + pe);
+  if (t) deler.push("topptrykk " + t);
+
+  return deler.length
+    ? "Luftveier: Intubert, " + deler.join(", ")
+    : "Luftveier: Intubert";
+}
+
+if (main === "Trakeostomi") {
+
+  const sel = [];
+
+  document.querySelectorAll(".trachOpt").forEach(cb => {
+    if (cb.checked) {
+      sel.push(cb.dataset.name);
+    }
+  });
+
+  const l = clean($("trachO2Liter").value);
+  const f = clean($("trachVentFio2").value);
+  const pe = clean($("trachVentPeep").value);
+  const t = clean($("trachVentTopp").value);
+
+  let tekst = "Luftveier: Trakeostomi";
+
+  if (sel.includes("Spontan pust via trakeostomi")) {
+    tekst += "; spontan";
+  }
+
+  if (sel.includes("O2 via trakeostomi")) {
+    tekst += l
+      ? "; O2 " + l + " l/min"
+      : "; O2";
+  }
+
+  if (
+    sel.includes("Koblet til respirator") ||
+    sel.includes("Trykkstøtte (NIV via trakeostomi)")
+  ) {
+    const vent = [];
+
+    if (f) vent.push("FiO2 " + f + " %");
+    if (pe) vent.push("PEEP " + pe);
+    if (t) vent.push("topptrykk " + t);
+
+    tekst += vent.length
+      ? "; respiratorbehandlet med " +
+        vent.join(", ").replace(/,([^,]*)$/, " og$1")
+      : "; respiratorbehandlet";
+  }
+
+  return tekst;
+}
+return "";
+}
 function buildAcuteAirwayLines() {
+  
+
   const airway = getBinaryValue("acuteAirway");
 
   if (!airway) {
@@ -393,136 +259,128 @@ function buildAcuteAirwayLines() {
   }
 
   if (airway === "Spontan med O2") {
+
     const l =
       clean($("acuteSpontO2Liter").value) ||
       clean($("spontO2Liter").value);
 
-    return [
-      l
-        ? "Luftveier: Spontan med " + l + " l/min O2"
-        : "Luftveier: Spontan med O2"
-    ];
+return [
+  l
+    ? "Luftveier: Spontan med " + l + " l/min O2"
+    : "Luftveier: Spontan med O2"
+];
   }
 
-  if (airway === "Spontant med high flow") {
-    const f =
-      clean($("acuteHighFlowFiO2")?.value) ||
-      clean($("highFlowFio2").value);
+if (airway === "Spontant med high flow") {
 
-    const fl =
-      clean($("acuteHighFlowFlow").value) ||
-      clean($("highFlowFlow").value);
+  const f =
+    clean($("acuteHighFlowFio2").value) ||
+    clean($("highFlowFio2").value);
 
-    let tekst = "Luftveier: Spontant med high flow";
+  const fl =
+    clean($("acuteHighFlowFlow").value) ||
+    clean($("highFlowFlow").value);
 
-    if (f) {
-      tekst += ", FiO2 " + f + " %";
-    }
+  let tekst = "Luftveier: Spontant med high flow";
 
-    if (fl) {
-      tekst += ", Flow " + fl + " L/min";
-    }
-
-    return [tekst];
+  if (f) {
+    tekst += ", FiO2 " + f + " %";
   }
 
-  if (airway === "NIV (CPAP/BiPAP)") {
-    const f =
-      clean($("acuteNivFio2").value) ||
-      clean($("nivFio2").value);
-
-    return [
-      f
-        ? "Luftveier: NIV, FiO2 " + f + " %"
-        : "Luftveier: NIV"
-    ];
+  if (fl) {
+    tekst += ", Flow " + fl + " L/min";
   }
 
-  if (airway === "Intubert") {
-    const deler = [];
-
-    const f =
-      clean($("acuteIntubFio2").value) ||
-      clean($("intubFio2").value);
-
-    const pe =
-      clean($("acuteIntubPeep").value) ||
-      clean($("intubPeep").value);
-
-    const t =
-      clean($("acuteIntubTopp").value) ||
-      clean($("intubTopp").value);
-
-    if (f) deler.push("FiO2 " + f + " %");
-    if (pe) deler.push("PEEP " + pe);
-    if (t) deler.push("topptrykk " + t);
-
-    return [
-      deler.length
-        ? "Luftveier: Intubert, " + deler.join(", ")
-        : "Luftveier: Intubert"
-    ];
-  }
-
-  if (airway === "Trakeostomi") {
-    const sel = [];
-
-    const valgtTrach = document.querySelector(
-      ".acuteTrachOpt:checked"
-    );
-
-    if (valgtTrach) {
-      sel.push(valgtTrach.dataset.name);
-    }
-
-    const l = clean($("acuteTrachO2Liter").value);
-    const f = clean($("acuteTrachVentFio2").value);
-    const pe = clean($("acuteTrachVentPeep").value);
-    const t = clean($("acuteTrachVentTopp").value);
-
-    let tekst = "Luftveier: Trakeostomi";
-
-    if (sel.includes("Spontan pust via trakeostomi")) {
-      tekst += "; spontan";
-    }
-
-    if (sel.includes("O2 via trakeostomi")) {
-      tekst += l
-        ? "; O2 " + l + " l/min"
-        : "; O2";
-    }
-
-    if (
-      sel.includes("Koblet til respirator") ||
-      sel.includes(
-        "Trykkstøtte (NIV via trakeostomi)"
-      )
-    ) {
-      const vent = [];
-
-      if (f) vent.push("FiO2 " + f + " %");
-      if (pe) vent.push("PEEP " + pe);
-      if (t) vent.push("topptrykk " + t);
-
-      tekst += vent.length
-        ? "; respiratorbehandlet med " +
-          vent.join(", ").replace(
-            /,([^,]*)$/,
-            " og$1"
-          )
-        : "; respiratorbehandlet";
-    }
-
-    return [tekst];
-  }
-
-  return ["Luftveier: " + airway];
+  return [tekst];
 }
 
+if (airway === "NIV (CPAP/BiPAP)") {
+  const f =
+    clean($("acuteNivFio2").value) ||
+    clean($("nivFio2").value);
 
-/* ======================================================
-   BARN OG SPEDBARN
-====================================================== */
+  return [
+    f
+      ? "Luftveier: NIV, FiO2 " + f + " %"
+      : "Luftveier: NIV"
+  ];
+}
+
+if (airway === "Intubert") {
+
+  const deler = [];
+
+  const f =
+    clean($("acuteIntubFio2").value) ||
+    clean($("intubFio2").value);
+
+  const pe =
+    clean($("acuteIntubPeep").value) ||
+    clean($("intubPeep").value);
+
+  const t =
+    clean($("acuteIntubTopp").value) ||
+    clean($("intubTopp").value);
+
+  if (f) deler.push("FiO2 " + f + " %");
+  if (pe) deler.push("PEEP " + pe);
+  if (t) deler.push("topptrykk " + t);
+
+  return [
+    deler.length
+      ? "Luftveier: Intubert, " + deler.join(", ")
+      : "Luftveier: Intubert"
+  ];
+}
+
+if (airway === "Trakeostomi") {
+
+  const sel = [];
+
+  const valgtTrach = document.querySelector(".acuteTrachOpt:checked");
+
+  if (valgtTrach) {
+    sel.push(valgtTrach.dataset.name);
+  }
+
+  const l = clean($("acuteTrachO2Liter").value);
+  const f = clean($("acuteTrachVentFio2").value);
+  const pe = clean($("acuteTrachVentPeep").value);
+  const t = clean($("acuteTrachVentTopp").value);
+
+  let tekst = "Luftveier: Trakeostomi";
+
+  if (sel.includes("Spontan pust via trakeostomi")) {
+    tekst += "; spontan";
+  }
+
+  if (sel.includes("O2 via trakeostomi")) {
+    tekst += l
+      ? "; O2 " + l + " l/min"
+      : "; O2";
+  }
+
+  if (
+    sel.includes("Koblet til respirator") ||
+    sel.includes("Trykkstøtte (NIV via trakeostomi)")
+  ) {
+    const vent = [];
+
+    if (f) vent.push("FiO2 " + f + " %");
+    if (pe) vent.push("PEEP " + pe);
+    if (t) vent.push("topptrykk " + t);
+
+    tekst += vent.length
+      ? "; respiratorbehandlet med " +
+        vent.join(", ").replace(/,([^,]*)$/, " og$1")
+      : "; respiratorbehandlet";
+  }
+
+  return [tekst];
+}
+
+return ["Luftveier: " + airway];
+}
 
 function buildSpedbarnLine() {
   const kategori = getSpedbarnValue();
@@ -534,10 +392,7 @@ function buildSpedbarnLine() {
   const u = clean($("gestasjonsUker").value);
   const d = clean($("gestasjonsDager").value);
   const v = clean($("vekt").value);
-
-  const brukerGram =
-    kategori === "Nyfødt" ||
-    kategori === "Spedbarn";
+  const brukerGram = kategori === "Nyfødt" || kategori === "Spedbarn";
 
   const p = [kategori];
 
@@ -556,11 +411,6 @@ function buildSpedbarnLine() {
 
   return p.join(", ");
 }
-
-
-/* ======================================================
-   UTSTYR
-====================================================== */
 
 function buildUtstyrList() {
   const out = [];
@@ -583,14 +433,9 @@ function buildUtstyrList() {
     out.push("Thoraxdren");
   }
 
-  document.querySelectorAll(
-    ".drenAnnetText"
-  ).forEach(txt => {
+  document.querySelectorAll(".drenAnnetText").forEach(txt => {
     const row = txt.closest(".dynamicRow");
-    const cb = row
-      ? row.querySelector(".drenAnnetChk")
-      : null;
-
+    const cb = row ? row.querySelector(".drenAnnetChk") : null;
     const val = clean(txt.value);
 
     if (cb && cb.checked && val) {
@@ -601,20 +446,13 @@ function buildUtstyrList() {
   return out;
 }
 
-
-/* ======================================================
-   SMITTE
-====================================================== */
-
 function buildSmitteLines() {
-  const base = document.querySelector(
-    ".smitteBase:checked"
-  );
-
+  const base = document.querySelector(".smitteBase:checked");
   const blod = $("sm_blod");
   const spes = clean(smitteSpes.value);
 
   if (!base || base.dataset.name === "Ingen kjente") {
+
     if (blod.checked) {
       let line = "Smitte: Blodsmitte";
 
@@ -641,11 +479,6 @@ function buildSmitteLines() {
   return [line];
 }
 
-
-/* ======================================================
-   CAVE
-====================================================== */
-
 function buildCaveLines() {
   const val = getCaveValue();
   const txt = clean(caveText.value);
@@ -664,21 +497,13 @@ function buildCaveLines() {
   ];
 }
 
-
-/* ======================================================
-   HLR OG RESPIRATOR
-====================================================== */
-
 function buildHlrRespLines() {
+
   const hlrVal =
-    document.querySelector(
-      ".hlrRadio:checked"
-    )?.value || "";
+    document.querySelector(".hlrRadio:checked")?.value || "";
 
   const respVal =
-    document.querySelector(
-      ".respRadio:checked"
-    )?.value || "";
+    document.querySelector(".respRadio:checked")?.value || "";
 
   const out = [];
 
@@ -687,8 +512,12 @@ function buildHlrRespLines() {
   }
 
   if (hlrVal === "Nei") {
-    const lege = clean($("hlrMinusLege")?.value);
-    const dato = clean($("hlrMinusDato")?.value);
+
+    const lege =
+      clean($("hlrMinusLege")?.value);
+
+    const dato =
+      clean($("hlrMinusDato")?.value);
 
     const dok =
       lege || dato
@@ -705,8 +534,12 @@ function buildHlrRespLines() {
   }
 
   if (respVal === "Nei") {
-    const lege = clean($("respMinusLege")?.value);
-    const dato = clean($("respMinusDato")?.value);
+
+    const lege =
+      clean($("respMinusLege")?.value);
+
+    const dato =
+      clean($("respMinusDato")?.value);
 
     const dok =
       lege || dato
@@ -721,11 +554,9 @@ function buildHlrRespLines() {
   return out;
 }
 
-
 /* ======================================================
-   UI - BARN OG SPEDBARN
+   UI OPPDATERING
 ====================================================== */
-
 function updateSpedbarnUI() {
   const val = getSpedbarnValue();
 
@@ -743,8 +574,13 @@ function updateSpedbarnUI() {
   const vektInput = $("vekt");
   const weightWrap = $("weightWrap");
 
+  // Vektfeltet skal alltid være synlig
   setHidden(weightWrap, false);
+
+  // GA skal kun vises ved nyfødt og spedbarn
   setHidden(spedbarnExtraWrap, !viserGA);
+
+  // Transportform vises ved nyfødt, spedbarn og barn
   setHidden(transportWrap, !viserTransportform);
 
   if (brukerGram) {
@@ -761,6 +597,7 @@ function updateSpedbarnUI() {
     vektInput.dataset.unit = "kg";
   }
 
+  // GA skal tømmes dersom Barn eller Nei velges
   if (!viserGA) {
     $("gestasjonsUker").value = "";
     $("gestasjonsDager").value = "";
@@ -769,15 +606,10 @@ function updateSpedbarnUI() {
   updateTitle();
 }
 
-
-/* ======================================================
-   UI - CAVE
-====================================================== */
-
 function updateCaveUI() {
-  const valgt = document.querySelector(
-    ".caveRadio:checked"
-  );
+
+  const valgt =
+    document.querySelector(".caveRadio:checked");
 
   const skalVises =
     valgt &&
@@ -790,193 +622,66 @@ function updateCaveUI() {
   }
 }
 
-
-/* ======================================================
-   VITALPARAMETRE - BEREGNING
-====================================================== */
-
-function calcMapFromSysDia(sysRaw, diaRaw) {
-  const sys = Number(clean(sysRaw));
-  const dia = Number(clean(diaRaw));
-
-  return (!sys || !dia)
-    ? ""
-    : String(Math.round((sys + 2 * dia) / 3));
+function calcMapFromSysDia(sysRaw,diaRaw){const sys=Number(clean(sysRaw)),dia=Number(clean(diaRaw));return(!sys||!dia)?"":String(Math.round((sys+2*dia)/3))}
+function updateMapField(){const mapEl=$("map"),auto=calcMapFromSysDia($("btSys").value,$("btDia").value);if(auto){mapEl.value=auto;mapEl.dataset.auto="1"}else if(mapEl.dataset.auto==="1"){mapEl.value="";mapEl.dataset.auto=""}}
+function normalizeNumericField(el,maxDigits,maxValue){let raw=(el.value||"").replace(/\D/g,"");if(maxValue!=null&&raw){const numeric=Number(raw);if(numeric>maxValue)raw=String(maxValue)}if(raw.length>maxDigits)raw=raw.slice(0,maxDigits);if(el.value!==raw)el.value=raw;return raw}
+function normalizeDecimalField(el,maxIntegerDigits,maxDecimals,decimalSep=','){let v=el.value||'';const sep=decimalSep||','; // allow digits and one separator
+  // replace dot with chosen separator to be forgiving
+  v=v.replace('.',sep);
+  // remove everything except digits and separator
+  v=v.split('').filter((c,i,arr)=>/\d/.test(c) || (c===sep && arr.indexOf(sep)===i)).join('');
+  const parts=v.split(sep);
+  let intPart=parts[0]||'';
+  let decPart=parts[1]||'';
+  if(intPart.length>maxIntegerDigits)intPart=intPart.slice(0,maxIntegerDigits);
+  if(decPart.length>maxDecimals)decPart=decPart.slice(0,maxDecimals);
+  // keep the separator in the output if the user has entered it (parts.length>1),
+  // even when the decimal part is still empty — this lets the user type '36,' then '5'
+  const out=(parts.length>1)?intPart+sep+decPart:intPart;
+  if(el.value!==out)el.value=out;
+  return {raw:out,int:intPart,dec:decPart};
 }
-
-function updateMapField() {
-  const mapEl = $("map");
-
-  const auto = calcMapFromSysDia(
-    $("btSys").value,
-    $("btDia").value
-  );
-
-  if (auto) {
-    mapEl.value = auto;
-    mapEl.dataset.auto = "1";
-  } else if (mapEl.dataset.auto === "1") {
-    mapEl.value = "";
-    mapEl.dataset.auto = "";
-  }
-}
-
-function normalizeNumericField(
-  el,
-  maxDigits,
-  maxValue
-) {
-  let raw = (el.value || "").replace(/\D/g, "");
-
-  if (maxValue != null && raw) {
-    const numeric = Number(raw);
-
-    if (numeric > maxValue) {
-      raw = String(maxValue);
-    }
-  }
-
-  if (raw.length > maxDigits) {
-    raw = raw.slice(0, maxDigits);
-  }
-
-  if (el.value !== raw) {
-    el.value = raw;
-  }
-
-  return raw;
-}
-
-function normalizeDecimalField(
-  el,
-  maxIntegerDigits,
-  maxDecimals,
-  decimalSep = ","
-) {
-  let v = el.value || "";
-  const sep = decimalSep || ",";
-
-  v = v.replace(".", sep);
-
-  v = v.split("").filter((c, i, arr) =>
-    /\d/.test(c) ||
-    (c === sep && arr.indexOf(sep) === i)
-  ).join("");
-
-  const parts = v.split(sep);
-
-  let intPart = parts[0] || "";
-  let decPart = parts[1] || "";
-
-  if (intPart.length > maxIntegerDigits) {
-    intPart = intPart.slice(0, maxIntegerDigits);
-  }
-
-  if (decPart.length > maxDecimals) {
-    decPart = decPart.slice(0, maxDecimals);
-  }
-
-  const out = parts.length > 1
-    ? intPart + sep + decPart
-    : intPart;
-
-  if (el.value !== out) {
-    el.value = out;
-  }
-
-  return {
-    raw: out,
-    int: intPart,
-    dec: decPart
-  };
-}
-
-function focusNextField(currentId) {
-  const next = {
-    rf: "spo2",
-    spo2: "puls",
-    puls: "btSys",
-    btSys: "btDia",
-    btDia: "map",
-    map: "temp",
-    temp: "gcs"
-  }[currentId];
-
-  const nextEl = next ? $(next) : null;
-
-  if (nextEl) {
-    nextEl.focus();
-
-    if (typeof nextEl.select === "function") {
-      nextEl.select();
-    }
-  }
-}
-
-function handleVitalInput(evt) {
-  const id = evt.target.id;
-
-  if (id === "rf") {
-    normalizeNumericField(evt.target, 3);
-  } else if (id === "spo2") {
-    normalizeNumericField(evt.target, 3, 100);
-  } else if (id === "puls") {
-    normalizeNumericField(evt.target, 3);
-  } else if (id === "btSys") {
-    normalizeNumericField(evt.target, 3);
-  } else if (id === "btDia") {
-    normalizeNumericField(evt.target, 3);
-  } else if (id === "map") {
-    normalizeNumericField(evt.target, 3);
-  } else if (id === "temp") {
-    normalizeDecimalField(evt.target, 2, 1, ",");
-  }
-}
-
-function handleVitalSpace(evt) {
-  if (evt.key !== " ") return;
+function focusNextField(currentId){const next={rf:"spo2",spo2:"puls",puls:"btSys",btSys:"btDia",btDia:"map",map:"temp",temp:"gcs"}[currentId];const nextEl=next?$(next):null;if(nextEl){nextEl.focus();if(typeof nextEl.select==="function")nextEl.select()}}
+function handleVitalInput(evt){
 
   const id = evt.target.id;
 
-  let digits = (
-    evt.target.value || ""
-  ).replace(/\D/g, "");
+  if(id==="rf"){
 
-  if (id === "temp") {
-    const r = (
-      evt.target.value || ""
-    ).replace(".", ",").split(",");
+    normalizeNumericField(evt.target,3);
 
-    digits = r[0] || "";
+  }else if(id==="spo2"){
+
+    normalizeNumericField(evt.target,3,100);
+
+  }else if(id==="puls"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="btSys"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="btDia"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="map"){
+
+    normalizeNumericField(evt.target,3);
+
+  }else if(id==="temp"){
+
+    normalizeDecimalField(evt.target,2,1,',');
+
   }
-
-  const mins = {
-    rf: 1,
-    spo2: 1,
-    puls: 1,
-    btSys: 1,
-    btDia: 1,
-    map: 1,
-    temp: 1
-  }[id];
-
-  if (mins == null || digits.length < mins) {
-    return;
-  }
-
-  evt.preventDefault();
-  focusNextField(id);
 }
 
-
-/* ======================================================
-   UI - SMITTE
-====================================================== */
-
+function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
 function updateSmitteSpes() {
-  const valgt = document.querySelector(
-    ".smitteBase:checked"
-  );
+
+  const valgt =
+    document.querySelector(".smitteBase:checked");
 
   const skalVises =
     valgt &&
@@ -989,56 +694,8 @@ function updateSmitteSpes() {
   }
 }
 
-
-/* ======================================================
-   UI - LUFTVEIER
-====================================================== */
-
-function refreshTrachDeps() {
-  setHidden(trachO2Wrap, !trO2?.checked);
-  setHidden(trachVentWrap, !trVent?.checked);
-
-  if (!trO2?.checked) {
-    $("trachO2Liter").value = "";
-  }
-
-  if (!trVent?.checked) {
-    [
-      "trachVentFio2",
-      "trachVentPeep",
-      "trachVentTopp"
-    ].forEach(id => {
-      $(id).value = "";
-    });
-  }
-}
-
-function handleAirwayChange() {
-  const v = getBinaryValue("airwayMain");
-
-  [
-    spontO2Wrap,
-    highFlowWrap,
-    nivWrap,
-    intubWrap,
-    trachWrap
-  ].forEach(el => setHidden(el, true));
-
-  if (v === "Spontan med O2") {
-    setHidden(spontO2Wrap, false);
-  } else if (v === "Spontant med high flow") {
-    setHidden(highFlowWrap, false);
-  } else if (v === "NIV (CPAP/BiPAP)") {
-    setHidden(nivWrap, false);
-  } else if (v === "Intubert") {
-    setHidden(intubWrap, false);
-  } else if (v === "Trakeostomi") {
-    setHidden(trachWrap, false);
-  }
-
-  refreshTrachDeps();
-}
-
+function refreshTrachDeps(){setHidden(trachO2Wrap,!trO2?.checked);setHidden(trachVentWrap,!trVent?.checked);if(!trO2?.checked)$("trachO2Liter").value="";if(!trVent?.checked)["trachVentFio2","trachVentPeep","trachVentTopp"].forEach(id=>$(id).value="")}
+function handleAirwayChange(){const v=getBinaryValue("airwayMain");[spontO2Wrap,highFlowWrap,nivWrap,intubWrap,trachWrap].forEach(el=>setHidden(el,true));if(v==="Spontan med O2")setHidden(spontO2Wrap,false);else if(v==="Spontant med high flow")setHidden(highFlowWrap,false);else if(v==="NIV (CPAP/BiPAP)")setHidden(nivWrap,false);else if(v==="Intubert")setHidden(intubWrap,false);else if(v==="Trakeostomi")setHidden(trachWrap,false);refreshTrachDeps()}
 function updateAcuteAirwayDetails() {
   const a = getBinaryValue("acuteAirway");
 
@@ -1052,9 +709,9 @@ function updateAcuteAirwayDetails() {
     acuteTrachVentWrap
   ].forEach(el => setHidden(el, true));
 
-  if (a === "Spontan med O2") {
-    setHidden(acuteSpontO2Wrap, false);
-  }
+if (a === "Spontan med O2") {
+  setHidden(acuteSpontO2Wrap, false);
+}
 
   if (a === "Spontant med high flow") {
     setHidden(acuteHighFlowWrap, false);
@@ -1079,133 +736,10 @@ function updateAcuteAirwayDetails() {
   }
 }
 
-
-/* ======================================================
-   SYNKRONISERING MELLOM HASTEGRADE
-====================================================== */
-
-function copyVal(from, to) {
-  if (
-    clean($(from).value) &&
-    !clean($(to).value)
-  ) {
-    $(to).value = $(from).value;
-  }
-}
-
-function syncAcuteToFull() {
-  copyVal("acuteHovedproblem", "hovedproblem");
-
-  const a = getBinaryValue("acuteAirway");
-
-  if (a && !getBinaryValue("airwayMain")) {
-    setBinaryValue("airwayMain", a);
-  }
-
-  [
-    ["acuteSpontO2Liter", "spontO2Liter"],
-    ["acuteHighFlowFiO2", "highFlowFio2"],
-    ["acuteHighFlowFlow", "highFlowFlow"],
-    ["acuteNivFio2", "nivFio2"],
-    ["acuteIntubFio2", "intubFio2"],
-    ["acuteIntubPeep", "intubPeep"],
-    ["acuteIntubTopp", "intubTopp"],
-    ["acuteTrachO2Liter", "trachO2Liter"],
-    ["acuteTrachVentFio2", "trachVentFio2"],
-    ["acuteTrachVentPeep", "trachVentPeep"],
-    ["acuteTrachVentTopp", "trachVentTopp"],
-    ["acuteRekNavn", "rekNavn"],
-    ["acuteRekTlf", "rekTlf"]
-  ].forEach(x => copyVal(...x));
-
-  if ($("acute_tr_spont").checked) {
-    $("tr_spont").checked = true;
-  }
-
-  if ($("acute_tr_o2").checked) {
-    $("tr_o2").checked = true;
-  }
-
-  if ($("acute_tr_vent").checked) {
-    $("tr_vent").checked = true;
-  }
-
-  if (
-    clean(acutePumperAntall.value) &&
-    !clean(utstPumperAntall.value)
-  ) {
-    utstPumperAntall.value = acutePumperAntall.value;
-    utstPumperChk.checked = true;
-  }
-}
-
-function syncFullToAcute() {
-  copyVal("hovedproblem", "acuteHovedproblem");
-
-  const a = getBinaryValue("airwayMain");
-
-  if (a && !getBinaryValue("acuteAirway")) {
-    setBinaryValue("acuteAirway", a);
-  }
-
-  [
-    ["spontO2Liter", "acuteSpontO2Liter"],
-    ["highFlowFio2", "acuteHighFlowFiO2"],
-    ["highFlowFlow", "acuteHighFlowFlow"],
-    ["nivFio2", "acuteNivFio2"],
-    ["intubFio2", "acuteIntubFio2"],
-    ["intubPeep", "acuteIntubPeep"],
-    ["intubTopp", "acuteIntubTopp"],
-    ["trachO2Liter", "acuteTrachO2Liter"],
-    ["trachVentFio2", "acuteTrachVentFio2"],
-    ["trachVentPeep", "acuteTrachVentPeep"],
-    ["trachVentTopp", "acuteTrachVentTopp"],
-    ["rekNavn", "acuteRekNavn"],
-    ["rekTlf", "acuteRekTlf"]
-  ].forEach(x => copyVal(...x));
-
-  if ($("tr_spont").checked) {
-    $("acute_tr_spont").checked = true;
-  }
-
-  if ($("tr_o2").checked) {
-    $("acute_tr_o2").checked = true;
-  }
-
-  if ($("tr_vent").checked) {
-    $("acute_tr_vent").checked = true;
-  }
-
-  if (
-    clean(utstPumperAntall.value) &&
-    !clean(acutePumperAntall.value)
-  ) {
-    acutePumperAntall.value = utstPumperAntall.value;
-    acutePumperChk.checked = true;
-  }
-
-  updateAcuteAirwayDetails();
-}
-
-function syncVisibleSharedFieldsBeforeSwitch() {
-  if (
-    forrigeHastegrad === "Akutt" &&
-    valgtHastegrad !== "Akutt"
-  ) {
-    syncAcuteToFull();
-  } else if (
-    forrigeHastegrad !== "Akutt" &&
-    valgtHastegrad === "Akutt"
-  ) {
-    syncFullToAcute();
-  }
-}
-
-
-/* ======================================================
-   HOVEDVISNING
-====================================================== */
-
+function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
+function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
+function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
+function syncVisibleSharedFieldsBeforeSwitch(){if(forrigeHastegrad==="Akutt"&&valgtHastegrad!=="Akutt")syncAcuteToFull();else if(forrigeHastegrad!=="Akutt"&&valgtHastegrad==="Akutt")syncFullToAcute()}
 function updateMainVisibility() {
   const h = getBinaryValue("hast");
   const harHastegrad = !!h;
@@ -1213,16 +747,17 @@ function updateMainVisibility() {
 
   setHidden(mainContent, !harHastegrad);
 
-  if (!harHastegrad) {
-    setHidden(acuteTop, true);
-    setHidden(acuteBottom, true);
-    setHidden(fullTop, true);
-    setHidden(fullBottom, true);
-    setHidden(sharedEquipmentBlock, true);
-    setHidden(safetyBlock, true);
-    setHidden(acuteDoctorBlock, true);
-    setHidden(sharedBottom, true);
+if (!harHastegrad) {
+  setHidden(acuteTop, true);
+  setHidden(acuteBottom, true);
+  setHidden(fullTop, true);
+  setHidden(fullBottom, true);
+  setHidden(sharedEquipmentBlock, true);
+  setHidden(safetyBlock, true);
+  setHidden(acuteDoctorBlock, true);
+  setHidden(sharedBottom, true);
 
+  
     setHidden($("reportActions"), true);
     setHidden($("rapport"), true);
     setHidden($("feedbackWrap"), true);
@@ -1231,18 +766,27 @@ function updateMainVisibility() {
     return;
   }
 
+  // Akutt-del
   setHidden(acuteTop, !acute);
   setHidden(acuteBottom, !acute);
 
+  // Ikke-akutt-del
   setHidden(fullTop, acute);
   setHidden(fullBottom, acute);
 
+  // Smitte, CAVE og HLR/respirator vises både ved Akutt og Haster
   setHidden(safetyBlock, false);
+
+  // Rekvirerende lege for Akutt vises nederst i Akutt-flyten
   setHidden(acuteDoctorBlock, !acute);
 
-  setHidden(sharedEquipmentBlock, acute);
-  setHidden(sharedBottom, acute);
+// Tilganger og utstyr skjules ved Akutt
+setHidden(sharedEquipmentBlock, acute);
 
+// Full legeinfo skjules ved Akutt
+setHidden(sharedBottom, acute);
+
+  // Rapport og knapper skal alltid vises når hastegrad er valgt
   setHidden($("reportActions"), false);
   setHidden($("rapport"), false);
   setHidden($("feedbackWrap"), false);
@@ -1256,41 +800,35 @@ function updateMainVisibility() {
   updateTitle();
 }
 
-
 /* ======================================================
-   HASTEGRADEVENTS
+   EVENT BINDING
 ====================================================== */
-
 function bindHastegradEvents() {
-  document.querySelectorAll(
-    ".hasteCard"
-  ).forEach(btn => {
-    btn.addEventListener("click", () => {
-      forrigeHastegrad = valgtHastegrad;
-      valgtHastegrad = btn.dataset.haste;
 
-      syncVisibleSharedFieldsBeforeSwitch();
+  document
+    .querySelectorAll(".hasteCard")
+    .forEach(btn =>
+      btn.addEventListener("click", () => {
 
-      document.querySelectorAll(
-        ".hasteCard"
-      ).forEach(b => {
-        b.classList.remove("active");
-      });
+        forrigeHastegrad = valgtHastegrad;
+        valgtHastegrad = btn.dataset.haste;
 
-      btn.classList.add("active");
+        syncVisibleSharedFieldsBeforeSwitch();
 
-      updateMainVisibility();
-      lagRapport();
-    });
-  });
+        document
+          .querySelectorAll(".hasteCard")
+          .forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        updateMainVisibility();
+        lagRapport();
+      })
+    );
 }
 
-
-/* ======================================================
-   VITALE HENDELSER
-====================================================== */
-
 function bindVitalEvents() {
+
   ["btSys", "btDia"].forEach(id => {
     const el = $(id);
 
@@ -1300,56 +838,36 @@ function bindVitalEvents() {
         handleVitalInput({ target: el });
       });
 
-      el.addEventListener(
-        "keydown",
-        handleVitalSpace
-      );
+      el.addEventListener("keydown", handleVitalSpace);
     }
   });
 
-  $("map").addEventListener(
-    "input",
-    handleVitalInput
-  );
-
-  $("map").addEventListener(
-    "keydown",
-    handleVitalSpace
-  );
+  $("map").addEventListener("input", handleVitalInput);
+  $("map").addEventListener("keydown", handleVitalSpace);
 
   ["rf", "spo2", "puls", "temp"].forEach(id => {
     const el = $(id);
 
     if (el) {
-      el.addEventListener(
-        "input",
-        handleVitalInput
-      );
-
-      el.addEventListener(
-        "keydown",
-        handleVitalSpace
-      );
+      el.addEventListener("input", handleVitalInput);
+      el.addEventListener("keydown", handleVitalSpace);
     }
   });
 }
 
 function bindAutoGrowEvents() {
-  document.querySelectorAll(
-    ".autoGrow"
-  ).forEach(el => {
-    el.addEventListener("input", () => {
-      autoGrowTextarea(el);
-    });
-  });
+
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(el =>
+      el.addEventListener("input", () =>
+        autoGrowTextarea(el)
+      )
+    );
 }
 
-
-/* ======================================================
-   PVK OG CVK
-====================================================== */
-
 function bindPvkEvents() {
+
   pvkAntall.addEventListener("input", () => {
     pvkChk.checked = !!pvkAntall.value;
     updateTilgangerUI();
@@ -1357,45 +875,42 @@ function bindPvkEvents() {
   });
 
   pvkChk.addEventListener("change", () => {
+
     if (!pvkChk.checked) {
       pvkAntall.value = "";
     }
 
     updateTilgangerUI();
+
     lagRapport();
   });
 }
 
 function bindCvkEvents() {
+
   $("cvkLumen")?.addEventListener("input", () => {
+
     $("til_cvk").checked = !!$("cvkLumen").value;
     updateTilgangerUI();
     lagRapport();
   });
 
   $("til_cvk")?.addEventListener("change", () => {
+
     if (!$("til_cvk").checked) {
       $("cvkLumen").value = "";
     }
-
     updateTilgangerUI();
     lagRapport();
   });
 }
 
-
-/* ======================================================
-   SPRØYTEPUMPER
-====================================================== */
-
 function updateUtstyrPumpeUI() {
-  setHidden(
-    utstPumperAntall,
-    !utstPumperChk?.checked
-  );
+  setHidden(utstPumperAntall, !utstPumperChk?.checked);
 }
 
 function bindUtstyrPumpeEvents() {
+
   utstPumperAntall.addEventListener("input", () => {
     utstPumperChk.checked = !!utstPumperAntall.value;
     updateUtstyrPumpeUI();
@@ -1403,6 +918,7 @@ function bindUtstyrPumpeEvents() {
   });
 
   utstPumperChk.addEventListener("change", () => {
+
     if (!utstPumperChk.checked) {
       utstPumperAntall.value = "";
     }
@@ -1413,13 +929,11 @@ function bindUtstyrPumpeEvents() {
 }
 
 function updateAcutePumpeUI() {
-  setHidden(
-    acutePumperAntall,
-    !acutePumperChk?.checked
-  );
+  setHidden(acutePumperAntall, !acutePumperChk?.checked);
 }
 
 function bindAcutePumpeEvents() {
+
   updateAcutePumpeUI();
 
   acutePumperAntall.addEventListener("input", () => {
@@ -1435,6 +949,7 @@ function bindAcutePumpeEvents() {
   });
 
   acutePumperChk.addEventListener("change", () => {
+
     if (!acutePumperChk.checked) {
       acutePumperAntall.value = "";
     }
@@ -1444,39 +959,29 @@ function bindAcutePumpeEvents() {
   });
 }
 
-
-/* ======================================================
-   GENERELLE TOGGLE EVENTS
-====================================================== */
-
 function bindToggleEvents() {
-  document.addEventListener("change", e => {
-    if (!e.target.classList.contains("specChoice")) {
-      return;
-    }
 
+  document.addEventListener("change", e => {
+    if (!e.target.classList.contains("specChoice")) return;
     e.stopPropagation();
 
     const specName = e.target.dataset.spec;
     const checked = e.target.checked;
 
-    document.querySelectorAll(
-      '.specChoice[data-spec="' + specName + '"]'
-    ).forEach(cb => {
-      cb.checked = checked;
-    });
+    document
+      .querySelectorAll('.specChoice[data-spec="' + specName + '"]')
+      .forEach(cb => {
+        cb.checked = checked;
+      });
 
     lagRapport();
   }, true);
 
   document.addEventListener("click", e => {
     const cell = e.target.closest(".toggleCell");
-
     if (!cell) return;
 
-    const tag = (
-      e.target.tagName || ""
-    ).toLowerCase();
+    const tag = (e.target.tagName || "").toLowerCase();
 
     if (
       tag === "select" ||
@@ -1490,25 +995,18 @@ function bindToggleEvents() {
       if (tag === "input") return;
 
       const cb = cell.querySelector(".specChoice");
-
       if (!cb) return;
 
-      setSpecChoice(
-        cb.dataset.spec,
-        !cb.checked
-      );
-
+      setSpecChoice(cb.dataset.spec, !cb.checked);
       return;
     }
 
     if (tag === "input") return;
 
     const id = cell.dataset.toggle;
-
     if (!id) return;
 
     const master = $(id);
-
     if (!master) return;
 
     if (
@@ -1529,15 +1027,8 @@ function bindToggleEvents() {
   });
 }
 
-
-/* ======================================================
-   BARN - VALG
-====================================================== */
-
 function bindSpedbarnEvents() {
-  document.querySelectorAll(
-    ".spedRadio"
-  ).forEach(radio => {
+  document.querySelectorAll(".spedRadio").forEach(radio => {
     const chip = radio.closest(".spedChip");
 
     if (!chip) return;
@@ -1553,13 +1044,14 @@ function bindSpedbarnEvents() {
       const wasChecked =
         radio.dataset.wasChecked === "true";
 
-      document.querySelectorAll(
-        ".spedRadio"
-      ).forEach(otherRadio => {
+      // Slå av alle alternativer først
+      document.querySelectorAll(".spedRadio").forEach(otherRadio => {
         otherRadio.checked = false;
         otherRadio.dataset.wasChecked = "false";
       });
 
+      // Hvis alternativet ikke allerede var valgt,
+      // velges det. Var det valgt, forblir alt avslått.
       if (!wasChecked) {
         radio.checked = true;
       }
@@ -1570,36 +1062,26 @@ function bindSpedbarnEvents() {
   });
 }
 
-
-/* ======================================================
-   CAVE - VALG
-====================================================== */
-
 function bindCaveEvents() {
-  document.querySelectorAll(
-    ".caveRadio"
-  ).forEach(radio => {
-    const chip = radio.closest(".medChip");
 
+  document.querySelectorAll(".caveRadio").forEach(radio => {
+
+    const chip = radio.closest(".medChip");
     if (!chip) return;
 
     chip.addEventListener("pointerdown", () => {
-      radio.dataset.wasChecked =
-        radio.checked ? "true" : "false";
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
     });
 
     chip.addEventListener("click", e => {
       e.preventDefault();
 
-      const wasChecked =
-        radio.dataset.wasChecked === "true";
+      const wasChecked = radio.dataset.wasChecked === "true";
 
       if (wasChecked) {
         radio.checked = false;
       } else {
-        document.querySelectorAll(
-          ".caveRadio"
-        ).forEach(r => {
+        document.querySelectorAll(".caveRadio").forEach(r => {
           r.checked = false;
         });
 
@@ -1609,45 +1091,38 @@ function bindCaveEvents() {
       updateCaveUI();
       lagRapport();
     });
+
   });
+
 }
 
-
-/* ======================================================
-   BINÆRE VALG
-====================================================== */
-
 function bindBinaryOptionEvents() {
-  document.querySelectorAll(
-    ".binOpt"
-  ).forEach(chk => {
+
+  document.querySelectorAll(".binOpt").forEach(chk => {
     const label = chk.closest("label");
 
     if (!label) return;
 
     label.addEventListener("pointerdown", () => {
-      chk.dataset.wasChecked =
-        chk.checked ? "true" : "false";
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
     });
 
     label.addEventListener("click", e => {
       e.preventDefault();
 
       const g = chk.dataset.group;
-
-      const wasChecked =
-        chk.dataset.wasChecked === "true";
+      const wasChecked = chk.dataset.wasChecked === "true";
 
       const canToggleOff =
         g === "airwayMain" ||
         g === "acuteAirway";
 
-      document.querySelectorAll(
-        '.binOpt[data-group="' + g + '"]'
-      ).forEach(o => {
-        o.checked = false;
-        o.dataset.wasChecked = "false";
-      });
+      document
+        .querySelectorAll('.binOpt[data-group="' + g + '"]')
+        .forEach(o => {
+          o.checked = false;
+          o.dataset.wasChecked = "false";
+        });
 
       if (!wasChecked || !canToggleOff) {
         chk.checked = true;
@@ -1670,33 +1145,23 @@ function bindBinaryOptionEvents() {
   });
 }
 
-
-/* ======================================================
-   TRAKEOSTOMI - VALG
-====================================================== */
-
 function bindTrachEvents() {
-  document.querySelectorAll(
-    ".trachOpt"
-  ).forEach(chk => {
-    const cell = chk.closest("label");
 
-    if (!cell) return;
+  document.querySelectorAll(".trachOpt").forEach(chk => {
+const cell = chk.closest("label");
+
+if (!cell) return;
 
     cell.addEventListener("pointerdown", () => {
-      chk.dataset.wasChecked =
-        chk.checked ? "true" : "false";
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
     });
 
     cell.addEventListener("click", e => {
       e.preventDefault();
 
-      const wasChecked =
-        chk.dataset.wasChecked === "true";
+      const wasChecked = chk.dataset.wasChecked === "true";
 
-      document.querySelectorAll(
-        ".trachOpt"
-      ).forEach(o => {
+      document.querySelectorAll(".trachOpt").forEach(o => {
         o.checked = false;
         o.dataset.wasChecked = "false";
       });
@@ -1712,27 +1177,22 @@ function bindTrachEvents() {
 }
 
 function bindAcuteTrachEvents() {
-  document.querySelectorAll(
-    ".acuteTrachOpt"
-  ).forEach(chk => {
+
+  document.querySelectorAll(".acuteTrachOpt").forEach(chk => {
     const cell = chk.closest(".toggleCell");
 
     if (!cell) return;
 
     cell.addEventListener("pointerdown", () => {
-      chk.dataset.wasChecked =
-        chk.checked ? "true" : "false";
+      chk.dataset.wasChecked = chk.checked ? "true" : "false";
     });
 
     cell.addEventListener("click", e => {
       e.preventDefault();
 
-      const wasChecked =
-        chk.dataset.wasChecked === "true";
+      const wasChecked = chk.dataset.wasChecked === "true";
 
-      document.querySelectorAll(
-        ".acuteTrachOpt"
-      ).forEach(o => {
+      document.querySelectorAll(".acuteTrachOpt").forEach(o => {
         o.checked = false;
         o.dataset.wasChecked = "false";
       });
@@ -1747,36 +1207,30 @@ function bindAcuteTrachEvents() {
   });
 }
 
-
-/* ======================================================
-   SMITTE - EVENTS
-====================================================== */
-
 function bindSmitteEvents() {
-  document.querySelectorAll(
-    ".smitteBase"
-  ).forEach(r => {
-    r.addEventListener("change", () => {
-      updateSmitteSpes();
-      lagRapport();
-    });
-  });
+
+  document
+    .querySelectorAll(".smitteBase")
+    .forEach(r =>
+      r.addEventListener("change", () => {
+
+        updateSmitteSpes();
+        lagRapport();
+      })
+    );
 
   $("sm_blod").addEventListener("change", () => {
+
     updateSmitteSpes();
     lagRapport();
   });
 }
 
-
-/* ======================================================
-   AKUTT LUFTVEIER - EVENTS
-====================================================== */
-
 function bindAcuteAirwayInputEvents() {
+
   [
     "acuteSpontO2Liter",
-    "acuteHighFlowFiO2",
+    "acuteHighFlowFio2",
     "acuteHighFlowFlow",
     "acuteNivFio2",
     "acuteIntubFio2",
@@ -1786,29 +1240,23 @@ function bindAcuteAirwayInputEvents() {
     "acuteTrachVentFio2",
     "acuteTrachVentPeep",
     "acuteTrachVentTopp"
-  ].forEach(id => {
+  ].forEach(id =>
+
     $(id)?.addEventListener("input", () => {
+
       updateAcuteAirwayDetails();
       lagRapport();
-    });
-  });
+    })
+  );
 }
 
-
-/* ======================================================
-   HLR / RESPIRATOR - UI
-====================================================== */
-
 function updateHlrRespUI() {
+
   const hlrVal =
-    document.querySelector(
-      ".hlrRadio:checked"
-    )?.value || "";
+    document.querySelector(".hlrRadio:checked")?.value || "";
 
   const respVal =
-    document.querySelector(
-      ".respRadio:checked"
-    )?.value || "";
+    document.querySelector(".respRadio:checked")?.value || "";
 
   setHidden(
     $("hlrMinusTextWrap"),
@@ -1831,24 +1279,22 @@ function updateHlrRespUI() {
   }
 }
 
-function bindHlrRespEvents() {
-  document.querySelectorAll(
-    ".hlrRadio, .respRadio"
-  ).forEach(radio => {
-    const chip = radio.closest(".medChip");
 
+function bindHlrRespEvents() {
+
+  document.querySelectorAll(".hlrRadio, .respRadio").forEach(radio => {
+
+    const chip = radio.closest(".medChip");
     if (!chip) return;
 
     chip.addEventListener("pointerdown", () => {
-      radio.dataset.wasChecked =
-        radio.checked ? "true" : "false";
+      radio.dataset.wasChecked = radio.checked ? "true" : "false";
     });
 
     chip.addEventListener("click", e => {
       e.preventDefault();
 
-      const wasChecked =
-        radio.dataset.wasChecked === "true";
+      const wasChecked = radio.dataset.wasChecked === "true";
 
       if (wasChecked) {
         radio.checked = false;
@@ -1859,166 +1305,24 @@ function bindHlrRespEvents() {
       updateHlrRespUI();
       lagRapport();
     });
+
   });
+
 }
-
-
-/* ======================================================
-   TILBAKEMELDING - POPUP
-====================================================== */
-
-function bindFeedbackModal() {
-  const feedbackBtn = $("feedbackBtn");
-  const feedbackModal = $("feedbackModal");
-  const feedbackModalClose = $("feedbackModalClose");
-  const feedbackModalOk = $("feedbackModalOk");
-
-  if (!feedbackBtn || !feedbackModal) {
-    console.warn(
-      "Tilbakemelding: Knapp eller popup mangler i HTML."
-    );
-    return;
-  }
-
-  // Flytt popup til body for å unngå at
-  // hovedskjemaets visning påvirker popupen.
-  if (feedbackModal.parentElement !== document.body) {
-    document.body.appendChild(feedbackModal);
-  }
-
-  feedbackBtn.setAttribute(
-    "aria-haspopup",
-    "dialog"
-  );
-
-  feedbackBtn.setAttribute(
-    "aria-controls",
-    "feedbackModal"
-  );
-
-  feedbackModal.setAttribute(
-    "role",
-    "dialog"
-  );
-
-  feedbackModal.setAttribute(
-    "aria-modal",
-    "true"
-  );
-
-  let previousFocus = null;
-
-  function openFeedbackModal() {
-    previousFocus = document.activeElement;
-
-    feedbackModal.classList.remove("hidden");
-
-    feedbackModal.style.position = "fixed";
-    feedbackModal.style.inset = "0";
-    feedbackModal.style.display = "flex";
-    feedbackModal.style.alignItems = "center";
-    feedbackModal.style.justifyContent = "center";
-    feedbackModal.style.background =
-      "rgba(0,0,0,0.62)";
-    feedbackModal.style.zIndex = "99999";
-
-    document.body.style.overflow = "hidden";
-
-    (feedbackModalClose || feedbackModalOk)?.focus();
-  }
-
-  function closeFeedbackModal() {
-    feedbackModal.classList.add("hidden");
-
-    feedbackModal.style.display = "none";
-
-    document.body.style.overflow = "";
-
-    if (
-      previousFocus &&
-      typeof previousFocus.focus === "function"
-    ) {
-      previousFocus.focus();
-    }
-  }
-
-  feedbackBtn.addEventListener(
-    "click",
-    openFeedbackModal
-  );
-
-  feedbackModalClose?.addEventListener(
-    "click",
-    closeFeedbackModal
-  );
-
-  feedbackModalOk?.addEventListener(
-    "click",
-    closeFeedbackModal
-  );
-
-  feedbackModal.addEventListener("click", e => {
-    if (e.target === feedbackModal) {
-      closeFeedbackModal();
-    }
-  });
-
-  feedbackModal.addEventListener("keydown", e => {
-    if (e.key !== "Tab") return;
-
-    const focusable = [
-      feedbackModalClose,
-      feedbackModalOk
-    ].filter(Boolean);
-
-    if (!focusable.length) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (
-      !e.shiftKey &&
-      document.activeElement === last
-    ) {
-      e.preventDefault();
-      first.focus();
-    }
-  });
-
-  document.addEventListener("keydown", e => {
-    if (
-      e.key === "Escape" &&
-      !feedbackModal.classList.contains("hidden")
-    ) {
-      closeFeedbackModal();
-    }
-  });
-}
-
-
-/* ======================================================
-   EVENT BINDING - HOVEDFUNKSJON
-====================================================== */
 
 function bindEvents() {
-
-  // Aktiver popup først.
-  bindFeedbackModal();
 
   bindHastegradEvents();
   bindAutoGrowEvents();
   bindVitalEvents();
 
-  bindPvkEvents();
-  bindCvkEvents();
-  bindUtstyrPumpeEvents();
-  bindAcutePumpeEvents();
-  bindAcuteSpontO2NumberOnly();
-  bindHighFlowNumberOnly();
-  bindMedicationNeiEvents();
+bindPvkEvents();
+bindCvkEvents();
+bindUtstyrPumpeEvents();
+bindAcutePumpeEvents();
+bindAcuteSpontO2NumberOnly();
+bindHighFlowNumberOnly();
+bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
   bindFollowNeedEvents();
@@ -2033,15 +1337,8 @@ function bindEvents() {
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
 
-  $("copyBtn")?.addEventListener(
-    "click",
-    kopierRapport
-  );
-
-  $("resetBtn")?.addEventListener(
-    "click",
-    nullstillSkjema
-  );
+  $("copyBtn")?.addEventListener("click", kopierRapport);
+  $("resetBtn")?.addEventListener("click", nullstillSkjema);
 
   document.addEventListener("input", () => {
     lagRapport();
@@ -2052,16 +1349,10 @@ function bindEvents() {
   });
 }
 
-
 /* ======================================================
    DYNAMISKE FELTER
 ====================================================== */
-
-function cleanupDynamicTextRows(
-  container,
-  textClass,
-  checkboxClass
-) {
+function cleanupDynamicTextRows(container, textClass, checkboxClass) {
   const rows = Array.from(
     container.querySelectorAll(".dynamicRow")
   );
@@ -2087,142 +1378,65 @@ function cleanupDynamicTextRows(
   });
 }
 
-function addDynamicTextRow(
-  container,
-  placeholder,
-  checkboxClass,
-  textClass
-) {
-  const row = document.createElement("div");
-  row.className = "dynamicRow";
-
-  row.innerHTML =
-    '<input type="checkbox" class="chk ' +
-    checkboxClass +
-    '">' +
-    '<input type="text" class="' +
-    textClass +
-    '" placeholder="' +
-    placeholder +
-    '">';
-
+function addDynamicTextRow(container, placeholder, checkboxClass, textClass) {  const row=document.createElement("div");
+  row.className="dynamicRow";
+  row.innerHTML='<input type="checkbox" class="chk '+checkboxClass+'"><input type="text" class="'+textClass+'" placeholder="'+placeholder+'">';
   container.appendChild(row);
-
-  const chk = row.querySelector("." + checkboxClass);
-  const txt = row.querySelector("." + textClass);
-
-  txt.addEventListener("input", () => {
-    chk.checked = !!clean(txt.value);
-
-    cleanupDynamicTextRows(
-      container,
-      textClass,
-      checkboxClass
-    );
-
-    if (textClass === "sedText") {
-      ensureSedBlankRow();
-    }
-
-    if (textClass === "pressorText") {
-      ensurePressorBlankRow();
-    }
-
-    if (textClass === "andreInfText") {
-      ensureAndreInfBlankRow();
-    }
-
+  const chk=row.querySelector("."+checkboxClass),txt=row.querySelector("."+textClass);
+  txt.addEventListener("input",()=>{
+    chk.checked=!!clean(txt.value);
+    cleanupDynamicTextRows(container,textClass,checkboxClass);
+    if(textClass==="sedText")ensureSedBlankRow();
+    if(textClass==="pressorText")ensurePressorBlankRow();
+    if(textClass==="andreInfText")ensureAndreInfBlankRow();
     lagRapport();
   });
-
-  chk.addEventListener("change", lagRapport);
+  chk.addEventListener("change",lagRapport);
 }
-
-function ensureBlankByClass(textClass, addFn) {
-  const texts = Array.from(
-    document.querySelectorAll("." + textClass)
-  );
-
-  if (
-    !texts.length ||
-    !texts.some(t => !clean(t.value))
-  ) {
-    addFn();
-  }
-}
-
-function addSedRow() {
+function ensureBlankByClass(textClass,addFn){const texts=Array.from(document.querySelectorAll("."+textClass));if(!texts.length||!texts.some(t=>!clean(t.value)))addFn()}
+function addSedRow(){
   addDynamicTextRow(
     sedDynamicBody,
     "Annet sedativ",
     "sedDynChk",
     "sedText"
-  );
+  )
+}
+function ensureSedBlankRow(){
+  ensureBlankByClass("sedText", addSedRow);
 }
 
-function ensureSedBlankRow() {
-  ensureBlankByClass(
-    "sedText",
-    addSedRow
-  );
-}
-
-function resetSedRows() {
-  sedDynamicBody.innerHTML = "";
+function resetSedRows(){
+  sedDynamicBody.innerHTML="";
   addSedRow();
 }
-
-function addPressorRow() {
+function addPressorRow(){
   addDynamicTextRow(
     pressorDynamicBody,
     "Annen pressor",
     "pressorDynChk",
     "pressorText"
-  );
+  )
 }
-
-function ensurePressorBlankRow() {
-  ensureBlankByClass(
-    "pressorText",
-    addPressorRow
-  );
-}
-
-function resetPressorRows() {
-  pressorDynamicBody.innerHTML = "";
-  addPressorRow();
-}
-
-function addAndreInfRow() {
+function ensurePressorBlankRow(){ensureBlankByClass("pressorText",addPressorRow)}function resetPressorRows(){pressorDynamicBody.innerHTML="";addPressorRow()}
+function addAndreInfRow(){
   addDynamicTextRow(
     andreInfBody,
     "Annet medikament / infusjon",
     "andreInfChk",
     "andreInfText"
-  );
+  )
 }
-
-function ensureAndreInfBlankRow() {
-  ensureBlankByClass(
-    "andreInfText",
-    addAndreInfRow
-  );
-}
-
-function resetAndreInfRows() {
-  andreInfBody.innerHTML = "";
+function ensureAndreInfBlankRow(){ensureBlankByClass("andreInfText",addAndreInfRow)}function resetAndreInfRows(){
+  andreInfBody.innerHTML="";
   addAndreInfRow();
 }
 
 function addTilgangRow() {
   const row = document.createElement("tr");
 
-  row.innerHTML =
-    '<td class="dynamicTableCell">' +
-    '<div class="dynamicRow">' +
-    '<input type="checkbox" class="chk tilgangDynChk">' +
-    '<input type="text" class="tilgangText" placeholder="Annen tilgang">' +
-    '</div></td>';
+row.innerHTML =
+  '<td class="dynamicTableCell"><div class="dynamicRow"><input type="checkbox" class="chk tilgangDynChk"><input type="text" class="tilgangText" placeholder="Annen tilgang"></div></td>';
 
   tilgangerDynamicBody.appendChild(row);
 
@@ -2244,144 +1458,27 @@ function addTilgangRow() {
 
   chk.addEventListener("change", lagRapport);
 }
+function ensureTilgangBlankRow(){const texts=Array.from(document.querySelectorAll(".tilgangText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addTilgangRow()}
+function resetTilgangRows(){tilgangerDynamicBody.innerHTML="";addTilgangRow()}
+function addDrenAnnetField(){const row=document.createElement("div");row.className="dynamicRow";row.innerHTML='<input type="checkbox" class="chk drenAnnetChk"><input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';const cb=row.querySelector(".drenAnnetChk"),txt=row.querySelector(".drenAnnetText");txt.addEventListener("input", () => {
 
-function ensureTilgangBlankRow() {
-  const texts = Array.from(
-    document.querySelectorAll(".tilgangText")
+  cb.checked = !!clean(txt.value);
+
+  cleanupDynamicTextRows(
+    drenAnnetContainer,
+    "drenAnnetText",
+    "drenAnnetChk"
   );
 
-  if (
-    !texts.length ||
-    !texts.some(t => !clean(t.value))
-  ) {
-    addTilgangRow();
-  }
-}
+  ensureDrenAnnetBlankField();
 
-function resetTilgangRows() {
-  tilgangerDynamicBody.innerHTML = "";
-  addTilgangRow();
-}
-
-function addDrenAnnetField() {
-  const row = document.createElement("div");
-  row.className = "dynamicRow";
-
-  row.innerHTML =
-    '<input type="checkbox" class="chk drenAnnetChk">' +
-    '<input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';
-
-  const cb = row.querySelector(".drenAnnetChk");
-  const txt = row.querySelector(".drenAnnetText");
-
-  txt.addEventListener("input", () => {
-    cb.checked = !!clean(txt.value);
-
-    cleanupDynamicTextRows(
-      drenAnnetContainer,
-      "drenAnnetText",
-      "drenAnnetChk"
-    );
-
-    ensureDrenAnnetBlankField();
-    lagRapport();
-  });
-
-  cb.addEventListener("change", lagRapport);
-
-  drenAnnetContainer.appendChild(row);
-}
-
-function ensureDrenAnnetBlankField() {
-  const texts = Array.from(
-    document.querySelectorAll(".drenAnnetText")
-  );
-
-  if (
-    !texts.length ||
-    !texts.some(t => !clean(t.value))
-  ) {
-    addDrenAnnetField();
-  }
-}
-
-function resetDrenAnnetFields() {
-  drenAnnetContainer.innerHTML = "";
-  addDrenAnnetField();
-}
-
-function collectDynamicTexts(
-  textSelector,
-  checkSelector
-) {
-  const out = [];
-
-  document.querySelectorAll(
-    textSelector
-  ).forEach(txt => {
-    const row = txt.closest(".dynamicRow");
-
-    const chk = row
-      ? row.querySelector(checkSelector)
-      : null;
-
-    const val = clean(txt.value);
-
-    if (chk && chk.checked && val) {
-      out.push(val);
-    }
-  });
-
-  return out;
-}
-
-function linesFixedMeds(selector) {
-  const out = [];
-
-  document.querySelectorAll(
-    selector
-  ).forEach(chk => {
-    if (chk.checked && chk.dataset.name) {
-      out.push(chk.dataset.name);
-    }
-  });
-
-  return out;
-}
-
-function formatGcsValue(raw) {
-  if (!raw) return "";
-
-  const match = raw.match(
-    /^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/
-  );
-
-  if (match) {
-    const sum =
-      Number(match[1]) +
-      Number(match[2]) +
-      Number(match[3]);
-
-    return (
-      "GCS: " +
-      match[1] +
-      "+" +
-      match[2] +
-      "+" +
-      match[3] +
-      "=" +
-      sum
-    );
-  }
-
-  return "GCS: " + raw;
-}
-
-
-/* ======================================================
-   RAPPORT - HOVEDFUNKSJON
-====================================================== */
-
+  lagRapport();
+});cb.addEventListener("change",lagRapport);drenAnnetContainer.appendChild(row)}
+function ensureDrenAnnetBlankField(){const texts=Array.from(document.querySelectorAll(".drenAnnetText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addDrenAnnetField()}
+function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetField()}
+function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
+function linesFixedMeds(selector){const out=[];document.querySelectorAll(selector).forEach(chk=>{if(chk.checked&&chk.dataset.name)out.push(chk.dataset.name)});return out}
+function formatGcsValue(raw){if(!raw)return"";const match=raw.match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);if(match){const sum=Number(match[1])+Number(match[2])+Number(match[3]);return"GCS: "+match[1]+"+"+match[2]+"+"+match[3]+"="+sum}return"GCS: "+raw}
 function lagRapport() {
   syncSpecMirrors();
   updateTitle();
@@ -2400,21 +1497,12 @@ function lagRapport() {
   addHastegrad(lines);
 
   const follow = buildFollowNeedLine();
-
-  if (follow) {
-    lines.push(follow);
-  }
+if (follow) lines.push(follow);
 
   const sped = buildSpedbarnLine();
+  if (sped) lines.push(sped);
 
-  if (sped) {
-    lines.push(sped);
-  }
-
-  if (
-    getSpedbarnValue() &&
-    getSpedbarnValue() !== "Nei"
-  ) {
+  if (getSpedbarnValue() && getSpedbarnValue() !== "Nei") {
     addTransportform(lines);
   }
 
@@ -2424,9 +1512,10 @@ function lagRapport() {
     buildFullReport(lines);
   }
 
-  rapport.value = lines.join("\n");
-  autoGrowTextarea(rapport);
+rapport.value = lines.join("\n");
+autoGrowTextarea(rapport);
 }
+
 
 function addHeader(lines) {
   const transportVal = getBinaryValue("transport");
@@ -2437,25 +1526,18 @@ function addHeader(lines) {
       : "INTENSIV"
   );
 }
-
 function addSpesialtransport(lines) {
   const specs = [
     ...new Set(
-      Array.from(
-        document.querySelectorAll(".specChoice")
-      )
+      Array.from(document.querySelectorAll(".specChoice"))
         .filter(x => x.checked)
         .map(x => x.dataset.spec || x.value)
-        .filter(x =>
-          x && x !== "Ikke aktuelt"
-        )
+        .filter(x => x && x !== "Ikke aktuelt")
     )
   ];
 
   if (specs.length) {
-    lines.push(
-      "Spesialtransport: " + specs.join(", ")
-    );
+    lines.push("Spesialtransport: " + specs.join(", "));
   }
 }
 
@@ -2465,7 +1547,6 @@ function addHastegrad(lines) {
     getBinaryValue("hast")
   );
 }
-
 function addTransportform(lines) {
   const transportVal = getBinaryValue("transport");
 
@@ -2473,36 +1554,22 @@ function addTransportform(lines) {
     lines.push("Transportform: " + transportVal);
   }
 }
-
 function getMedicationData() {
   return {
     sedasjon: [
       ...linesFixedMeds(".sed"),
-      ...collectDynamicTexts(
-        ".sedText",
-        ".sedDynChk"
-      )
+      ...collectDynamicTexts(".sedText", ".sedDynChk")
     ],
 
     pressor: [
       ...linesFixedMeds(".pre"),
-      ...collectDynamicTexts(
-        ".pressorText",
-        ".pressorDynChk"
-      )
+      ...collectDynamicTexts(".pressorText", ".pressorDynChk")
     ],
 
     andre: [
-      ...Array.from(
-        document.querySelectorAll(
-          'input[name="medicationOther"]:checked'
-        )
-      ).map(x => x.value),
-
-      ...collectDynamicTexts(
-        ".andreInfText",
-        ".andreInfChk"
-      )
+      ...Array.from(document.querySelectorAll('input[name="medicationOther"]:checked'))
+        .map(x => x.value),
+      ...collectDynamicTexts(".andreInfText", ".andreInfChk")
     ]
   };
 }
@@ -2512,13 +1579,15 @@ function addMedicationSections(lines) {
 
   if (meds.sedasjon.length) {
     lines.push(
-      "Sedasjon: " + meds.sedasjon.join(", ")
+      "Sedasjon: " +
+      meds.sedasjon.join(", ")
     );
   }
 
   if (meds.pressor.length) {
     lines.push(
-      "Pressor: " + meds.pressor.join(", ")
+      "Pressor: " +
+      meds.pressor.join(", ")
     );
   }
 
@@ -2529,13 +1598,8 @@ function addMedicationSections(lines) {
     );
   }
 }
-
-
-/* ======================================================
-   RAPPORT - AKUTT
-====================================================== */
-
 function buildAcuteReport(lines) {
+
   const hp = clean($("acuteHovedproblem").value);
 
   if (hp) {
@@ -2544,12 +1608,12 @@ function buildAcuteReport(lines) {
 
   if (
     clean($("vekt").value) &&
-    !["Nyfødt", "Spedbarn"].includes(
-      getSpedbarnValue()
-    )
+    !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
   ) {
     lines.push(
-      "Vekt: " + clean($("vekt").value) + " kg"
+      "Vekt: " +
+      clean($("vekt").value) +
+      " kg"
     );
   }
 
@@ -2569,7 +1633,7 @@ function buildAcuteReport(lines) {
     );
   }
 
-  buildSmitteLines().forEach(l => lines.push(l));
+    buildSmitteLines().forEach(l => lines.push(l));
   buildCaveLines().forEach(l => lines.push(l));
   buildHlrRespLines().forEach(l => lines.push(l));
 
@@ -2577,11 +1641,8 @@ function buildAcuteReport(lines) {
 }
 
 
-/* ======================================================
-   RAPPORT - HASTER / SAMME DØGN / PLANLAGT
-====================================================== */
-
 function buildFullReport(lines) {
+
   const hp = clean($("hovedproblem").value);
 
   if (hp) {
@@ -2596,34 +1657,35 @@ function buildFullReport(lines) {
 
   if (
     clean($("vekt").value) &&
-    !["Nyfødt", "Spedbarn"].includes(
-      getSpedbarnValue()
-    )
+    !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
   ) {
     lines.push(
-      "Vekt: " + clean($("vekt").value) + " kg"
+      "Vekt: " +
+      clean($("vekt").value) +
+      " kg"
     );
   }
 
-  const airway = buildFullAirwayLine();
+const airway = buildFullAirwayLine();
 
-  if (airway) {
-    lines.push(airway);
-  }
+if (airway) {
+  lines.push(airway);
+}
 
-  const vit = buildVitalsLine();
+const vit = buildVitalsLine();
 
-  if (vit) {
-    lines.push(vit);
-  }
+if (vit) {
+  lines.push(vit);
+}
 
-  addMedicationSections(lines);
+addMedicationSections(lines);
 
   const til = linesTilganger();
 
   if (til.length) {
     lines.push(
-      "Tilganger: " + til.join(", ")
+      "Tilganger: " +
+      til.join(", ")
     );
   }
 
@@ -2631,23 +1693,19 @@ function buildFullReport(lines) {
 
   if (utstyr.length) {
     lines.push(
-      "Utstyr: " + utstyr.join(", ")
+      "Utstyr: " +
+      utstyr.join(", ")
     );
   }
 
-  buildSmitteLines().forEach(l => lines.push(l));
-  buildCaveLines().forEach(l => lines.push(l));
-  buildHlrRespLines().forEach(l => lines.push(l));
+buildSmitteLines().forEach(l => lines.push(l));
+buildCaveLines().forEach(l => lines.push(l));
+buildHlrRespLines().forEach(l => lines.push(l));
 
   addFullDoctors(lines);
 }
-
-
-/* ======================================================
-   REKVIRERENDE / MOTTAKENDE LEGE
-====================================================== */
-
 function addAcuteDoctor(lines) {
+
   const rn = clean($("acuteRekNavn").value);
 
   const rt = clean($("acuteRekTlf").value)
@@ -2657,16 +1715,12 @@ function addAcuteDoctor(lines) {
   if (rn || rt) {
     lines.push(
       "Rekvirerende lege: " +
-      (
-        rn && rt
-          ? rn + " - " + rt
-          : rn || rt
-      )
+      (rn && rt ? rn + " - " + rt : rn || rt)
     );
   }
 }
-
 function addFullDoctors(lines) {
+
   const rn = clean($("rekNavn").value);
 
   const rt = clean($("rekTlf").value)
@@ -2682,30 +1736,17 @@ function addFullDoctors(lines) {
   if (rn || rt) {
     lines.push(
       "Rekvirerende lege: " +
-      (
-        rn && rt
-          ? rn + " - " + rt
-          : rn || rt
-      )
+      (rn && rt ? rn + " - " + rt : rn || rt)
     );
   }
 
   if (mn || mt) {
     lines.push(
       "Mottakende lege: " +
-      (
-        mn && mt
-          ? mn + " - " + mt
-          : mn || mt
-      )
+      (mn && mt ? mn + " - " + mt : mn || mt)
     );
   }
 }
-
-
-/* ======================================================
-   KOPIER RAPPORT
-====================================================== */
 
 function kopierRapport() {
   navigator.clipboard.writeText(rapport.value);
@@ -2720,15 +1761,10 @@ function kopierRapport() {
   }, 2000);
 }
 
-
-/* ======================================================
-   NULLSTILL SKJEMA
-====================================================== */
-
 function nullstillSkjema() {
-  document.querySelectorAll(
-    "input"
-  ).forEach(el => {
+
+  document.querySelectorAll("input").forEach(el => {
+
     el.dataset.active = "false";
 
     if (
@@ -2741,9 +1777,7 @@ function nullstillSkjema() {
     }
   });
 
-  document.querySelectorAll(
-    "textarea"
-  ).forEach(el => {
+  document.querySelectorAll("textarea").forEach(el => {
     el.value = "";
     autoGrowTextarea(el);
   });
@@ -2751,27 +1785,21 @@ function nullstillSkjema() {
   valgtHastegrad = "";
   forrigeHastegrad = "";
 
-  document.querySelectorAll(
-    ".hasteCard"
-  ).forEach(b => {
-    b.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".hasteCard")
+    
+    .forEach(b => b.classList.remove("active"));
 
   updateMainVisibility();
   updateSpedbarnUI();
   updateCaveUI();
-  updateHlrRespUI();
+  updateHlrRespUI(); 
   updateSmitteSpes();
   handleAirwayChange();
   updateAcuteAirwayDetails();
 
   rapport.value = "";
 }
-
-
-/* ======================================================
-   EKSKLUSIVE CHIP-GRUPPER
-====================================================== */
 
 function bindExclusiveChipGroup(options) {
   const {
@@ -2794,17 +1822,9 @@ function bindExclusiveChipGroup(options) {
       });
 
       clearSelectors.forEach(sel => {
-        document.querySelectorAll(
-          sel
-        ).forEach(el => {
-          if ("value" in el) {
-            el.value = "";
-          }
-
-          if ("checked" in el) {
-            el.checked = false;
-          }
-
+        document.querySelectorAll(sel).forEach(el => {
+          if ("value" in el) el.value = "";
+          if ("checked" in el) el.checked = false;
           el.classList?.add("hidden");
         });
       });
@@ -2814,10 +1834,7 @@ function bindExclusiveChipGroup(options) {
       }
     }
 
-    if (typeof onChange === "function") {
-      onChange();
-    }
-
+    if (typeof onChange === "function") onChange();
     lagRapport();
   });
 
@@ -2827,10 +1844,7 @@ function bindExclusiveChipGroup(options) {
         none.checked = false;
       }
 
-      if (typeof onChange === "function") {
-        onChange();
-      }
-
+      if (typeof onChange === "function") onChange();
       lagRapport();
     });
   });
@@ -2838,135 +1852,202 @@ function bindExclusiveChipGroup(options) {
 
 function bindSmartChipLogic() {
 
-  // Følgebehov
+  // Følgebehov: Ikke aktuelt slår av alle andre
   bindExclusiveChipGroup({
     noneSelector: "#follow_none",
-    otherSelector:
-      'input[name="followNeed"]:not(#follow_none)'
+    otherSelector: 'input[name="followNeed"]:not(#follow_none)'
   });
 
-  // Tilganger
-  bindExclusiveChipGroup({
-    noneSelector: "#til_ingen",
-    otherSelector:
-      '.accessChipRow input[type="checkbox"]:not(#til_ingen)',
+// Tilganger: Ingen tilganger slår av CVK/PVK/annet
+bindExclusiveChipGroup({
+  noneSelector: "#til_ingen",
+  otherSelector: '.accessChipRow input[type="checkbox"]:not(#til_ingen)',
+  clearSelectors: [
+    ".tilgangDynChk",
+    ".tilgangText"
+  ],
+  resetRows: () => {
+    $("cvkLumen").value = "";
+    $("pvkAntall").value = "";
 
-    clearSelectors: [
-      ".tilgangDynChk",
-      ".tilgangText"
-    ],
-
-    resetRows: () => {
-      $("cvkLumen").value = "";
-      $("pvkAntall").value = "";
-
+    if (typeof resetTilgangRows === "function") {
       resetTilgangRows();
-      updateTilgangerUI();
-    },
-
-    onChange: () => {
-      updateTilgangerUI();
     }
-  });
 
-  // Utstyr
+    updateTilgangerUI();
+  },
+  onChange: () => {
+    updateTilgangerUI();
+  }
+});
+
+  // Utstyr: Ingen utstyr slår av alt annet
   bindExclusiveChipGroup({
     noneSelector: "#utst_ingen",
-    otherSelector:
-      '.utstyrChipRow input[type="checkbox"]:not(#utst_ingen)',
-
+    otherSelector: '.utstyrChipRow input[type="checkbox"]:not(#utst_ingen)',
     clearSelectors: [
       "#utstPumpeAntall",
       ".drenAnnetChk",
       ".drenAnnetText"
     ],
-
     resetRows: () => {
-      resetDrenAnnetFields();
+      if (typeof resetDrenAnnetFields === "function") resetDrenAnnetFields();
     }
   });
 
-  // Sedasjon
+  // Sedasjon: Nei slår av andre sedasjonsvalg og fritekst
   bindExclusiveChipGroup({
     noneSelector: "#sed_nei",
-    otherSelector: ".sed:not(#sed_nei)",
-
+    otherSelector: '.sed:not(#sed_nei)',
     clearSelectors: [
       ".sedDynChk",
       ".sedText"
     ],
-
     resetRows: () => {
-      resetSedRows();
+      if (typeof resetSedRows === "function") resetSedRows();
     }
   });
 
-  // Pressor
+  // Pressor: Nei slår av andre pressorvalg og fritekst
   bindExclusiveChipGroup({
     noneSelector: "#pre_nei",
-    otherSelector: ".pre:not(#pre_nei)",
-
+    otherSelector: '.pre:not(#pre_nei)',
     clearSelectors: [
       ".pressorDynChk",
       ".pressorText"
     ],
-
     resetRows: () => {
-      resetPressorRows();
+      if (typeof resetPressorRows === "function") resetPressorRows();
     }
   });
 
-  // Andre medikamenter
+  // Andre medikamenter: Nei slår av Ringer/NaCl/Blod/Plasma/annet
   bindExclusiveChipGroup({
-    noneSelector:
-      'input[name="medicationOther"][value="Nei"]',
-
-    otherSelector:
-      'input[name="medicationOther"]:not([value="Nei"])',
-
+    noneSelector: 'input[name="medicationOther"][value="Nei"]',
+    otherSelector: 'input[name="medicationOther"]:not([value="Nei"])',
     clearSelectors: [
       ".andreInfChk",
       ".andreInfText"
     ],
-
     resetRows: () => {
-      resetAndreInfRows();
+      if (typeof resetAndreInfRows === "function") resetAndreInfRows();
     }
   });
 
-  // Spesialtransport
+  // Spesialtransport: Ikke aktuelt slår av ECMO/IABP osv.
   bindExclusiveChipGroup({
     noneSelector: "#spec_ingen",
-    otherSelector:
-      ".specialGroup .specChoice:not(#spec_ingen)"
+    otherSelector: '.specialGroup .specChoice:not(#spec_ingen)'
   });
 }
 
+function init() {
 
-/* ======================================================
-   SPONTAN O2 - TALLBEGRENSNING
-====================================================== */
+  bindEvents();
+
+  resetSedRows();
+  resetPressorRows();
+  resetAndreInfRows();
+  resetTilgangRows();
+  resetDrenAnnetFields();
+
+  updateSpedbarnUI();
+
+  handleAirwayChange();
+  updateAcuteAirwayDetails();
+
+  updateMapField();
+  syncSpecMirrors();
+  updateMainVisibility();
+  updateTitle();
+
+  document
+    .querySelectorAll(".autoGrow")
+    .forEach(autoGrowTextarea);
+
+  lagRapport();
+}
+
+init();
+
+function bindGestasjonsalderEvents() {
+  const uker = document.getElementById("gestasjonsUker");
+  const dager = document.getElementById("gestasjonsDager");
+
+  if (!uker || !dager) return;
+
+  uker.addEventListener("input", () => {
+    uker.value = uker.value.replace(/\D/g, "").slice(0, 2);
+
+    lagRapport();
+  });
+
+  uker.addEventListener("keydown", e => {
+    if ((e.key === " " || e.code === "Space") && uker.value.length >= 1) {
+      e.preventDefault();
+      dager.focus();
+      dager.select?.();
+    }
+  });
+
+  dager.addEventListener("input", () => {
+    dager.value = dager.value.replace(/\D/g, "").slice(0, 1);
+    lagRapport();
+  });
+}
+
+bindGestasjonsalderEvents();
+
+document.addEventListener("click", e => {
+  const cell = e.target.closest(".specialGroup .specCell");
+  if (!cell) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const input = cell.querySelector("input");
+  if (!input) return;
+
+  input.checked = !input.checked;
+
+  const ikkeAktuelt = $("spec_ingen");
+  const alle = document.querySelectorAll(".specialGroup .specChoice");
+
+  if (input === ikkeAktuelt && input.checked) {
+    alle.forEach(chk => {
+      if (chk !== ikkeAktuelt) chk.checked = false;
+    });
+  }
+
+  if (input !== ikkeAktuelt && input.checked && ikkeAktuelt) {
+    ikkeAktuelt.checked = false;
+  }
+
+  document.querySelectorAll(".specialGroup .specCell").forEach(celle => {
+    const chk = celle.querySelector("input");
+    celle.classList.toggle("active", !!chk?.checked);
+  });
+
+  lagRapport();
+}, true);
 
 function bindSpontO2NumberOnly() {
   const el = $("spontO2Liter");
-
   if (!el) return;
 
   el.addEventListener("input", () => {
-    el.value = el.value
-      .replace(/\D/g, "")
-      .slice(0, 2);
-
+    el.value = el.value.replace(/\D/g, "").slice(0, 2);
     lagRapport();
   });
 }
 
 function bindAcuteSpontO2NumberOnly() {
-  const el = $("acuteSpontO2Liter");
 
+  const el = $("acuteSpontO2Liter");
   if (!el) return;
 
   el.addEventListener("input", () => {
+
     el.value = el.value
       .replace(/\D/g, "")
       .slice(0, 2);
@@ -2976,13 +2057,16 @@ function bindAcuteSpontO2NumberOnly() {
 }
 
 function bindHighFlowNumberOnly() {
+
   [
     $("highFlowFlow"),
     $("acuteHighFlowFlow")
   ].forEach(el => {
+
     if (!el) return;
 
     el.addEventListener("input", () => {
+
       el.value = el.value
         .replace(/\D/g, "")
         .slice(0, 3);
@@ -2993,11 +2077,13 @@ function bindHighFlowNumberOnly() {
 
   [
     $("highFlowFio2"),
-    $("acuteHighFlowFiO2")
+    $("acuteHighFlowFio2")
   ].forEach(el => {
+
     if (!el) return;
 
     el.addEventListener("input", () => {
+
       el.value = el.value
         .replace(/[^0-9.,]/g, "")
         .replace(",", ".");
@@ -3006,11 +2092,6 @@ function bindHighFlowNumberOnly() {
     });
   });
 }
-
-
-/* ======================================================
-   TILGANGER - UI
-====================================================== */
 
 function updateTilgangerUI() {
   const cvkValgt = $("til_cvk")?.checked;
@@ -3023,45 +2104,27 @@ function updateTilgangerUI() {
   $("pvkAntall")?.classList.remove("hidden");
 }
 
+function bindMedicationNeiLogic(groupSelector, neiSelector, dynamicBody, textClass) {
 
-/* ======================================================
-   MEDIKAMENTER - NEI-LOGIKK
-====================================================== */
-
-function bindMedicationNeiLogic(
-  groupSelector,
-  neiSelector,
-  dynamicBody,
-  textClass
-) {
   const nei = document.querySelector(neiSelector);
-
   if (!nei) return;
 
   const alle = document.querySelectorAll(groupSelector);
 
   nei.addEventListener("change", () => {
+
     if (nei.checked) {
+
       alle.forEach(chk => {
-        if (chk !== nei) {
-          chk.checked = false;
-        }
+        if (chk !== nei) chk.checked = false;
       });
 
       if (dynamicBody) {
         dynamicBody.innerHTML = "";
 
-        if (textClass === "sedText") {
-          addSedRow();
-        }
-
-        if (textClass === "pressorText") {
-          addPressorRow();
-        }
-
-        if (textClass === "andreInfText") {
-          addAndreInfRow();
-        }
+        if (textClass === "sedText") addSedRow();
+        if (textClass === "pressorText") addPressorRow();
+        if (textClass === "andreInfText") addAndreInfRow();
       }
     }
 
@@ -3069,23 +2132,26 @@ function bindMedicationNeiLogic(
   });
 
   alle.forEach(chk => {
+
     if (chk === nei) return;
 
     chk.addEventListener("change", () => {
+
       if (chk.checked) {
         nei.checked = false;
       }
 
       lagRapport();
     });
+
   });
 
   if (dynamicBody) {
+
     dynamicBody.addEventListener("input", () => {
+
       const harTekst = Array.from(
-        dynamicBody.querySelectorAll(
-          "input[type='text']"
-        )
+        dynamicBody.querySelectorAll("input[type='text']")
       ).some(txt => clean(txt.value));
 
       if (harTekst) {
@@ -3094,10 +2160,13 @@ function bindMedicationNeiLogic(
 
       lagRapport();
     });
+
   }
+
 }
 
 function bindMedicationNeiEvents() {
+
   bindMedicationNeiLogic(
     ".sed",
     "#sed_nei",
@@ -3120,41 +2189,26 @@ function bindMedicationNeiEvents() {
   );
 }
 
-
-/* ======================================================
-   FØLGEBEHOV
-====================================================== */
-
 function buildFollowNeedLine() {
   const valgt = Array.from(
-    document.querySelectorAll(
-      'input[name="followNeed"]:checked'
-    )
+    document.querySelectorAll('input[name="followNeed"]:checked')
   ).map(x => x.value);
 
   if (!valgt.length) return "";
 
-  return (
-    "Følgebehov ifølge rekvirent: " +
-    valgt.join(", ")
-  );
+  return "Følgebehov ifølge rekvirent: " + valgt.join(", ");
 }
 
 function bindFollowNeedEvents() {
-  const none = $("follow_none");
-
-  const all = document.querySelectorAll(
-    'input[name="followNeed"]'
-  );
+  const none = document.getElementById("follow_none");
+  const all = document.querySelectorAll('input[name="followNeed"]');
 
   if (!none) return;
 
   none.addEventListener("change", () => {
     if (none.checked) {
       all.forEach(chk => {
-        if (chk !== none) {
-          chk.checked = false;
-        }
+        if (chk !== none) chk.checked = false;
       });
     }
 
@@ -3172,157 +2226,4 @@ function bindFollowNeedEvents() {
       lagRapport();
     });
   });
-}
-
-
-/* ======================================================
-   GESTASJONSALDER
-====================================================== */
-
-function bindGestasjonsalderEvents() {
-  const uker = $("gestasjonsUker");
-  const dager = $("gestasjonsDager");
-
-  if (!uker || !dager) return;
-
-  uker.addEventListener("input", () => {
-    uker.value = uker.value
-      .replace(/\D/g, "")
-      .slice(0, 2);
-
-    lagRapport();
-  });
-
-  uker.addEventListener("keydown", e => {
-    if (
-      (e.key === " " || e.code === "Space") &&
-      uker.value.length >= 1
-    ) {
-      e.preventDefault();
-      dager.focus();
-      dager.select?.();
-    }
-  });
-
-  dager.addEventListener("input", () => {
-    dager.value = dager.value
-      .replace(/\D/g, "")
-      .slice(0, 1);
-
-    lagRapport();
-  });
-}
-
-
-/* ======================================================
-   SPESIALTRANSPORT - KLIKK
-====================================================== */
-
-function bindSpecialTransportClick() {
-  document.addEventListener("click", e => {
-    const cell = e.target.closest(
-      ".specialGroup .specCell"
-    );
-
-    if (!cell) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const input = cell.querySelector("input");
-
-    if (!input) return;
-
-    input.checked = !input.checked;
-
-    const ikkeAktuelt = $("spec_ingen");
-
-    const alle = document.querySelectorAll(
-      ".specialGroup .specChoice"
-    );
-
-    if (
-      input === ikkeAktuelt &&
-      input.checked
-    ) {
-      alle.forEach(chk => {
-        if (chk !== ikkeAktuelt) {
-          chk.checked = false;
-        }
-      });
-    }
-
-    if (
-      input !== ikkeAktuelt &&
-      input.checked &&
-      ikkeAktuelt
-    ) {
-      ikkeAktuelt.checked = false;
-    }
-
-    document.querySelectorAll(
-      ".specialGroup .specCell"
-    ).forEach(celle => {
-      const chk = celle.querySelector("input");
-
-      celle.classList.toggle(
-        "active",
-        !!chk?.checked
-      );
-    });
-
-    lagRapport();
-  }, true);
-}
-
-
-/* ======================================================
-   INITIALISERING
-====================================================== */
-
-function init() {
-
-  bindEvents();
-
-  bindGestasjonsalderEvents();
-  bindSpecialTransportClick();
-
-  resetSedRows();
-  resetPressorRows();
-  resetAndreInfRowSikker();
-  resetTilgangRows();
-  resetDrenAnnetFields();
-
-  updateSpedbarnUI();
-
-  handleAirwayChange();
-  updateAcuteAirwayDetails();
-
-  updateMapField();
-  syncSpecMirrors();
-  updateMainVisibility();
-  updateTitle();
-
-  document.querySelectorAll(
-    ".autoGrow"
-  ).forEach(autoGrowTextarea);
-
-  lagRapport();
-}
-
-// Beholder separat hjelpefunksjon for
-// initialisering av øvrige infusjoner.
-function resetAndreInfRowSikker() {
-  resetAndreInfRows();
-}
-
-// Start skjema når HTML er ferdig lastet.
-if (document.readyState === "loading") {
-  document.addEventListener(
-    "DOMContentLoaded",
-    init,
-    { once: true }
-  );
-} else {
-  init();
 }
