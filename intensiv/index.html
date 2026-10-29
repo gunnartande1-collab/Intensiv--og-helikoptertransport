@@ -8,7 +8,7 @@
 
   <title>Intensiv- og helikoptertransport</title>
 
-  <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/intensiv/style.css">
 </head>
  
 <body>
@@ -1051,7 +1051,32 @@
   </button>
 </div>
 
-<div id="feedbackModal" class="feedbackModal hidden">
+
+<div id="feedbackWrap" class="feedbackWrap">
+  <button
+    id="feedbackBtn"
+    type="button"
+    class="feedbackBtn"
+    aria-haspopup="dialog"
+    aria-controls="feedbackModal"
+  >
+    Tilbakemelding
+  </button>
+</div>
+
+</div> <!-- mainContent -->
+
+</div> <!-- card -->
+</div> <!-- wrap -->
+
+<!-- TILBAKEMELDING - POPUP -->
+<div
+  id="feedbackModal"
+  class="feedbackModal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="feedbackModalTitle"
+>
   <div class="feedbackModalBox">
 
     <button
@@ -1063,11 +1088,11 @@
       ×
     </button>
 
-    <h2>Tilbakemelding</h2>
+    <h2 id="feedbackModalTitle">Tilbakemelding</h2>
 
     <p>
-      Feil, innspill og andre tilbakemeldinger bes om å meldes i Teams
-      eller tas muntlig med Gunnar.
+      Feil, innspill og andre tilbakemeldinger bes om å
+      meldes i Teams eller tas muntlig med Gunnar.
     </p>
 
     <button
@@ -1081,10 +1106,6 @@
   </div>
 </div>
 
-</div> <!-- mainContent -->
- 
-</div></div>
-
-<script src="/script.js"></script>
+<script src="/intensiv/script.js"></script>
 </body>
 </html>
