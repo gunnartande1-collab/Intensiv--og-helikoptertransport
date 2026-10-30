@@ -1,3 +1,4 @@
+
 /* ======================================================
    DOM ELEMENTER
 ====================================================== */
@@ -23,12 +24,203 @@ const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("sm
 const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("utstyrDynamicBody");
 const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
 let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
+
+/* Hver seksjon huskes separat, ikke som én stor hastegradgruppe. */
+const beholdteFeltgrupper = new Set();
+const beholdteSeksjoner = new Set();
+const hasteFeltgrupper = ["acuteBottom", "acuteDoctorBlock", "fullBottom"];
+const seksjoner = {};
+
+function lagSeksjon(id, noder) {
+  if (!noder.length) return;
+  const parent = noder[0].parentElement;
+  const wrap = document.createElement("div");
+  wrap.id = "bevar-" + id;
+  parent.insertBefore(wrap, noder[0]);
+  noder.forEach(node => wrap.appendChild(node));
+  seksjoner[id] = wrap;
+}
+
+function mellom(start, slutt) {
+  const nodes = [];
+  for (let node = start; node && node !== slutt; node = node.nextElementSibling) nodes.push(node);
+  return nodes;
+}
+
+function lagFeltseksjoner() {
+  const full = $("fullTop");
+  const form = full.querySelector(".formGroup");
+  const felter = Array.from(form.children);
+  lagSeksjon("full-aktuelt", felter.slice(0, 2));
+  lagSeksjon("full-tidligere", felter.slice(2, 4));
+  const airway = full.querySelector(".airwaySection");
+  const vitals = full.querySelector(".vpTitle");
+  lagSeksjon("full-luftveier", mellom(airway, vitals));
+  lagSeksjon("full-vitalparametre", [vitals, full.querySelector(".inlineVitals")]);
+
+  const acute = $("acuteTop");
+  const acuteAktuelt = acute.querySelector(".bigSection");
+  const acuteAirway = acute.querySelector(".airwaySection");
+  lagSeksjon("acute-aktuelt", [acuteAktuelt, $("acuteHovedproblem")]);
+  lagSeksjon("acute-luftveier", mellom(acuteAirway, null));
+
+  const groups = $("sharedEquipmentBlock").querySelectorAll(":scope > .accessGroup");
+  lagSeksjon("full-tilganger", [groups[0]]);
+  lagSeksjon("full-utstyr", [groups[1]]);
+
+  const doctors = $("sharedBottom").querySelector(".accessGroup");
+  const doctorChildren = Array.from(doctors.children);
+  lagSeksjon("full-rekvirerende", doctorChildren.slice(0, 2));
+  lagSeksjon("full-mottakende", doctorChildren.slice(2, 4));
+}
+
+function seksjonHarInnhold(el) {
+  return !!el && Array.from(el.querySelectorAll("input, textarea, select")).some(felt => {
+    if (felt.type === "checkbox" || felt.type === "radio") return felt.checked;
+    return clean(felt.value) !== "";
+  });
+}
+
+function huskUtfylteFeltgrupper() {
+  Object.entries(seksjoner).forEach(([id, el]) => {
+    // Registrer bare seksjoner som faktisk har vært synlige for brukeren.
+    if (el.getClientRects().length && seksjonHarInnhold(el)) beholdteSeksjoner.add(id);
+  });
+  hasteFeltgrupper.forEach(id => {
+    const el = $(id);
+    if (el && el.getClientRects().length && seksjonHarInnhold(el)) beholdteFeltgrupper.add(id);
+  });
+}
+
+function harBeholdteSeksjoner(prefix) {
+  return Array.from(beholdteSeksjoner).some(id => id.startsWith(prefix));
+}
+
+function plasserTidligereRiktig() {
+  const tidligere = seksjoner["full-tidligere"];
+  const aktueltAkutt = $("acuteHovedproblem");
+  const aktueltFull = seksjoner["full-aktuelt"];
+
+  if (!tidligere || !aktueltAkutt || !aktueltFull) {
+    return;
+  }
+
+  if (isAcute() && beholdteSeksjoner.has("full-tidligere")) {
+    // Flytt Tidligere rett etter Aktuelt i Akutt-visningen.
+    aktueltAkutt.insertAdjacentElement("afterend", tidligere);
+  } else {
+    // Flytt Tidligere tilbake til sin vanlige plass.
+    aktueltFull.insertAdjacentElement("afterend", tidligere);
+  }
+}
+
+
+
+function oppdaterSeksjonsvisning() {
+
+  // Plasser Tidligere under riktig Aktuelt-felt.
+  plasserTidligereRiktig();
+
+  const acute = isAcute();
+
+  // Oppdater hver seksjon separat.
+  Object.entries(seksjoner).forEach(([id, el]) => {
+
+    const tilhorerAkutt = id.startsWith("acute-");
+
+    const standardSynlig = tilhorerAkutt
+      ? acute
+      : !acute;
+
+    let skalVises =
+      standardSynlig || beholdteSeksjoner.has(id);
+
+    // Aktuelt skal aldri vises dobbelt.
+    // Den aktive hastegraden bestemmer hvilket
+    // Aktuelt-felt brukeren skal se.
+    if (id === "acute-aktuelt") {
+      skalVises = acute;
+    }
+
+    if (id === "full-aktuelt") {
+      skalVises = !acute;
+    }
+
+    setHidden(el, !skalVises);
+
+  });
+
+  // Kontroller om Akutt-gruppen har synlige seksjoner.
+  const akuttHarSynligeSeksjoner = [
+    "acute-aktuelt",
+    "acute-luftveier"
+  ].some(id => {
+    const el = seksjoner[id];
+    return el && !el.classList.contains("hidden");
+  });
+
+  // Kontroller om Haster-gruppen har synlige seksjoner.
+  const fullHarSynligeSeksjoner = [
+    "full-aktuelt",
+    "full-tidligere",
+    "full-luftveier",
+    "full-vitalparametre"
+  ].some(id => {
+    const el = seksjoner[id];
+
+    return el &&
+      el.parentElement?.closest("#fullTop") &&
+      !el.classList.contains("hidden");
+  });
+
+  // Skjul hele den inaktive gruppen dersom
+  // ingen av dens seksjoner trenger å vises.
+  setHidden(
+    acuteTop,
+    !acute && !akuttHarSynligeSeksjoner
+  );
+
+  setHidden(
+    fullTop,
+    acute && !fullHarSynligeSeksjoner
+  );
+
+}
+
+function visFeltgruppe(id, normaltSynlig) {
+  let brukt = beholdteFeltgrupper.has(id);
+  if (id === "acuteTop") brukt = harBeholdteSeksjoner("acute-");
+  if (id === "fullTop" || id === "sharedEquipmentBlock" || id === "sharedBottom") {
+if (id === "fullTop") {
+  brukt = [
+    "full-aktuelt",
+    "full-luftveier",
+    "full-vitalparametre"
+  ].some(id => beholdteSeksjoner.has(id));
+}    else if (id === "sharedEquipmentBlock") brukt = ["full-tilganger","full-utstyr"].some(x => beholdteSeksjoner.has(x));
+    else brukt = ["full-rekvirerende","full-mottakende"].some(x => beholdteSeksjoner.has(x));
+  }
+  setHidden($(id), !normaltSynlig && !brukt);
+}
+
+/* Supplerer rapporten med registreringer fra en annen hastegrad.
+   Identiske linjer legges ikke inn to ganger. */
+function leggTilUnikeRapportlinjer(mal, tillegg) {
+  const finnes = new Set(mal);
+  tillegg.forEach(linje => {
+    if (linje && !finnes.has(linje)) {
+      mal.push(linje);
+      finnes.add(linje);
+    }
+  });
+}
+
 /* ======================================================
    GENERELLE HJELPEFUNKSJONER
 ====================================================== */
 const clean=v=>(v??"").toString().trim();
 function setHidden(el,hide){if(el)el.classList.toggle("hidden",!!hide)}
-function formatPhone(raw){const d=(raw||"").replace(/\D/g,"");return d.length===8?d.slice(0,3)+" "+d.slice(3,5)+" "+d.slice(5):raw}
+function formatPhone(raw){const d=(raw||"").replace(/\D/g,"");return d.length===8?d.slice(0,3)+" "+d.slice(3,5):raw}
 function getBinaryValue(group){if(group==="hast")return valgtHastegrad;const el=document.querySelector('.binOpt[data-group="'+group+'"]:checked');return el?el.dataset.value:""}
 function setBinaryValue(group,value){document.querySelectorAll('.binOpt[data-group="'+group+'"]').forEach(el=>el.checked=el.dataset.value===value)}
 function getSpedbarnValue(){const el=document.querySelector(".spedRadio:checked");return el?el.dataset.value:""}
@@ -736,7 +928,14 @@ if (a === "Spontan med O2") {
   }
 }
 
-function copyVal(from,to){if(clean($(from).value)&&!clean($(to).value))$(to).value=$(from).value}
+function copyVal(from, to) {
+  const kilde = $(from), mottaker = $(to);
+  if (!kilde || !mottaker) {
+    console.warn("Manglende felt-ID ved synkronisering:", from, to);
+    return;
+  }
+  if (clean(kilde.value) && !clean(mottaker.value)) mottaker.value = kilde.value;
+}
 function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
 function syncVisibleSharedFieldsBeforeSwitch(){if(forrigeHastegrad==="Akutt"&&valgtHastegrad!=="Akutt")syncAcuteToFull();else if(forrigeHastegrad!=="Akutt"&&valgtHastegrad==="Akutt")syncFullToAcute()}
@@ -767,24 +966,24 @@ if (!harHastegrad) {
   }
 
   // Akutt-del
-  setHidden(acuteTop, !acute);
-  setHidden(acuteBottom, !acute);
+  visFeltgruppe("acuteTop", acute);
+  visFeltgruppe("acuteBottom", acute);
 
   // Ikke-akutt-del
-  setHidden(fullTop, acute);
-  setHidden(fullBottom, acute);
+  visFeltgruppe("fullTop", !acute);
+  visFeltgruppe("fullBottom", !acute);
 
   // Smitte, CAVE og HLR/respirator vises både ved Akutt og Haster
   setHidden(safetyBlock, false);
 
   // Rekvirerende lege for Akutt vises nederst i Akutt-flyten
-  setHidden(acuteDoctorBlock, !acute);
+  visFeltgruppe("acuteDoctorBlock", acute);
 
 // Tilganger og utstyr skjules ved Akutt
-setHidden(sharedEquipmentBlock, acute);
+visFeltgruppe("sharedEquipmentBlock", !acute);
 
 // Full legeinfo skjules ved Akutt
-setHidden(sharedBottom, acute);
+visFeltgruppe("sharedBottom", !acute);
 
   // Rapport og knapper skal alltid vises når hastegrad er valgt
   setHidden($("reportActions"), false);
@@ -797,6 +996,7 @@ setHidden(sharedBottom, acute);
     handleAirwayChange();
   }
 
+  oppdaterSeksjonsvisning();
   updateTitle();
 }
 
@@ -804,27 +1004,27 @@ setHidden(sharedBottom, acute);
    EVENT BINDING
 ====================================================== */
 function bindHastegradEvents() {
+  function velgHastegrad(btn) {
+    const neste = btn.dataset.haste;
+    if (!neste || neste === valgtHastegrad) return;
 
-  document
-    .querySelectorAll(".hasteCard")
-    .forEach(btn =>
-      btn.addEventListener("click", () => {
+    // Bevar innhold før feltene skifter visningsmodus.
+    huskUtfylteFeltgrupper();
+    forrigeHastegrad = valgtHastegrad;
+    valgtHastegrad = neste;
+    syncVisibleSharedFieldsBeforeSwitch();
 
-        forrigeHastegrad = valgtHastegrad;
-        valgtHastegrad = btn.dataset.haste;
+    document.querySelectorAll(".hasteCard").forEach(b => {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-pressed", String(b === btn));
+    });
+    updateMainVisibility();
+    lagRapport();
+  }
 
-        syncVisibleSharedFieldsBeforeSwitch();
-
-        document
-          .querySelectorAll(".hasteCard")
-          .forEach(b => b.classList.remove("active"));
-
-        btn.classList.add("active");
-
-        updateMainVisibility();
-        lagRapport();
-      })
-    );
+  document.querySelectorAll(".hasteCard").forEach(btn => {
+    btn.addEventListener("click", () => velgHastegrad(btn));
+  });
 }
 
 function bindVitalEvents() {
@@ -1341,10 +1541,12 @@ bindMedicationNeiEvents();
   $("resetBtn")?.addEventListener("click", nullstillSkjema);
 
   document.addEventListener("input", () => {
+    huskUtfylteFeltgrupper();
     lagRapport();
   });
 
   document.addEventListener("change", () => {
+    huskUtfylteFeltgrupper();
     lagRapport();
   });
 }
@@ -1508,8 +1710,19 @@ if (follow) lines.push(follow);
 
   if (isAcute()) {
     buildAcuteReport(lines);
+    if (harBeholdteSeksjoner("full-") || beholdteFeltgrupper.has("fullBottom")) {
+      const supplerende = [];
+      buildFullReport(supplerende);
+      leggTilUnikeRapportlinjer(lines, supplerende);
+    }
   } else {
     buildFullReport(lines);
+    if (harBeholdteSeksjoner("acute-") || ["acuteBottom", "acuteDoctorBlock"]
+      .some(id => beholdteFeltgrupper.has(id))) {
+      const supplerende = [];
+      buildAcuteReport(supplerende);
+      leggTilUnikeRapportlinjer(lines, supplerende);
+    }
   }
 
 rapport.value = lines.join("\n");
@@ -1762,6 +1975,8 @@ function kopierRapport() {
 }
 
 function nullstillSkjema() {
+  beholdteFeltgrupper.clear();
+  beholdteSeksjoner.clear();
 
   document.querySelectorAll("input").forEach(el => {
 
@@ -1872,6 +2087,7 @@ bindExclusiveChipGroup({
 
     if (typeof resetTilgangRows === "function") {
       resetTilgangRows();
+
     }
 
     updateTilgangerUI();
@@ -1943,6 +2159,7 @@ bindExclusiveChipGroup({
 
 function init() {
 
+  lagFeltseksjoner();
   bindEvents();
 
   resetSedRows();
@@ -2287,6 +2504,390 @@ function bindFollowNeedEvents() {
     document.addEventListener("DOMContentLoaded", initFeedbackDialog);
   } else {
     initFeedbackDialog();
+  }
+
+})();
+/* ======================================================
+   VERSJONSHISTORIKK – GITHUB RELEASES
+====================================================== */
+
+(() => {
+  "use strict";
+
+  /* ====================================================
+     INNSTILLINGER
+
+     FYLL INN GITHUB-INFORMASJON HER
+  ==================================================== */
+
+const GITHUB_OWNER = "gunnartande1-collab";
+const GITHUB_REPO = "Intensiv--og-helikoptertransport";
+
+  const MAX_RELEASES = 100;
+
+  /* ====================================================
+     INITIALISERING
+  ==================================================== */
+
+  function initVersionHistory() {
+
+    const openBtn = document.getElementById(
+      "versionHistoryBtn"
+    );
+
+    const dialog = document.getElementById(
+      "versionHistoryDialog"
+    );
+
+    const closeBtn = document.getElementById(
+      "versionHistoryClose"
+    );
+
+    const okBtn = document.getElementById(
+      "versionHistoryOk"
+    );
+
+    const list = document.getElementById(
+      "versionHistoryList"
+    );
+
+    const currentVersionElement = document.getElementById(
+      "currentVersion"
+    );
+
+    if (
+      !openBtn ||
+      !dialog ||
+      !closeBtn ||
+      !okBtn ||
+      !list ||
+      !currentVersionElement
+    ) {
+      return;
+    }
+
+    const currentVersion =
+      currentVersionElement.dataset.version || "v1.0.0";
+
+    let releasesLoaded = false;
+
+    /* ================================================
+       HJELPEFUNKSJONER
+    ================================================ */
+
+    function normalizeVersion(value) {
+      return String(value || "")
+        .trim()
+        .replace(/^v/i, "")
+        .toLowerCase();
+    }
+
+    function formatDate(dateString) {
+
+      if (!dateString) {
+        return "Dato ikke oppgitt";
+      }
+
+      const date = new Date(dateString);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Dato ikke oppgitt";
+      }
+
+      return new Intl.DateTimeFormat("nb-NO", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function setStatus(message) {
+
+      list.replaceChildren();
+
+      const paragraph = document.createElement("p");
+      paragraph.className = "versionHistoryStatus";
+      paragraph.textContent = message;
+
+      list.appendChild(paragraph);
+    }
+
+    function createElement(tag, className, text) {
+
+      const element = document.createElement(tag);
+
+      if (className) {
+        element.className = className;
+      }
+
+      if (text !== undefined) {
+        element.textContent = text;
+      }
+
+      return element;
+    }
+
+    /* ================================================
+       VIS ÉN VERSJON
+    ================================================ */
+
+    function createReleaseEntry(release) {
+
+      const entry = createElement(
+        "article",
+        "versionHistoryEntry"
+      );
+
+      const header = createElement(
+        "div",
+        "versionHistoryEntryHeader"
+      );
+
+      const versionName =
+        release.tag_name || release.name || "Ukjent versjon";
+
+      const title = createElement(
+        "h3",
+        "versionHistoryEntryTitle",
+        versionName
+      );
+
+      header.appendChild(title);
+
+      const isCurrent =
+        normalizeVersion(release.tag_name) ===
+        normalizeVersion(currentVersion);
+
+      if (isCurrent) {
+
+        const badge = createElement(
+          "span",
+          "versionHistoryBadge",
+          "Gjeldende"
+        );
+
+        header.appendChild(badge);
+      }
+
+      entry.appendChild(header);
+
+      const date = createElement(
+        "span",
+        "versionHistoryDate",
+        "Publisert: " + formatDate(release.published_at)
+      );
+
+      entry.appendChild(date);
+
+      const description = createElement(
+        "p",
+        "versionHistoryDescription",
+        release.body && release.body.trim()
+          ? release.body.trim()
+          : "Ingen endringsbeskrivelse er registrert."
+      );
+
+      entry.appendChild(description);
+
+      return entry;
+    }
+
+    /* ================================================
+       HENT RELEASES FRA GITHUB
+    ================================================ */
+
+    async function loadVersionHistory() {
+
+      if (releasesLoaded) {
+        return;
+      }
+
+      const owner = GITHUB_OWNER.trim();
+      const repo = GITHUB_REPO.trim();
+
+      if (
+        !owner ||
+        !repo ||
+        owner === "DITT_GITHUB_BRUKERNAVN" ||
+        repo === "DITT_REPOSITORY_NAVN"
+      ) {
+
+        setStatus(
+          "Versjon " +
+          currentVersion.replace(/^v/i, "") +
+          " er angitt som gjeldende. " +
+          "GitHub-repositoriet må konfigureres før " +
+          "versjonshistorikken kan hentes automatisk."
+        );
+
+        return;
+      }
+
+      setStatus("Henter versjonshistorikk fra GitHub…");
+
+      const apiUrl =
+        "https://api.github.com/repos/" +
+        encodeURIComponent(owner) +
+        "/" +
+        encodeURIComponent(repo) +
+        "/releases?per_page=" +
+        MAX_RELEASES;
+
+      try {
+
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Accept": "application/vnd.github+json"
+          },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            "GitHub svarte med status " + response.status
+          );
+        }
+
+        const releases = await response.json();
+
+        if (!Array.isArray(releases)) {
+          throw new Error("Ugyldig svar fra GitHub");
+        }
+
+        // Vis kun publiserte, ordinære versjoner.
+        const publishedReleases = releases.filter(
+          release =>
+            !release.draft &&
+            !release.prerelease &&
+            release.published_at
+        );
+
+        publishedReleases.sort(
+          (a, b) =>
+            new Date(b.published_at) -
+            new Date(a.published_at)
+        );
+
+        list.replaceChildren();
+
+        if (publishedReleases.length === 0) {
+
+          setStatus(
+            "Ingen publiserte versjoner er registrert " +
+            "i GitHub Releases ennå. " +
+            "Gjeldende versjon i skjemaet er " +
+            currentVersion + "."
+          );
+
+          releasesLoaded = true;
+          return;
+        }
+
+        publishedReleases.forEach(release => {
+          list.appendChild(
+            createReleaseEntry(release)
+          );
+        });
+
+        const currentReleaseExists =
+          publishedReleases.some(
+            release =>
+              normalizeVersion(release.tag_name) ===
+              normalizeVersion(currentVersion)
+          );
+
+        if (!currentReleaseExists) {
+
+          const notice = createElement(
+            "p",
+            "versionHistoryStatus",
+            "Merk: Versjonen som er angitt som gjeldende " +
+            "i nettsiden (" + currentVersion + ") finnes " +
+            "ikke blant de hentede publiserte versjonene."
+          );
+
+          list.prepend(notice);
+        }
+
+        releasesLoaded = true;
+
+      } catch (error) {
+
+        console.error(
+          "Kunne ikke hente versjonshistorikk:",
+          error
+        );
+
+        setStatus(
+          "Kunne ikke hente versjonshistorikken fra GitHub. " +
+          "Kontroller at repositoriet er offentlig, " +
+          "at adressen er riktig, og at du har " +
+          "internettforbindelse. " +
+          "Gjeldende versjon i skjemaet er " +
+          currentVersion + "."
+        );
+      }
+    }
+
+    /* ================================================
+       ÅPNE OG LUKKE POPUP
+    ================================================ */
+
+    openBtn.addEventListener("click", () => {
+
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+
+      loadVersionHistory();
+    });
+
+    closeBtn.addEventListener("click", () => {
+      dialog.close();
+    });
+
+    okBtn.addEventListener("click", () => {
+      dialog.close();
+    });
+
+    dialog.addEventListener("click", event => {
+
+      if (event.target !== dialog) {
+        return;
+      }
+
+      const rect = dialog.getBoundingClientRect();
+
+      const inside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (!inside) {
+        dialog.close();
+      }
+    });
+
+    // Escape håndteres automatisk av <dialog>.
+  }
+
+  /* ====================================================
+     START FUNKSJONEN
+  ==================================================== */
+
+  if (document.readyState === "loading") {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      initVersionHistory
+    );
+
+  } else {
+
+    initVersionHistory();
+
   }
 
 })();
