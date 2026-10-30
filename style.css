@@ -3572,26 +3572,26 @@ body.theme-light {
   gap: 10px;
 }
 /* ==========================================
-/* ==========================================
    OPSIX – FOOTER
 ========================================== */
 
-.opsix-footer {
+body .wrap > .opsix-footer {
+  display: block !important;
   position: relative;
-  display: block;
+
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 18px auto 24px !important;
+  padding: 0 12px !important;
+
   box-sizing: border-box;
-
-  width: 100%;
-  max-width: none;
-
-  margin: 24px 0;
-  padding: 0 16px;
-
   text-align: center !important;
-  font-size: 12px;
+
+  font-size: 12px !important;
   font-weight: 400;
   line-height: 1.5;
 
   color: var(--muted, #aaa);
-  opacity: 0.75;
+  opacity: 0.65;
 }
