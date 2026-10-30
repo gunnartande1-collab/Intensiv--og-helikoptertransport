@@ -3645,14 +3645,17 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
   }
 
 })();
+
 /* ======================================================
    OPSIX – DAG / NATT
 
-   Lagrer bare brukerens visningsvalg.
-   Ingen pasientopplysninger lagres.
+   Nattmodus er alltid standard ved åpning.
+   Brukeren kan manuelt velge dagmodus.
+   Ingen valg eller pasientopplysninger lagres.
 ====================================================== */
 
 (() => {
+  "use strict";
 
   function initThemeToggle() {
 
@@ -3663,7 +3666,6 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
     if (!button || !label || !icon) {
       return;
     }
-
 
     function applyTheme(isLight) {
 
@@ -3700,28 +3702,22 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
         isLight ? "light" : "dark";
     }
 
+    // Start alltid i nattmodus
+    applyTheme(false);
 
-// Start alltid i nattmodus
-applyTheme(false);
+    // Bytt mellom dag og natt ved klikk
+    button.addEventListener("click", () => {
 
-// Bytt tema ved klikk
-button.addEventListener("click", () => {
-  const nextLight =
-    !document.body.classList.contains("theme-light");
+      const nextLight =
+        !document.body.classList.contains("theme-light");
 
-  applyTheme(nextLight);
-});
-
-
-      } catch (_) {
-        // Bryteren fungerer fortsatt uten lagring.
-      }
+      applyTheme(nextLight);
 
     });
 
   }
 
-
+  // Initialiser når HTML er ferdig lastet
   if (document.readyState === "loading") {
 
     document.addEventListener(

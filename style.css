@@ -3571,3 +3571,19 @@ body.theme-light {
   justify-content: center;
   gap: 10px;
 }
+/* ==========================================
+   OPSIX – FOOTER
+========================================== */
+
+.opsix-footer {
+  width: 100%;
+  padding: 24px 12px;
+  margin-top: 30px;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+
+  color: var(--muted);
+  opacity: 0.75;
+}
