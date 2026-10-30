@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,60 +10,122 @@
   <title>OPSIX</title>
 
   <style>
+    /* ==========================================
+       GRUNNINNSTILLINGER
+    ========================================== */
+
     * {
       box-sizing: border-box;
     }
 
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       margin: 0;
+      padding: 0;
       min-height: 100vh;
       min-height: 100dvh;
-      background: #ffffff;
+
+      background-color: #ffffff;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       font-family: Arial, sans-serif;
     }
 
+    /* ==========================================
+       FORSIDE
+    ========================================== */
+
     .forside {
       position: relative;
+
       width: 100%;
       max-width: 1600px;
-      margin: auto;
+
+      margin: 0 auto;
     }
+
+    /* ==========================================
+       OPSIX-BILDE
+    ========================================== */
 
     .forside img {
       display: block;
+
       width: 100%;
       height: auto;
+
+      object-fit: contain;
     }
 
-    /* Klikkbart område over intensivtransport */
+    /* ==========================================
+       KLIKKBART INTENSIVTRANSPORT-OMRÅDE
+    ========================================== */
+
     .intensiv-lenke {
       position: absolute;
+
       left: 36%;
       top: 66%;
+
       width: 28%;
       height: 21%;
+
+      display: block;
+
       cursor: pointer;
       border-radius: 12px;
+
+      text-decoration: none;
     }
 
     .intensiv-lenke:focus-visible {
       outline: 3px solid #003b65;
       outline-offset: 3px;
     }
+
+    /* ==========================================
+       MOBILTILPASNING
+    ========================================== */
+
+    @media (max-width: 600px) {
+
+      .forside {
+        width: 100%;
+      }
+
+      .intensiv-lenke {
+        left: 34%;
+        top: 63%;
+
+        width: 32%;
+        height: 28%;
+      }
+
+    }
+
   </style>
+
 </head>
 
 <body>
 
   <main class="forside">
 
+    <!-- OPSIX HOVEDBILDE -->
+
     <img
-      src="OPSIX-intensiv.png"
-      alt="OPSIX – Operational Support, Intelligence & eXecution"
+      src="OPSIX.jpeg"
+      alt="OPSIX – Operational Support, Intelligence & eXecution. Intensivtransport."
     >
+
+    <!-- KLIKKBART OMRÅDE FOR INTENSIVTRANSPORT -->
 
     <a
       class="intensiv-lenke"
@@ -74,4 +137,5 @@
   </main>
 
 </body>
+
 </html>
