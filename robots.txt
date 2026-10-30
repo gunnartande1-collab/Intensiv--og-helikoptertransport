@@ -1,0 +1,39 @@
+
+# OPSIX - Robots.txt
+# Begrens AI-crawlere og automatisert innsamling
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-SearchBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+# Google og Bing skal kunne lese noindex
+# slik at sidene kan fjernes fra søkeresultater.
+
+User-agent: *
+Allow: /
