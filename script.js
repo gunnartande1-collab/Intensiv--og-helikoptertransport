@@ -3654,8 +3654,6 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
 
 (() => {
 
-  const STORAGE_KEY = "opsix-intensiv-theme";
-
   function initThemeToggle() {
 
     const button = document.getElementById("themeToggle");
@@ -3703,37 +3701,17 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
     }
 
 
-    // Hent tidligere visningsvalg
+// Start alltid i nattmodus
+applyTheme(false);
 
-    let savedTheme = "dark";
+// Bytt tema ved klikk
+button.addEventListener("click", () => {
+  const nextLight =
+    !document.body.classList.contains("theme-light");
 
-    try {
+  applyTheme(nextLight);
+});
 
-      savedTheme =
-        localStorage.getItem(STORAGE_KEY) || "dark";
-
-    } catch (_) {
-      // Mørk visning brukes hvis lagring er blokkert.
-    }
-
-    applyTheme(savedTheme === "light");
-
-
-    // Bytt tema ved klikk
-
-    button.addEventListener("click", () => {
-
-      const nextLight =
-        !document.body.classList.contains("theme-light");
-
-      applyTheme(nextLight);
-
-      try {
-
-        localStorage.setItem(
-          STORAGE_KEY,
-          nextLight ? "light" : "dark"
-        );
 
       } catch (_) {
         // Bryteren fungerer fortsatt uten lagring.

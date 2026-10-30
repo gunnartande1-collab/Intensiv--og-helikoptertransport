@@ -1,11 +1,77 @@
-<!DOCTYPE HTML>
-<HTML LANG="NO"
-  <HEAD>
-    <META CHARSET="UTF-8">
-    <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <TITLE>OPSIX</TITLE>
-</HEAD>
-  <BODY>
-  </BODY>
-</HTML>
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+
+  <title>OPSIX</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .forside {
+      position: relative;
+      width: 100%;
+      max-width: 1600px;
+      margin: auto;
+    }
+
+    .forside img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Klikkbart område over intensivtransport */
+    .intensiv-lenke {
+      position: absolute;
+      left: 36%;
+      top: 66%;
+      width: 28%;
+      height: 21%;
+      cursor: pointer;
+      border-radius: 12px;
+    }
+
+    .intensiv-lenke:focus-visible {
+      outline: 3px solid #003b65;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="forside">
+
+    <img
+      src="OPSIX-intensiv.png"
+      alt="OPSIX – Operational Support, Intelligence & eXecution"
+    >
+
+    <a
+      class="intensiv-lenke"
+      href="/intensiv/"
+      aria-label="Åpne intensivtransportskjema"
+      title="Åpne intensivtransport"
+    ></a>
+
+  </main>
+
+</body>
+</html>
