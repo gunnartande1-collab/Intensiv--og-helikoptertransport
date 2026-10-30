@@ -15,7 +15,30 @@
 
 <div class="wrap"><div class="card">
 
-<h1 id="pageTitle">Intensiv- og helikoptertransport</h1>
+<div class="pageHeader">
+
+  <h1 id="pageTitle">
+    Intensiv- og helikoptertransport
+  </h1>
+
+  <button
+    id="themeToggle"
+    class="themeToggle"
+    type="button"
+    aria-label="Bytt til dagvisning"
+    aria-pressed="false"
+    title="Bytt til dagvisning"
+  >
+    <span
+      id="themeIcon"
+      class="themeIcon"
+      aria-hidden="true"
+    >☀</span>
+
+    <span id="themeLabel">Dag</span>
+  </button>
+
+</div>
 <div class="hasteLabel">Rekvirert hastegrad</div>
 
 <div class="hasteGrid">
@@ -667,10 +690,25 @@
     <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
     <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
     <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
-    <div class="vpField"><span>GCS</span><input id="gcs"></div>
-  </div>
+<div class="vpField vpGcsField">
 
+  <span
+    title="GCS: Skriv totalskår 3–15 eller tast tre siffer for Øye + Verbal + Motorisk. Eksempel: 456 blir 4+5+6."
+  >
+    GCS
+  </span>
 
+  <input
+    id="gcs"
+    type="text"
+    inputmode="numeric"
+    autocomplete="off"
+    aria-label="GCS. Skriv totalskår 3 til 15 eller tre siffer for øye, verbal og motorisk respons."
+    title="Skriv 15 direkte, eller tast 456 for 4+5+6."
+  >
+
+</div>
+</div>
 </div> <!-- fullTop -->
 
     <div class="minorTitle">Medikamenter og infusjoner</div>
@@ -1031,7 +1069,25 @@
   <span id="copyMsg" class="copyMsg"></span>
 
 <button id="resetBtn" type="button" class="btn-red actionBtn push-right">
-  <svg class="trashIcon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+<svg
+  class="trashIcon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d="M3 6h18"/>
+  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+  <path d="M19 6l-1 14H6L5 6"/>
+  <path d="M10 11v6"/>
+  <path d="M14 11v6"/>
+</svg>
     <path d="M4 7h16" fill="none" stroke="currentColor" stroke-width="2"/>
     <path d="M10 11v6" fill="none" stroke="currentColor" stroke-width="2"/>
     <path d="M14 11v6" fill="none" stroke="currentColor" stroke-width="2"/>

@@ -227,7 +227,18 @@ function getSpedbarnValue(){const el=document.querySelector(".spedRadio:checked"
 function getCaveValue(){const el=document.querySelector(".caveRadio:checked");return el?el.dataset.value:""}
 function isAcute(){return valgtHastegrad==="Akutt"}
 function autoGrowTextarea(el){if(!el)return;el.style.height="auto";el.style.height=el.scrollHeight+"px"}
-function updateTitle(){pageTitle.textContent=getBinaryValue("transport")==="Kuvøse"?"KUVØSETRANSPORT":"Intensiv- og helikoptertransport"}
+function updateTitle() {
+  const kategori = getSpedbarnValue();
+
+  const kanHaTransportform =
+    ["Nyfødt", "Spedbarn", "Barn"].includes(kategori);
+
+  pageTitle.textContent =
+    kanHaTransportform &&
+    getBinaryValue("transport") === "Kuvøse"
+      ? "KUVØSETRANSPORT"
+      : "Intensiv- og helikoptertransport";
+}
 function syncSpecChoices(){
   const state = {};
 
@@ -597,10 +608,15 @@ function buildSpedbarnLine() {
     );
   }
 
-  if (brukerGram && v) {
-    p.push("Vekt: " + v + " g");
-  }
+if (brukerGram && v !== "") {
 
+  p.push(
+    Number(v) === 0
+      ? "Vekt: Ikke oppgitt"
+      : "Vekt: " + v + " g"
+  );
+
+}
   return p.join(", ");
 }
 
@@ -750,6 +766,7 @@ function buildHlrRespLines() {
    UI OPPDATERING
 ====================================================== */
 function updateSpedbarnUI() {
+
   const val = getSpedbarnValue();
 
   const brukerGram =
@@ -772,24 +789,75 @@ function updateSpedbarnUI() {
   // GA skal kun vises ved nyfødt og spedbarn
   setHidden(spedbarnExtraWrap, !viserGA);
 
-  // Transportform vises ved nyfødt, spedbarn og barn
+  // Transportform vises kun for barn
   setHidden(transportWrap, !viserTransportform);
 
-  if (brukerGram) {
-    vektLabel.textContent = "Vekt (gram)";
-    vektInput.placeholder = "gram";
-    vektInput.step = "1";
-    vektInput.inputMode = "numeric";
-    vektInput.dataset.unit = "g";
-  } else {
-    vektLabel.textContent = "Vekt (kg)";
-    vektInput.placeholder = "kg";
-    vektInput.step = "0.1";
-    vektInput.inputMode = "decimal";
-    vektInput.dataset.unit = "kg";
+
+  /* ==========================================
+     T013 – KORREKT VEKTENHET
+  ========================================== */
+
+  const gammelEnhet = vektInput.dataset.unit;
+  const nyEnhet = brukerGram ? "g" : "kg";
+
+  if (
+    gammelEnhet &&
+    gammelEnhet !== nyEnhet &&
+    clean(vektInput.value)
+  ) {
+
+    const gammelVekt = Number(vektInput.value);
+
+    const nyVekt = gammelEnhet === "g"
+      ? gammelVekt / 1000
+      : gammelVekt * 1000;
+
+    vektInput.value =
+      Number.isFinite(nyVekt) && nyVekt >= 0
+        ? String(Number(nyVekt.toFixed(6)))
+        : "";
   }
 
-  // GA skal tømmes dersom Barn eller Nei velges
+  vektLabel.textContent = brukerGram
+    ? "Vekt (gram)"
+    : "Vekt (kg)";
+
+  vektInput.placeholder = brukerGram
+    ? "gram"
+    : "kg";
+
+  vektInput.step = brukerGram
+    ? "1"
+    : "0.1";
+
+  vektInput.inputMode = brukerGram
+    ? "numeric"
+    : "decimal";
+
+  vektInput.dataset.unit = nyEnhet;
+
+
+  /* ==========================================
+     T035 – FJERN UAKTUELL TRANSPORTFORM
+  ========================================== */
+
+  if (!viserTransportform) {
+
+    document
+      .querySelectorAll('.binOpt[data-group="transport"]')
+      .forEach(el => {
+
+        el.checked = false;
+        el.dataset.wasChecked = "false";
+
+      });
+  }
+
+
+  /* ==========================================
+     GESTASJONSALDER
+  ========================================== */
+
   if (!viserGA) {
     $("gestasjonsUker").value = "";
     $("gestasjonsDager").value = "";
@@ -815,7 +883,35 @@ function updateCaveUI() {
 }
 
 function calcMapFromSysDia(sysRaw,diaRaw){const sys=Number(clean(sysRaw)),dia=Number(clean(diaRaw));return(!sys||!dia)?"":String(Math.round((sys+2*dia)/3))}
-function updateMapField(){const mapEl=$("map"),auto=calcMapFromSysDia($("btSys").value,$("btDia").value);if(auto){mapEl.value=auto;mapEl.dataset.auto="1"}else if(mapEl.dataset.auto==="1"){mapEl.value="";mapEl.dataset.auto=""}}
+function updateMapField() {
+
+  const mapEl = $("map");
+
+  // Manuell MAP skal ikke overskrives
+  if (
+    mapEl.dataset.auto === "manual" &&
+    clean(mapEl.value)
+  ) {
+    return;
+  }
+
+  const auto = calcMapFromSysDia(
+    $("btSys").value,
+    $("btDia").value
+  );
+
+  if (auto) {
+
+    mapEl.value = auto;
+    mapEl.dataset.auto = "1";
+
+  } else if (mapEl.dataset.auto === "1") {
+
+    mapEl.value = "";
+    mapEl.dataset.auto = "";
+
+  }
+}
 function normalizeNumericField(el,maxDigits,maxValue){let raw=(el.value||"").replace(/\D/g,"");if(maxValue!=null&&raw){const numeric=Number(raw);if(numeric>maxValue)raw=String(maxValue)}if(raw.length>maxDigits)raw=raw.slice(0,maxDigits);if(el.value!==raw)el.value=raw;return raw}
 function normalizeDecimalField(el,maxIntegerDigits,maxDecimals,decimalSep=','){let v=el.value||'';const sep=decimalSep||','; // allow digits and one separator
   // replace dot with chosen separator to be forgiving
@@ -936,9 +1032,194 @@ function copyVal(from, to) {
   }
   if (clean(kilde.value) && !clean(mottaker.value)) mottaker.value = kilde.value;
 }
+/* ======================================================
+   T039 – FELLES AKTUELT-TEKST
+
+   Aktuelt er én opplysning som kan redigeres
+   fra begge hastegradvisningene.
+
+   Siste registrerte tekst skal alltid gjelde.
+====================================================== */
+
+function bindAktueltSynkronisering() {
+
+  [
+    ["hovedproblem", "acuteHovedproblem"],
+    ["acuteHovedproblem", "hovedproblem"]
+
+  ].forEach(([fraId, tilId]) => {
+
+    $(fraId).addEventListener("input", () => {
+
+      const fra = $(fraId);
+      const til = $(tilId);
+
+      til.value = fra.value;
+
+      autoGrowTextarea(til);
+
+    });
+
+  });
+
+}
 function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
-function syncVisibleSharedFieldsBeforeSwitch(){if(forrigeHastegrad==="Akutt"&&valgtHastegrad!=="Akutt")syncAcuteToFull();else if(forrigeHastegrad!=="Akutt"&&valgtHastegrad==="Akutt")syncFullToAcute()}
+/* ======================================================
+   T034 – FELLES LUFTVEISSTATUS
+
+   Sist registrerte luftveisstatus skal alltid være
+   gjeldende, uavhengig av hastegrad.
+
+   Den andre luftveisstatusen erstattes automatisk.
+====================================================== */
+
+const LUFTVEI_DETALJFELTER = [
+  ["spontO2Liter", "acuteSpontO2Liter"],
+  ["highFlowFio2", "acuteHighFlowFio2"],
+  ["highFlowFlow", "acuteHighFlowFlow"],
+  ["nivFio2", "acuteNivFio2"],
+  ["intubFio2", "acuteIntubFio2"],
+  ["intubPeep", "acuteIntubPeep"],
+  ["intubTopp", "acuteIntubTopp"],
+  ["trachO2Liter", "acuteTrachO2Liter"],
+  ["trachVentFio2", "acuteTrachVentFio2"],
+  ["trachVentPeep", "acuteTrachVentPeep"],
+  ["trachVentTopp", "acuteTrachVentTopp"]
+];
+
+const LUFTVEI_TRACHVALG = [
+  ["tr_spont", "acute_tr_spont"],
+  ["tr_o2", "acute_tr_o2"],
+  ["tr_vent", "acute_tr_vent"]
+];
+
+
+/* ======================================================
+   SYNKRONISERING AV LUFTVEIER
+====================================================== */
+
+function synkroniserLuftveiFra(kilde) {
+
+  const fraAkutt = kilde === "acute";
+
+  const fraGruppe = fraAkutt
+    ? "acuteAirway"
+    : "airwayMain";
+
+  const tilGruppe = fraAkutt
+    ? "airwayMain"
+    : "acuteAirway";
+
+
+  // Erstatt tidligere luftveisvalg med gjeldende valg.
+
+  setBinaryValue(
+    tilGruppe,
+    getBinaryValue(fraGruppe)
+  );
+
+
+  // Synkroniser tilhørende luftveisverdier.
+
+  LUFTVEI_DETALJFELTER.forEach(([fullId, akuttId]) => {
+
+    const fra = $(
+      fraAkutt ? akuttId : fullId
+    );
+
+    const til = $(
+      fraAkutt ? fullId : akuttId
+    );
+
+    if (fra && til) {
+      til.value = fra.value;
+    }
+
+  });
+
+
+  // Synkroniser trakeostomivalg.
+
+  LUFTVEI_TRACHVALG.forEach(([fullId, akuttId]) => {
+
+    const fra = $(
+      fraAkutt ? akuttId : fullId
+    );
+
+    const til = $(
+      fraAkutt ? fullId : akuttId
+    );
+
+    if (fra && til) {
+      til.checked = fra.checked;
+    }
+
+  });
+
+
+  // Oppdater begge luftveisvisningene.
+
+  handleAirwayChange();
+  updateAcuteAirwayDetails();
+
+}
+
+
+/* ======================================================
+   OPPDATER LUFTVEIER VED ENDRING AV DETALJFELTER
+====================================================== */
+
+function bindLuftveiDetaljer() {
+
+  const idTilKilde = new Map();
+
+  LUFTVEI_DETALJFELTER.forEach(([fullId, akuttId]) => {
+
+    idTilKilde.set(fullId, "full");
+    idTilKilde.set(akuttId, "acute");
+
+  });
+
+
+  document.addEventListener("input", event => {
+
+    const kilde = idTilKilde.get(event.target.id);
+
+    if (kilde) {
+      synkroniserLuftveiFra(kilde);
+    }
+
+  });
+
+}
+
+
+/* ======================================================
+   SYNKRONISERING VED BYTTE AV HASTEGRAD
+====================================================== */
+
+function syncVisibleSharedFieldsBeforeSwitch() {
+
+  if (
+    forrigeHastegrad === "Akutt" &&
+    valgtHastegrad !== "Akutt"
+  ) {
+
+    syncAcuteToFull();
+    synkroniserLuftveiFra("acute");
+
+  } else if (
+    forrigeHastegrad !== "Akutt" &&
+    valgtHastegrad === "Akutt"
+  ) {
+
+    syncFullToAcute();
+    synkroniserLuftveiFra("full");
+
+  }
+
+}
 function updateMainVisibility() {
   const h = getBinaryValue("hast");
   const harHastegrad = !!h;
@@ -1026,31 +1307,105 @@ function bindHastegradEvents() {
     btn.addEventListener("click", () => velgHastegrad(btn));
   });
 }
+/* ======================================================
+   GCS – HURTIGREGISTRERING
+====================================================== */
+
+function bindGcsHurtigregistrering() {
+
+  const felt = $("gcs");
+
+  if (!felt) return;
+
+  felt.addEventListener("input", () => {
+
+    const tekst = felt.value
+      .trim()
+      .replace(/\s+/g, "");
+
+    // Tre siffer blir automatisk E+V+M
+
+    if (/^\d{3}$/.test(tekst)) {
+
+      const oye = tekst[0];
+      const verbal = tekst[1];
+      const motorisk = tekst[2];
+
+      felt.value =
+        oye + "+" +
+        verbal + "+" +
+        motorisk;
+
+    }
+
+  });
+
+}
 
 function bindVitalEvents() {
 
   ["btSys", "btDia"].forEach(id => {
+
     const el = $(id);
 
     if (el) {
+
       el.addEventListener("input", () => {
-        updateMapField();
+
         handleVitalInput({ target: el });
+        updateMapField();
+
       });
 
-      el.addEventListener("keydown", handleVitalSpace);
+      el.addEventListener(
+        "keydown",
+        handleVitalSpace
+      );
     }
   });
 
-  $("map").addEventListener("input", handleVitalInput);
-  $("map").addEventListener("keydown", handleVitalSpace);
+
+  /* ==========================================
+     MANUELL MAP
+  ========================================== */
+
+  $("map").addEventListener("input", event => {
+
+    handleVitalInput(event);
+
+    $("map").dataset.auto =
+      clean($("map").value)
+        ? "manual"
+        : "";
+
+  });
+
+  $("map").addEventListener(
+    "keydown",
+    handleVitalSpace
+  );
+
+
+  /* ==========================================
+     ØVRIGE VITALPARAMETRE
+  ========================================== */
 
   ["rf", "spo2", "puls", "temp"].forEach(id => {
+
     const el = $(id);
 
     if (el) {
-      el.addEventListener("input", handleVitalInput);
-      el.addEventListener("keydown", handleVitalSpace);
+
+      el.addEventListener(
+        "input",
+        handleVitalInput
+      );
+
+      el.addEventListener(
+        "keydown",
+        handleVitalSpace
+      );
+
     }
   });
 }
@@ -1332,13 +1687,13 @@ function bindBinaryOptionEvents() {
         updateTitle();
       }
 
-      if (g === "airwayMain") {
-        handleAirwayChange();
-      }
+if (g === "airwayMain") {
+  synkroniserLuftveiFra("full");
+}
 
-      if (g === "acuteAirway") {
-        updateAcuteAirwayDetails();
-      }
+if (g === "acuteAirway") {
+  synkroniserLuftveiFra("acute");
+}
 
       lagRapport();
     });
@@ -1348,22 +1703,31 @@ function bindBinaryOptionEvents() {
 function bindTrachEvents() {
 
   document.querySelectorAll(".trachOpt").forEach(chk => {
-const cell = chk.closest("label");
 
-if (!cell) return;
+    const cell = chk.closest("label");
+
+    if (!cell) return;
 
     cell.addEventListener("pointerdown", () => {
-      chk.dataset.wasChecked = chk.checked ? "true" : "false";
+
+      chk.dataset.wasChecked =
+        chk.checked ? "true" : "false";
+
     });
 
+
     cell.addEventListener("click", e => {
+
       e.preventDefault();
 
-      const wasChecked = chk.dataset.wasChecked === "true";
+      const wasChecked =
+        chk.dataset.wasChecked === "true";
 
       document.querySelectorAll(".trachOpt").forEach(o => {
+
         o.checked = false;
         o.dataset.wasChecked = "false";
+
       });
 
       if (!wasChecked) {
@@ -1371,9 +1735,13 @@ if (!cell) return;
       }
 
       refreshTrachDeps();
+      synkroniserLuftveiFra("full");
       lagRapport();
+
     });
+
   });
+
 }
 
 function bindAcuteTrachEvents() {
@@ -1401,8 +1769,9 @@ function bindAcuteTrachEvents() {
         chk.checked = true;
       }
 
-      updateAcuteAirwayDetails();
-      lagRapport();
+updateAcuteAirwayDetails();
+synkroniserLuftveiFra("acute");
+lagRapport();
     });
   });
 }
@@ -1512,43 +1881,66 @@ function bindHlrRespEvents() {
 
 function bindEvents() {
 
-  bindHastegradEvents();
-  bindAutoGrowEvents();
-  bindVitalEvents();
+bindHastegradEvents();
+bindAutoGrowEvents();
+bindVitalEvents();
+bindGcsHurtigregistrering();
+bindAktueltSynkronisering();
 
-bindPvkEvents();
-bindCvkEvents();
-bindUtstyrPumpeEvents();
-bindAcutePumpeEvents();
-bindAcuteSpontO2NumberOnly();
-bindHighFlowNumberOnly();
-bindMedicationNeiEvents();
+  bindPvkEvents();
+  bindCvkEvents();
+  bindUtstyrPumpeEvents();
+  bindAcutePumpeEvents();
+
+  bindAcuteSpontO2NumberOnly();
+  bindHighFlowNumberOnly();
+  bindMedicationNeiEvents();
 
   bindSpedbarnEvents();
   bindFollowNeedEvents();
   bindCaveEvents();
   bindSmitteEvents();
   bindHlrRespEvents();
+
   bindBinaryOptionEvents();
   bindSpontO2NumberOnly();
+
   bindTrachEvents();
   bindAcuteTrachEvents();
+
   bindSmartChipLogic();
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
 
-  $("copyBtn")?.addEventListener("click", kopierRapport);
-  $("resetBtn")?.addEventListener("click", nullstillSkjema);
+  // Synkroniser etter øvrig feltbehandling
+  bindLuftveiDetaljer();
+
+
+  $("copyBtn")?.addEventListener(
+    "click",
+    kopierRapport
+  );
+
+  $("resetBtn")?.addEventListener(
+    "click",
+    nullstillSkjema
+  );
+
 
   document.addEventListener("input", () => {
+
     huskUtfylteFeltgrupper();
     lagRapport();
+
   });
 
   document.addEventListener("change", () => {
+
     huskUtfylteFeltgrupper();
     lagRapport();
+
   });
+
 }
 
 /* ======================================================
@@ -1680,10 +2072,150 @@ function ensureDrenAnnetBlankField(){const texts=Array.from(document.querySelect
 function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetField()}
 function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
 function linesFixedMeds(selector){const out=[];document.querySelectorAll(selector).forEach(chk=>{if(chk.checked&&chk.dataset.name)out.push(chk.dataset.name)});return out}
-function formatGcsValue(raw){if(!raw)return"";const match=raw.match(/^\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})\s*$/);if(match){const sum=Number(match[1])+Number(match[2])+Number(match[3]);return"GCS: "+match[1]+"+"+match[2]+"+"+match[3]+"="+sum}return"GCS: "+raw}
+/* ======================================================
+   GCS – KONTROLL AV TOTALSKÅR OG E+V+M
+====================================================== */
+
+function kontrollerGcs(raw) {
+
+  const v = clean(raw);
+
+  if (!v) {
+    return { gyldig: true, tekst: "" };
+  }
+
+  // GCS oppgitt som totalskår, f.eks. 15
+
+  if (/^\d{1,2}$/.test(v)) {
+
+    const sum = Number(v);
+
+    return {
+      gyldig: sum >= 3 && sum <= 15,
+      tekst: "GCS: " + sum
+    };
+  }
+
+  // GCS oppgitt som Øye + Verbal + Motorisk
+
+  const m = v.match(
+    /^(\d{1,2})\s*\+\s*(\d{1,2})\s*\+\s*(\d{1,2})$/
+  );
+
+  if (m) {
+
+    const [e, verbal, motorisk] =
+      m.slice(1).map(Number);
+
+    const gyldig =
+      e >= 1 && e <= 4 &&
+      verbal >= 1 && verbal <= 5 &&
+      motorisk >= 1 && motorisk <= 6;
+
+    return {
+      gyldig,
+      tekst:
+        `GCS: ${e}+${verbal}+${motorisk}` +
+        (gyldig ? `=${e + verbal + motorisk}` : "")
+    };
+  }
+
+  return {
+    gyldig: false,
+    tekst: "GCS: " + v
+  };
+}
+
+
+/* ======================================================
+   GCS – TEKST I RAPPORT
+====================================================== */
+
+function formatGcsValue(raw) {
+
+  const vurdering = kontrollerGcs(raw);
+
+  if (!vurdering.tekst) {
+    return "";
+  }
+
+  return vurdering.gyldig
+    ? vurdering.tekst
+    : vurdering.tekst + " (KONTROLLER GCS)";
+}
+
+
+/* ======================================================
+   VISUELL KONTROLL AV GCS OG FiO2
+====================================================== */
+
+function oppdaterKliniskeFeltvarsler() {
+
+  // GCS
+
+  const gcs = $("gcs");
+
+  if (gcs) {
+
+    const feil =
+      !!clean(gcs.value) &&
+      !kontrollerGcs(gcs.value).gyldig;
+
+    gcs.classList.toggle("kliniskUgyldig", feil);
+
+    gcs.setAttribute(
+      "aria-invalid",
+      String(feil)
+    );
+
+    gcs.title = feil
+      ? "Kontroller GCS: sum 3–15 eller E 1–4 + V 1–5 + M 1–6"
+      : "";
+  }
+
+
+  // FiO2 – samtlige relevante felt
+
+  [
+    "highFlowFio2",
+    "acuteHighFlowFio2",
+    "nivFio2",
+    "acuteNivFio2",
+    "intubFio2",
+    "acuteIntubFio2",
+    "trachVentFio2",
+    "acuteTrachVentFio2"
+
+  ].forEach(id => {
+
+    const el = $(id);
+
+    if (!el) return;
+
+    const tekst = clean(el.value).replace(",", ".");
+
+    const feil =
+      tekst !== "" &&
+      Number.isFinite(Number(tekst)) &&
+      Number(tekst) > 100;
+
+    el.classList.toggle("kliniskUgyldig", feil);
+
+    el.setAttribute(
+      "aria-invalid",
+      String(feil)
+    );
+
+    el.title = feil
+      ? "FiO₂ kan ikke være over 100 %"
+      : "";
+  });
+}
 function lagRapport() {
+
   syncSpecMirrors();
   updateTitle();
+  oppdaterKliniskeFeltvarsler();
 
   const h = getBinaryValue("hast");
 
@@ -1698,46 +2230,207 @@ function lagRapport() {
   addSpesialtransport(lines);
   addHastegrad(lines);
 
+
+  /* ==========================================
+     FØLGEBEHOV OG BARN
+  ========================================== */
+
   const follow = buildFollowNeedLine();
-if (follow) lines.push(follow);
+
+  if (follow) {
+    lines.push(follow);
+  }
 
   const sped = buildSpedbarnLine();
-  if (sped) lines.push(sped);
 
-  if (getSpedbarnValue() && getSpedbarnValue() !== "Nei") {
+  if (sped) {
+    lines.push(sped);
+  }
+
+  if (
+    getSpedbarnValue() &&
+    getSpedbarnValue() !== "Nei"
+  ) {
     addTransportform(lines);
   }
 
+
+  /* ==========================================
+     BYGG RAPPORT ETTER HASTEGRAD
+  ========================================== */
+
   if (isAcute()) {
+
     buildAcuteReport(lines);
-    if (harBeholdteSeksjoner("full-") || beholdteFeltgrupper.has("fullBottom")) {
+
+    if (
+      harBeholdteSeksjoner("full-") ||
+      beholdteFeltgrupper.has("fullBottom")
+    ) {
+
       const supplerende = [];
+
       buildFullReport(supplerende);
-      leggTilUnikeRapportlinjer(lines, supplerende);
+
+      leggTilUnikeRapportlinjer(
+        lines,
+        supplerende
+      );
     }
+
   } else {
+
     buildFullReport(lines);
-    if (harBeholdteSeksjoner("acute-") || ["acuteBottom", "acuteDoctorBlock"]
-      .some(id => beholdteFeltgrupper.has(id))) {
+
+    if (
+      harBeholdteSeksjoner("acute-") ||
+      ["acuteBottom", "acuteDoctorBlock"]
+        .some(id => beholdteFeltgrupper.has(id))
+    ) {
+
       const supplerende = [];
+
       buildAcuteReport(supplerende);
-      leggTilUnikeRapportlinjer(lines, supplerende);
+
+      leggTilUnikeRapportlinjer(
+        lines,
+        supplerende
+      );
     }
   }
 
-rapport.value = lines.join("\n");
+
+  /* ==========================================
+     T034 – SISTE LUFTVEISSTATUS
+  ========================================== */
+
+  const gjeldendeLuftvei = isAcute()
+    ? (buildAcuteAirwayLines()[0] || "")
+    : buildFullAirwayLine();
+
+
+  /* ==========================================
+     T039 – SISTE AKTUELT-TEKST
+  ========================================== */
+
+  const gjeldendeAktuelt = clean(
+    $(
+      isAcute()
+        ? "acuteHovedproblem"
+        : "hovedproblem"
+    ).value
+  );
+
+
+  /* ==========================================
+     FJERN MOTSTRIDENDE RAPPORTLINJER
+  ========================================== */
+
+  let aktueltSattInn = false;
+  let luftveiSattInn = false;
+
+  const ferdigeLinjer = [];
+
+  lines.forEach(linje => {
+
+    // Kun én gjeldende Aktuelt-tekst
+    if (linje.startsWith("Aktuelt:")) {
+
+      if (
+        !aktueltSattInn &&
+        gjeldendeAktuelt
+      ) {
+
+        ferdigeLinjer.push(
+          "Aktuelt: " + gjeldendeAktuelt
+        );
+
+      }
+
+      aktueltSattInn = true;
+      return;
+    }
+
+
+    // Kun én gjeldende luftveisstatus
+    if (linje.startsWith("Luftveier:")) {
+
+      if (
+        !luftveiSattInn &&
+        gjeldendeLuftvei
+      ) {
+
+        ferdigeLinjer.push(
+          gjeldendeLuftvei
+        );
+
+      }
+
+      luftveiSattInn = true;
+      return;
+    }
+
+
+    // Alle andre opplysninger beholdes
+    ferdigeLinjer.push(linje);
+
+  });
+
+
+  /* ==========================================
+     FERDIG RAPPORT
+  ========================================== */
+
+/* ======================================================
+   MARKER FOR HØY FiO2 I RAPPORTTEKSTEN
+====================================================== */
+
+const kontrollerteLinjer = ferdigeLinjer.map(linje => {
+
+  if (!linje.startsWith("Luftveier:")) {
+    return linje;
+  }
+
+  const treff = linje.match(
+    /\bFiO2\s+(\d+(?:[.,]\d+)?)\s*%/i
+  );
+
+  if (
+    treff &&
+    Number(treff[1].replace(",", ".")) > 100
+  ) {
+
+    return linje +
+      " (KONTROLLER FiO₂ – over 100 %)";
+  }
+
+  return linje;
+
+});
+
+
+rapport.value = kontrollerteLinjer.join("\n");
+
 autoGrowTextarea(rapport);
 }
 
-
 function addHeader(lines) {
-  const transportVal = getBinaryValue("transport");
+
+  const transportVal =
+    getBinaryValue("transport");
+
+  const barn = [
+    "Nyfødt",
+    "Spedbarn",
+    "Barn"
+  ].includes(getSpedbarnValue());
 
   lines.push(
-    transportVal === "Kuvøse"
+    barn && transportVal === "Kuvøse"
       ? "KUVØSETRANSPORT"
       : "INTENSIV"
   );
+
 }
 function addSpesialtransport(lines) {
   const specs = [
@@ -1823,11 +2516,13 @@ function buildAcuteReport(lines) {
     clean($("vekt").value) &&
     !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
   ) {
-    lines.push(
-      "Vekt: " +
-      clean($("vekt").value) +
-      " kg"
-    );
+const vekt = clean($("vekt").value);
+
+lines.push(
+  Number(vekt) === 0
+    ? "Vekt: Ikke oppgitt"
+    : "Vekt: " + vekt + " kg"
+);
   }
 
   buildAcuteAirwayLines().forEach(l => {
@@ -1868,16 +2563,21 @@ function buildFullReport(lines) {
     lines.push("T: " + tid);
   }
 
-  if (
-    clean($("vekt").value) &&
-    !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
-  ) {
-    lines.push(
-      "Vekt: " +
-      clean($("vekt").value) +
-      " kg"
-    );
-  }
+
+  const vekt = clean($("vekt").value);
+
+if (
+  vekt !== "" &&
+  !["Nyfødt", "Spedbarn"].includes(getSpedbarnValue())
+) {
+
+  lines.push(
+    Number(vekt) === 0
+      ? "Vekt: Ikke oppgitt"
+      : "Vekt: " + vekt + " kg"
+  );
+
+}
 
 const airway = buildFullAirwayLine();
 
@@ -1961,20 +2661,47 @@ function addFullDoctors(lines) {
   }
 }
 
-function kopierRapport() {
-  navigator.clipboard.writeText(rapport.value);
+async function kopierRapport() {
 
-  copyMsg.textContent = "Rapport kopiert";
-  copyMsg.classList.add("show");
+  const tekst = rapport.value;
 
   clearTimeout(copyTimer);
 
+  try {
+
+    if (
+      !navigator.clipboard ||
+      typeof navigator.clipboard.writeText !== "function"
+    ) {
+      throw new Error("Utklippstavle ikke tilgjengelig");
+    }
+
+    await navigator.clipboard.writeText(tekst);
+
+    // Vis bare suksess når kopieringen lykkes
+    copyMsg.textContent = "Rapport kopiert";
+
+  } catch (error) {
+
+    console.warn("Kopiering mislyktes:", error);
+
+    copyMsg.textContent =
+      "Kunne ikke kopiere. Marker rapporten og kopier manuelt.";
+
+  }
+
+  copyMsg.classList.add("show");
+
   copyTimer = setTimeout(() => {
+
     copyMsg.classList.remove("show");
-  }, 2000);
+
+  }, 4000);
+
 }
 
 function nullstillSkjema() {
+
   beholdteFeltgrupper.clear();
   beholdteSeksjoner.clear();
 
@@ -1986,34 +2713,61 @@ function nullstillSkjema() {
       el.type === "checkbox" ||
       el.type === "radio"
     ) {
+
       el.checked = false;
+
     } else {
+
       el.value = "";
+
     }
+
   });
 
+
   document.querySelectorAll("textarea").forEach(el => {
+
     el.value = "";
     autoGrowTextarea(el);
+
   });
+
+
+  // Nullstill manuell MAP-status
+  $("map").dataset.auto = "";
+
+
+  // Nullstill alle nedtrekksmenyer
+  document.querySelectorAll("select").forEach(el => {
+
+    el.selectedIndex = 0;
+
+  });
+
 
   valgtHastegrad = "";
   forrigeHastegrad = "";
 
   document
     .querySelectorAll(".hasteCard")
-    
-    .forEach(b => b.classList.remove("active"));
+    .forEach(b => {
+
+      b.classList.remove("active");
+
+    });
+
 
   updateMainVisibility();
   updateSpedbarnUI();
   updateCaveUI();
-  updateHlrRespUI(); 
+  updateHlrRespUI();
   updateSmitteSpes();
-  handleAirwayChange();
-  updateAcuteAirwayDetails();
 
-  rapport.value = "";
+handleAirwayChange();
+updateAcuteAirwayDetails();
+oppdaterKliniskeFeltvarsler();
+
+rapport.value = "";
 }
 
 function bindExclusiveChipGroup(options) {
@@ -2887,6 +3641,119 @@ const GITHUB_REPO = "Intensiv--og-helikoptertransport";
   } else {
 
     initVersionHistory();
+
+  }
+
+})();
+/* ======================================================
+   OPSIX – DAG / NATT
+
+   Lagrer bare brukerens visningsvalg.
+   Ingen pasientopplysninger lagres.
+====================================================== */
+
+(() => {
+
+  const STORAGE_KEY = "opsix-intensiv-theme";
+
+  function initThemeToggle() {
+
+    const button = document.getElementById("themeToggle");
+    const label = document.getElementById("themeLabel");
+    const icon = document.getElementById("themeIcon");
+
+    if (!button || !label || !icon) {
+      return;
+    }
+
+
+    function applyTheme(isLight) {
+
+      document.body.classList.toggle(
+        "theme-light",
+        isLight
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        String(isLight)
+      );
+
+      button.setAttribute(
+        "aria-label",
+        isLight
+          ? "Bytt til nattvisning"
+          : "Bytt til dagvisning"
+      );
+
+      button.title = isLight
+        ? "Bytt til nattvisning"
+        : "Bytt til dagvisning";
+
+      label.textContent = isLight
+        ? "Natt"
+        : "Dag";
+
+      icon.textContent = isLight
+        ? "☾"
+        : "☀";
+
+      document.documentElement.style.colorScheme =
+        isLight ? "light" : "dark";
+    }
+
+
+    // Hent tidligere visningsvalg
+
+    let savedTheme = "dark";
+
+    try {
+
+      savedTheme =
+        localStorage.getItem(STORAGE_KEY) || "dark";
+
+    } catch (_) {
+      // Mørk visning brukes hvis lagring er blokkert.
+    }
+
+    applyTheme(savedTheme === "light");
+
+
+    // Bytt tema ved klikk
+
+    button.addEventListener("click", () => {
+
+      const nextLight =
+        !document.body.classList.contains("theme-light");
+
+      applyTheme(nextLight);
+
+      try {
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          nextLight ? "light" : "dark"
+        );
+
+      } catch (_) {
+        // Bryteren fungerer fortsatt uten lagring.
+      }
+
+    });
+
+  }
+
+
+  if (document.readyState === "loading") {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      initThemeToggle
+    );
+
+  } else {
+
+    initThemeToggle();
 
   }
 

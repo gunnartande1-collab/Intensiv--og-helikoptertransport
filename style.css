@@ -264,6 +264,7 @@ input[type=number]::-webkit-outer-spin-button{
 
 /* Fjern piler i Firefox */
 input[type=number]{
+  appearance:textfield;
   -moz-appearance:textfield;
 }
 
@@ -2652,4 +2653,921 @@ select{
   .versionHistoryFooter {
     padding: 0 18px 18px;
   }
+}
+
+/* ======================================================
+   T048 – RESPONSIV MOBILVISNING
+
+   Hindrer at innhold strekker seg utenfor skjermen.
+   Tilpasser legefelter, tilganger og dynamiske felt.
+====================================================== */
+
+@media (max-width: 720px) {
+
+  .wrap,
+  .card,
+  #mainContent,
+  #sharedBottom,
+  #sharedEquipmentBlock,
+  .accessGroup {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+
+  /* ==========================================
+     LEGEFELTER
+  ========================================== */
+
+  .doctorRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .doctorRow > input,
+  .doctorRow > .phoneInput {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+
+  /* ==========================================
+     DYNAMISKE TILGANGSFELTER
+  ========================================== */
+
+  #tilgangerDynamicBody,
+  #tilgangerDynamicBody tr,
+  #tilgangerDynamicBody td,
+  #utstyrDynamicBody {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  #tilgangerDynamicBody .dynamicRow,
+  #utstyrDynamicBody .dynamicRow {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #tilgangerDynamicBody .dynamicRow input[type="text"],
+  #utstyrDynamicBody .dynamicRow input[type="text"] {
+    flex: 1 1 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+
+  /* ==========================================
+     VALGGRUPPER
+  ========================================== */
+
+  .chipRow,
+  .smLine,
+  .accessChipRow,
+  .binaryRow,
+  .spesialtransportRow {
+    max-width: 100%;
+  }
+
+  /* HLR og respiratorvalg skal brytes ved behov */
+  .caveRow {
+    flex-wrap: wrap;
+  }
+
+
+  /* ==========================================
+     TOOLTIPS OG OVERSKRIFT
+  ========================================== */
+
+  /* Skjul hover-tooltip for spesialtransport
+     på små skjermer */
+  .specialGroup .specLabel::after {
+    display: none;
+  }
+
+  h1 {
+    overflow-wrap: anywhere;
+    font-size: clamp(19px, 5vw, 30px);
+  }
+
+}
+/* ======================================================
+   KLINISK VALIDERING – GCS OG FiO2
+====================================================== */
+
+input.kliniskUgyldig {
+  color: #b91c1c !important;
+  border: 2px solid #dc2626 !important;
+  background: #fff1f2 !important;
+}
+
+
+/* ======================================================
+   STØRRE GCS-FELT
+====================================================== */
+
+.vpGcsField {
+  width: 190px;
+  flex: 0 0 190px;
+}
+
+.vpGcsField input {
+  padding-left: 46px;
+}
+
+.gcsHelp {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+
+/* ======================================================
+   GCS PÅ SMÅ SKJERMER
+====================================================== */
+
+@media (max-width: 720px) {
+
+  .vpGcsField {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+}
+/* ======================================================
+   OPSIX – DAG / NATT
+====================================================== */
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.pageHeader #pageTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  margin: 6px 0 28px;
+}
+
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  min-width: 86px;
+  min-height: 38px;
+  padding: 7px 12px;
+  margin: 4px 0 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: #2b2f36;
+  color: #f1f5f9;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.themeToggle:hover {
+  background: #424955;
+}
+
+.themeToggle:focus-visible {
+  outline: 3px solid #8fb0ff;
+  outline-offset: 3px;
+}
+
+.themeIcon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .pageHeader {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .pageHeader #pageTitle {
+    flex-basis: 100%;
+    order: 2;
+    margin: 4px 0 20px;
+  }
+
+  .themeToggle {
+    order: 1;
+    margin-top: 0;
+  }
+}
+
+
+/* ======================================================
+   LYST FARGETEMA
+====================================================== */
+
+body.theme-light {
+  --bg: #dfe5eb;
+  --panel: #f7f9fb;
+  --text: #1f2a3d;
+  --muted: #5b677a;
+  --field: #fdfdfd;
+  --fieldText: #1f2a3d;
+  --line: #c5cfda;
+  --accent: #2a5fb8;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+.theme-light .card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(31, 42, 61, 0.06);
+}
+
+.theme-light .pageHeader #pageTitle {
+  color: #172338;
+}
+
+.theme-light .themeToggle {
+  background: #e3e8ee;
+  color: #1f2a3d;
+  border-color: #b8c3cf;
+}
+
+.theme-light .themeToggle:hover {
+  background: #d7dee7;
+}
+
+/* Overskrifter */
+
+.theme-light .hasteLabel,
+.theme-light .section,
+.theme-light .bigSection,
+.theme-light .minorTitle,
+.theme-light .blockTitle,
+.theme-light .medSection .minorTitle,
+.theme-light .hasteSupportTitle,
+.theme-light .flowDivider,
+.theme-light .vpTitle {
+  color: #172338;
+}
+
+.theme-light .medGroupTitle {
+  color: #334155;
+  opacity: 1;
+}
+
+.theme-light .hint,
+.theme-light .gcsHelp {
+  color: #475569;
+}
+
+
+/* Registreringsfelter */
+
+.theme-light input:not([type="checkbox"]):not([type="radio"]):not(.kliniskUgyldig),
+.theme-light textarea,
+.theme-light select {
+  background: #ffffff;
+  color: #172338;
+  border-color: #b9c6d8;
+}
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #68788d;
+  opacity: 1;
+}
+
+/* Behold rød markering ved ugyldige verdier */
+
+.theme-light input.kliniskUgyldig {
+  color: #b91c1c !important;
+  border: 2px solid #dc2626 !important;
+  background: #fff1f2 !important;
+}
+
+
+/* Seksjoner og grupper */
+
+.theme-light .medGroup,
+.theme-light .hasteSupport,
+.theme-light .accessGroup,
+.theme-light .doctorGroup,
+.theme-light .infoGroup {
+  border-color: #d8e1ed;
+  background: #f8fafc;
+}
+
+.theme-light .accessGroup .toggleCell,
+.theme-light .accessGroup .nonToggleRow,
+.theme-light .flowDivider {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+}
+
+.theme-light .medUnifiedTable th,
+.theme-light .medTable th {
+  background: #e7edf5;
+  color: #172338;
+}
+
+.theme-light .hasteSupportItem {
+  background: #f1f5f9;
+  color: #172338;
+}
+
+.theme-light .hasteSupportItem strong {
+  color: #172338;
+}
+
+.theme-light .hasteSupportItem span {
+  color: #334155;
+}
+
+
+/* Ikke-valgte knapper blir lyse */
+
+.theme-light .medChip:not(:has(input:checked)),
+.theme-light .followChip:not(:has(input:checked)),
+.theme-light .caveChip:not(:has(input:checked)),
+.theme-light .accessChip:not(:has(input:checked)),
+.theme-light .utstyrChip:not(:has(input:checked)),
+.theme-light .spedChip:not(:has(input:checked)),
+.theme-light .smChip:not(:has(input:checked)),
+.theme-light .binaryOpt:not(:has(input:checked)),
+.theme-light .specialGroup .specCell:not(.active):not(:has(input:checked)),
+.theme-light .airwayRow .binaryOpt:not(:has(input:checked)),
+.theme-light .spedRespArbeidRow .medChip:not(:has(input:checked)),
+.theme-light .pumpRow .utstyrChip:not(:has(input:checked)) {
+  background: #f5f7fa !important;
+  color: #1f2a3d !important;
+  border: 1px solid #bcc8d4 !important;
+}
+
+.theme-light .medChip:not(:has(input:checked)) span,
+.theme-light .followChip:not(:has(input:checked)) span,
+.theme-light .caveChip:not(:has(input:checked)) span,
+.theme-light .utstyrChip:not(:has(input:checked)) span,
+.theme-light .spedChip:not(:has(input:checked)) span,
+.theme-light .binaryOpt:not(:has(input:checked)) span,
+.theme-light .specialGroup .specCell:not(.active):not(:has(input:checked)) span,
+.theme-light .airwayRow .binaryOpt:not(:has(input:checked)) span,
+.theme-light .spedRespArbeidRow .medChip:not(:has(input:checked)) span {
+  color: #233044 !important;
+  font-weight: 500;
+}
+
+.theme-light .medChip:not(:has(input:checked)):hover,
+.theme-light .followChip:not(:has(input:checked)):hover,
+.theme-light .binaryOpt:not(:has(input:checked)):hover,
+.theme-light .specialGroup .specCell:not(:has(input:checked)):hover {
+  background: #e7edf4 !important;
+  border-color: #9fb0c3 !important;
+}
+
+/* Hastegrad: beholder farger ved valg */
+
+.theme-light .hasteGrid .hasteCard:not(.active) {
+  background: #f9fbfc !important;
+  color: #1f2a3d !important;
+  box-shadow: 0 3px 10px rgba(31, 42, 61, 0.06);
+}
+
+.theme-light .hasteGrid .hasteCard:not(.active) .hasteCardText {
+  color: #4c5b70;
+}
+
+/* Vektfelt */
+
+.theme-light #weightWrap {
+  background: #fff4f4;
+  border-color: #e76a6a;
+}
+
+.theme-light #weightWrap label {
+  color: #8f1d1d;
+}
+
+.theme-light #weightWrap input {
+  background: #ffffff;
+}
+
+
+/* Tilbakemelding og versjonshistorikk */
+
+.theme-light .feedbackBtn {
+  background: #e9eef6;
+  color: #172338;
+  border-color: #cbd5e1;
+}
+
+.theme-light .feedbackBtn:hover {
+  background: #dde8f6;
+  color: #172338;
+}
+
+.theme-light .versionHistoryBtn {
+  color: #1d4ed8;
+}
+
+.theme-light .versionHistoryBtn:hover {
+  color: #1e40af;
+}
+
+.theme-light .versionHistoryStatus,
+.theme-light .versionHistoryDate {
+  color: #475569;
+}
+
+.theme-light .versionHistoryEntry {
+  border-color: #d5dde8;
+}
+
+.theme-light .versionHistoryEntryTitle {
+  color: #172338;
+}
+
+
+/* ======================================================
+   MOBIL – RESPIRATORFELTER
+====================================================== */
+
+@media (max-width: 720px) {
+
+  .intubRow {
+    flex-wrap: wrap;
+  }
+
+  .intubRow .unitInputWrap {
+    flex: 1 1 140px;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+}
+
+/* ======================================================
+   OPSIX – FINJUSTERING AV LYS VISNING
+   Mattere uttrykk, tydeligere rammer og bedre kontrast
+====================================================== */
+
+
+
+/* ======================================================
+   OPSIX – DAGMODUS: ROLIG GRÅ, HVITE CHIPS
+
+   Samlet lyst fargetema.
+   Nattmodus påvirkes ikke.
+====================================================== */
+
+body.theme-light {
+  --bg: #dfe5eb;
+  --panel: #eaf0f4;
+  --text: #202b39;
+  --muted: #536172;
+  --field: #ffffff;
+  --fieldText: #202b39;
+  --line: #bdc9d4;
+  --accent: #526a84;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+
+/* ======================================================
+   BAKGRUNN OG HOVEDPANEL
+====================================================== */
+
+.theme-light .card {
+  background: var(--panel);
+  border: 1px solid #c5d0da;
+  box-shadow: 0 2px 9px rgba(32, 43, 57, 0.045);
+}
+
+
+/* ======================================================
+   OVERSKRIFTER
+====================================================== */
+
+.theme-light .pageHeader #pageTitle,
+.theme-light .hasteLabel,
+.theme-light .section,
+.theme-light .bigSection,
+.theme-light .minorTitle,
+.theme-light .blockTitle,
+.theme-light .medSection .minorTitle,
+.theme-light .hasteSupportTitle,
+.theme-light .flowDivider,
+.theme-light .vpTitle {
+  color: #202b39;
+}
+
+.theme-light .medGroupTitle,
+.theme-light .hint,
+.theme-light .gcsHelp {
+  color: #48586b;
+  opacity: 1;
+}
+
+
+/* ======================================================
+   SEKSJONER OG GRUPPER
+====================================================== */
+
+.theme-light .medGroup,
+.theme-light .hasteSupport,
+.theme-light .accessGroup,
+.theme-light .doctorGroup,
+.theme-light .infoGroup {
+  background: transparent;
+  border-color: #c8d2dc;
+}
+
+.theme-light .accessGroup .toggleCell,
+.theme-light .accessGroup .nonToggleRow,
+.theme-light .flowDivider {
+  background: rgba(255,255,255,0.18);
+  border-color: #cbd5df;
+}
+
+.theme-light .medUnifiedTable th,
+.theme-light .medTable th {
+  background: #dce5ec;
+  color: #202b39;
+}
+
+.theme-light .hasteSupportItem {
+  background: #e4ebf0;
+  color: #202b39;
+}
+
+.theme-light .hasteSupportItem strong {
+  color: #202b39;
+}
+
+.theme-light .hasteSupportItem span {
+  color: #536172;
+}
+
+
+/* ======================================================
+   REGISTRERINGSFELTER
+====================================================== */
+
+.theme-light input:not([type="checkbox"]):not([type="radio"]):not(.kliniskUgyldig),
+.theme-light textarea,
+.theme-light select {
+  background: #ffffff;
+  color: #202b39;
+  border-color: #aebecb;
+}
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #68788a;
+  opacity: 1;
+}
+
+.theme-light input:focus-visible,
+.theme-light textarea:focus-visible,
+.theme-light select:focus-visible {
+  outline: 2px solid #526a84;
+  outline-offset: 1px;
+}
+
+
+/* ======================================================
+   KLINISKE FEILMARKERINGER
+====================================================== */
+
+.theme-light input.kliniskUgyldig {
+  color: #b91c1c !important;
+  background: #fff1f2 !important;
+  border: 2px solid #dc2626 !important;
+}
+
+
+/* ======================================================
+   DAG / NATT-KNAPP
+====================================================== */
+
+.theme-light .themeToggle {
+  background: #dbe4eb;
+  color: #202b39;
+  border: 1px solid #adbcc9;
+  box-shadow: none;
+}
+
+.theme-light .themeToggle:hover {
+  background: #cddbe5;
+}
+
+
+/* ======================================================
+   HASTEGRADER
+
+   Grå bakgrunn når ikke valgt.
+   Farget ramme.
+   Farget fyll når hastegrad er valgt.
+====================================================== */
+
+.theme-light .hasteGrid .hasteCard:not(.active) {
+  background: #edf1f4 !important;
+  color: #202b39 !important;
+  box-shadow: 0 2px 6px rgba(32,43,57,0.055);
+}
+
+.theme-light .hasteGrid .hasteCard:not(.active) .hasteCardText {
+  color: #48586b;
+}
+
+.theme-light .hasteGrid .hasteCard {
+  border-width: 2px !important;
+  border-style: solid !important;
+}
+
+
+/* Akutt – rød ramme */
+
+.theme-light .hasteGrid .hasteCard.haste-akutt {
+  border-color: #de4549 !important;
+}
+
+
+/* Haster – gul ramme */
+
+.theme-light .hasteGrid .hasteCard.haste-haster {
+  border-color: #c79400 !important;
+}
+
+
+/* Samme døgn – grønn ramme */
+
+.theme-light .hasteGrid .hasteCard.haste-samme {
+  border-color: #5c946c !important;
+}
+
+
+/* Planlagt – mørkegrønn ramme */
+
+.theme-light .hasteGrid .hasteCard.haste-planlagt {
+  border-color: #27663f !important;
+}
+
+
+/* Hvit tekst ved valgt Planlagt */
+
+.theme-light .hasteGrid .hasteCard.haste-planlagt.active,
+.theme-light .hasteGrid .hasteCard.haste-planlagt.active .hasteCardTitle,
+.theme-light .hasteGrid .hasteCard.haste-planlagt.active .hasteCardText {
+  color: #ffffff !important;
+}
+
+
+/* ======================================================
+   CHIPS – GENERELL UTFORMING
+
+   Hvit bakgrunn.
+   Mørk tekst.
+   Rolig grå ramme.
+====================================================== */
+
+.theme-light .medChip,
+.theme-light .followChip,
+.theme-light .caveChip,
+.theme-light .accessChip,
+.theme-light .utstyrChip,
+.theme-light .spedChip,
+.theme-light .smChip,
+.theme-light .binaryOpt,
+.theme-light .pumpRow .utstyrChip,
+.theme-light .airwayRow .binaryOpt,
+.theme-light .spedRespArbeidRow .medChip,
+.theme-light .specialGroup .specCell,
+.theme-light #trachWrap .toggleCell,
+.theme-light #acuteTrachWrap .toggleCell {
+  background: #ffffff !important;
+  color: #1c2634 !important;
+  border: 1px solid #b2beca !important;
+  box-shadow: none !important;
+}
+
+
+/* ======================================================
+   TEKST INNI CHIPS
+====================================================== */
+
+.theme-light .medChip span,
+.theme-light .followChip span,
+.theme-light .caveChip span,
+.theme-light .accessChip span,
+.theme-light .utstyrChip span,
+.theme-light .spedChip span,
+.theme-light .smChip span,
+.theme-light .binaryOpt span,
+.theme-light .pumpRow .utstyrChip span,
+.theme-light .airwayRow .binaryOpt span,
+.theme-light .spedRespArbeidRow .medChip span,
+.theme-light .specialGroup .specCell span,
+.theme-light #trachWrap .toggleCell span,
+.theme-light #acuteTrachWrap .toggleCell span {
+  color: #1c2634 !important;
+}
+
+
+/* ======================================================
+   AKTIVE CHIPS
+
+   Fortsatt hvit bakgrunn.
+   Tydeligere mørk ramme.
+   Svak skygge.
+   Fetere tekst.
+====================================================== */
+
+.theme-light .medChip:has(input:checked),
+.theme-light .followChip:has(input:checked),
+.theme-light .caveChip:has(input:checked),
+.theme-light .accessChip:has(input:checked),
+.theme-light .utstyrChip:has(input:checked),
+.theme-light .spedChip:has(input:checked),
+.theme-light .smChip:has(input:checked),
+.theme-light .binaryOpt:has(input:checked),
+.theme-light .pumpRow .utstyrChip:has(input:checked),
+.theme-light .airwayRow .binaryOpt:has(input:checked),
+.theme-light .spedRespArbeidRow .medChip:has(input:checked),
+.theme-light .specialGroup .specCell.active,
+.theme-light .specialGroup .specCell:has(input:checked),
+.theme-light #trachWrap .toggleCell:has(input:checked),
+.theme-light #acuteTrachWrap .toggleCell:has(input:checked) {
+  background: #ffffff !important;
+  color: #1c2634 !important;
+  border: 2px solid #50647a !important;
+  box-shadow:
+    0 2px 6px rgba(35,51,69,0.12),
+    inset 0 0 0 1px rgba(80,100,122,0.10) !important;
+  font-weight: 750 !important;
+}
+
+
+/* ======================================================
+   TEKST I AKTIVE CHIPS
+====================================================== */
+
+.theme-light .medChip:has(input:checked) span,
+.theme-light .followChip:has(input:checked) span,
+.theme-light .caveChip:has(input:checked) span,
+.theme-light .accessChip:has(input:checked) span,
+.theme-light .utstyrChip:has(input:checked) span,
+.theme-light .spedChip:has(input:checked) span,
+.theme-light .smChip:has(input:checked) span,
+.theme-light .binaryOpt:has(input:checked) span,
+.theme-light .pumpRow .utstyrChip:has(input:checked) span,
+.theme-light .airwayRow .binaryOpt:has(input:checked) span,
+.theme-light .spedRespArbeidRow .medChip:has(input:checked) span,
+.theme-light .specialGroup .specCell.active span,
+.theme-light .specialGroup .specCell:has(input:checked) span,
+.theme-light #trachWrap .toggleCell:has(input:checked) span,
+.theme-light #acuteTrachWrap .toggleCell:has(input:checked) span {
+  color: #1c2634 !important;
+  font-weight: 750 !important;
+}
+
+
+/* ======================================================
+   HOVER-EFFEKT
+
+   Diskret endring ved musepeker over chip.
+====================================================== */
+
+.theme-light .medChip:hover,
+.theme-light .followChip:hover,
+.theme-light .binaryOpt:hover,
+.theme-light .specialGroup .specCell:hover,
+.theme-light #trachWrap .toggleCell:hover,
+.theme-light #acuteTrachWrap .toggleCell:hover {
+  background: #f1f5f8 !important;
+}
+
+
+/* Valgt chip forblir hvit ved hover */
+
+.theme-light .medChip:has(input:checked):hover,
+.theme-light .followChip:has(input:checked):hover,
+.theme-light .binaryOpt:has(input:checked):hover,
+.theme-light .specialGroup .specCell.active:hover,
+.theme-light .specialGroup .specCell:has(input:checked):hover {
+  background: #ffffff !important;
+}
+
+
+/* ======================================================
+   VEKT – FORTSATT TYDELIG MARKERT
+====================================================== */
+
+.theme-light #weightWrap {
+  background: rgba(222,69,73,0.055);
+  border-color: #cf777d;
+}
+
+.theme-light #weightWrap label {
+  color: #8f3038;
+}
+
+.theme-light #weightWrap input {
+  background: #ffffff;
+}
+
+
+/* ======================================================
+   TILBAKEMELDINGER OG VERSJONSHISTORIKK
+====================================================== */
+
+.theme-light .feedbackBtn {
+  background: #dee7ee;
+  color: #202b39;
+  border-color: #b2bfcb;
+}
+
+.theme-light .feedbackBtn:hover {
+  background: #d4e0e9;
+  color: #202b39;
+}
+
+.theme-light .versionHistoryBtn {
+  color: #345574;
+}
+
+.theme-light .versionHistoryBtn:hover {
+  color: #233e57;
+}
+
+.theme-light .versionHistoryStatus,
+.theme-light .versionHistoryDate {
+  color: #536172;
+}
+
+.theme-light .versionHistoryEntry {
+  border-color: #c5d0da;
+}
+
+.theme-light .versionHistoryEntryTitle {
+  color: #202b39;
+}
+
+
+/* ======================================================
+   MOBIL – RESPIRATORFELTER
+
+   Hindrer horisontal scrolling ved små skjermer.
+   Gjelder både dag- og nattmodus.
+====================================================== */
+
+@media (max-width: 720px) {
+
+  .intubRow {
+    flex-wrap: wrap;
+  }
+
+  .intubRow .unitInputWrap {
+    flex: 1 1 140px;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+}
+/* ======================================================
+   SØPPELBØTTE – TØM SKJEMA
+====================================================== */
+
+#resetBtn .trashIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+}
+
+#resetBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
