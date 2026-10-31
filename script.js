@@ -23,6 +23,7 @@ const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("sm
 const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("utstyrDynamicBody");
 const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall");
 let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
+let copyVersion = 0;
 
 /* Hver seksjon huskes separat, ikke som én stor hastegradgruppe. */
 const beholdteFeltgrupper = new Set();
@@ -2193,7 +2194,6 @@ bindRekvirerendeLegeSynkronisering();
   bindCvkEvents();
   bindUtstyrPumpeEvents();
 
-  bindAcuteSpontO2NumberOnly();
   bindHighFlowNumberOnly();
   bindMedicationNeiEvents();
 
@@ -2204,7 +2204,6 @@ bindRekvirerendeLegeSynkronisering();
   bindHlrRespEvents();
 
   bindBinaryOptionEvents();
-  bindSpontO2NumberOnly();
 
   bindTrachEvents();
   bindAcuteTrachEvents();
@@ -2341,6 +2340,10 @@ row.innerHTML =
   txt.addEventListener("input", () => {
     chk.checked = !!clean(txt.value);
 
+    if (chk.checked) {
+      $("til_ingen").checked = false;
+    }
+
     cleanupDynamicTextRows(
       tilgangerDynamicBody,
       "tilgangText",
@@ -2351,13 +2354,23 @@ row.innerHTML =
     lagRapport();
   });
 
-  chk.addEventListener("change", lagRapport);
+  chk.addEventListener("change", () => {
+    if (chk.checked) {
+      $("til_ingen").checked = false;
+    }
+
+    lagRapport();
+  });
 }
 function ensureTilgangBlankRow(){const texts=Array.from(document.querySelectorAll(".tilgangText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addTilgangRow()}
 function resetTilgangRows(){tilgangerDynamicBody.innerHTML="";addTilgangRow()}
 function addDrenAnnetField(){const row=document.createElement("div");row.className="dynamicRow";row.innerHTML='<input type="checkbox" class="chk drenAnnetChk"><input type="text" class="drenAnnetText" placeholder="Beskriv utstyr">';const cb=row.querySelector(".drenAnnetChk"),txt=row.querySelector(".drenAnnetText");txt.addEventListener("input", () => {
 
   cb.checked = !!clean(txt.value);
+
+  if (cb.checked) {
+    $("utst_ingen").checked = false;
+  }
 
   cleanupDynamicTextRows(
     drenAnnetContainer,
@@ -2368,7 +2381,13 @@ function addDrenAnnetField(){const row=document.createElement("div");row.classNa
   ensureDrenAnnetBlankField();
 
   lagRapport();
-});cb.addEventListener("change",lagRapport);drenAnnetContainer.appendChild(row)}
+});cb.addEventListener("change", () => {
+  if (cb.checked) {
+    $("utst_ingen").checked = false;
+  }
+
+  lagRapport();
+});drenAnnetContainer.appendChild(row)}
 function ensureDrenAnnetBlankField(){const texts=Array.from(document.querySelectorAll(".drenAnnetText"));if(!texts.length||!texts.some(t=>!clean(t.value)))addDrenAnnetField()}
 function resetDrenAnnetFields(){drenAnnetContainer.innerHTML="";addDrenAnnetField()}
 function collectDynamicTexts(textSelector,checkSelector){const out=[];document.querySelectorAll(textSelector).forEach(txt=>{const row=txt.closest(".dynamicRow"),chk=row?row.querySelector(checkSelector):null,val=clean(txt.value);if(chk&&chk.checked&&val)out.push(val)});return out}
@@ -2999,6 +3018,7 @@ function addFullDoctors(lines) {
 async function kopierRapport() {
 
   const tekst = rapport.value;
+  const requestVersion = ++copyVersion;
 
   clearTimeout(copyTimer);
 
@@ -3013,10 +3033,15 @@ async function kopierRapport() {
 
     await navigator.clipboard.writeText(tekst);
 
+    // En fullført kopiering fra før tømming skal ikke vise ny status.
+    if (requestVersion !== copyVersion) return;
+
     // Vis bare suksess når kopieringen lykkes
     copyMsg.textContent = "Rapport kopiert";
 
   } catch (error) {
+
+    if (requestVersion !== copyVersion) return;
 
     console.warn("Kopiering mislyktes:", error);
 
@@ -3037,12 +3062,20 @@ async function kopierRapport() {
 
 function nullstillSkjema() {
 
+  // Avslutt gammel statusvisning, også ved pågående kopiering.
+  copyVersion++;
+  clearTimeout(copyTimer);
+  copyTimer = null;
+  copyMsg.textContent = "";
+  copyMsg.classList.remove("show");
+
   beholdteFeltgrupper.clear();
   beholdteSeksjoner.clear();
 
   document.querySelectorAll("input").forEach(el => {
 
     el.dataset.active = "false";
+    el.dataset.wasChecked = "false";
 
     if (
       el.type === "checkbox" ||
@@ -3088,10 +3121,22 @@ function nullstillSkjema() {
     .forEach(b => {
 
       b.classList.remove("active");
+      b.setAttribute("aria-pressed", "false");
 
     });
 
 
+  document.querySelectorAll(".specialGroup .specCell").forEach(cell => {
+    cell.classList.remove("active");
+  });
+
+  resetSedRows();
+  resetPressorRows();
+  resetAndreInfRows();
+  resetTilgangRows();
+  resetDrenAnnetFields();
+
+  updateTilgangerUI();
   updateUtstyrPumpeUI();
   updateMainVisibility();
   updateSpedbarnUI();
@@ -3337,31 +3382,6 @@ document.addEventListener("click", e => {
 
   lagRapport();
 }, true);
-
-function bindSpontO2NumberOnly() {
-  const el = $("spontO2Liter");
-  if (!el) return;
-
-  el.addEventListener("input", () => {
-    el.value = el.value.replace(/\D/g, "").slice(0, 2);
-    lagRapport();
-  });
-}
-
-function bindAcuteSpontO2NumberOnly() {
-
-  const el = $("acuteSpontO2Liter");
-  if (!el) return;
-
-  el.addEventListener("input", () => {
-
-    el.value = el.value
-      .replace(/\D/g, "")
-      .slice(0, 2);
-
-    lagRapport();
-  });
-}
 
 function bindHighFlowNumberOnly() {
 
