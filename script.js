@@ -7,7 +7,6 @@ const pageTitle=$("pageTitle"),
 mainContent=$("mainContent"),
 acuteTop=$("acuteTop"),
 fullTop=$("fullTop"),
-acuteBottom=$("acuteBottom"),
 fullBottom=$("fullBottom"),
 sharedBottom=$("sharedBottom"),
 sharedEquipmentBlock=$("sharedEquipmentBlock"),
@@ -22,13 +21,13 @@ const spontO2Wrap=$("spontO2Wrap"),highFlowWrap=$("highFlowWrap"),nivWrap=$("niv
 const acuteSpontO2Wrap=$("acuteSpontO2Wrap"),acuteHighFlowWrap=$("acuteHighFlowWrap"),acuteNivWrap=$("acuteNivWrap"),acuteIntubWrap=$("acuteIntubWrap"),acuteTrachWrap=$("acuteTrachWrap"),acuteTrachO2Wrap=$("acuteTrachO2Wrap"),acuteTrachVentWrap=$("acuteTrachVentWrap");
 const caveTextWrap=$("caveTextWrap"),caveText=$("caveText"),smitteSpesWrap=$("smitteSpesWrap"),smitteSpes=$("smitteSpes");
 const sedDynamicBody=$("sedDynamicBody"),pressorDynamicBody=$("pressorDynamicBody"),andreInfBody=$("andreInfBody"),tilgangerDynamicBody=$("tilgangerDynamicBody"),drenAnnetContainer=$("utstyrDynamicBody");
-const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall"),acutePumperChk=$("acutePumperChk"),acutePumperAntall=$("acutePumperAntall");
+const pvkChk=$("til_pvk"),pvkAntall=$("pvkAntall"),utstPumperChk=$("utst_pumper"),utstPumperAntall=$("utstPumpeAntall");
 let valgtHastegrad="",forrigeHastegrad="",copyTimer=null;
 
 /* Hver seksjon huskes separat, ikke som én stor hastegradgruppe. */
 const beholdteFeltgrupper = new Set();
 const beholdteSeksjoner = new Set();
-const hasteFeltgrupper = ["acuteBottom", "acuteDoctorBlock", "fullBottom"];
+const hasteFeltgrupper = ["acuteDoctorBlock", "fullBottom"];
 const seksjoner = {};
 
 function lagSeksjon(id, noder) {
@@ -282,32 +281,9 @@ function leggTilUnikeRapportlinjer(mal, tillegg) {
 
     let linje = originalLinje;
 
-    // Antall pumper kommer fra felles synkronisert
-    // pumpestatus, ikke fra gammel hastegrad.
-    if (linje.startsWith("Sprøytepumper:")) {
-      return;
-    }
-
-    // I Akutt kan vi beholde øvrig utstyr fra
-    // Haster, men pumpene skal ikke stå to ganger.
-    if (
-      isAcute() &&
-      linje.startsWith("Utstyr:")
-    ) {
-
-      const utstyr = linje
-        .slice("Utstyr:".length)
-        .split(", ")
-        .map(x => x.trim())
-        .filter(x =>
-          x &&
-          !x.startsWith("Sprøytepumper:")
-        );
-
-      if (!utstyr.length) return;
-
-      linje = "Utstyr: " + utstyr.join(", ");
-    }
+    // Utstyr og sprøytepumper kommer alltid fra samme felt.
+    // En duplisert Utstyr-linje fra en tidligere hastegrad
+    // skal ikke legge til en ny kopi.
 
     const type = hentFeltType(linje);
 
@@ -760,9 +736,11 @@ if (brukerGram && v !== "") {
   return p.join(", ");
 }
 
+
 function buildUtstyrList() {
   const out = [];
 
+  // Sprøytepumper – felles for alle hastegrader
   const n = clean(utstPumperAntall.value);
 
   if (utstPumperChk.checked) {
@@ -773,14 +751,17 @@ function buildUtstyrList() {
     );
   }
 
+  // Arteriekran – tas med dersom allerede registrert
   if ($("utst_arterie").checked) {
     out.push("Arteriekran");
   }
 
+  // Thoraxdren – tas med dersom allerede registrert
   if ($("dren_thorax").checked) {
     out.push("Thoraxdren");
   }
 
+  // Annet utstyr – tas med dersom allerede registrert
   document.querySelectorAll(".drenAnnetText").forEach(txt => {
     const row = txt.closest(".dynamicRow");
     const cb = row ? row.querySelector(".drenAnnetChk") : null;
@@ -1266,8 +1247,25 @@ function bindRekvirerendeLegeSynkronisering() {
 
 }
 
-function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
-function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
+function syncAcuteToFull() {
+  copyVal("acuteHovedproblem", "hovedproblem");
+  const a = getBinaryValue("acuteAirway");
+  if (a && !getBinaryValue("airwayMain")) setBinaryValue("airwayMain", a);
+  [["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));
+  if ($("acute_tr_spont").checked) $("tr_spont").checked = true;
+  if ($("acute_tr_o2").checked) $("tr_o2").checked = true;
+  if ($("acute_tr_vent").checked) $("tr_vent").checked = true;
+}
+function syncFullToAcute() {
+  copyVal("hovedproblem", "acuteHovedproblem");
+  const a = getBinaryValue("airwayMain");
+  if (a && !getBinaryValue("acuteAirway")) setBinaryValue("acuteAirway", a);
+  [["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));
+  if ($("tr_spont").checked) $("acute_tr_spont").checked = true;
+  if ($("tr_o2").checked) $("acute_tr_o2").checked = true;
+  if ($("tr_vent").checked) $("acute_tr_vent").checked = true;
+  updateAcuteAirwayDetails();
+}
 /* ======================================================
    T034 – FELLES LUFTVEISSTATUS
 
@@ -1423,16 +1421,52 @@ function syncVisibleSharedFieldsBeforeSwitch() {
   }
 
 }
+
+function oppdaterAkuttUtstyrVisning() {
+  const akutt = isAcute();
+
+  // Vis bare tidligere avkryssede utstyrsvalg ved Akutt.
+  document.querySelectorAll(".akuttSkjulUtstyr").forEach(chip => {
+    const input = chip.querySelector("input[type='checkbox']");
+    const erValgt = !!input?.checked;
+
+    setHidden(chip, akutt && !erValgt);
+  });
+
+  // Behold registrert annet utstyr, men skjul tomme felt.
+  const container = $("utstyrDynamicBody");
+
+  if (container) {
+    let harRegistrertUtstyr = false;
+
+    container.querySelectorAll(".dynamicRow").forEach(row => {
+      const input = row.querySelector(".drenAnnetText");
+      const checkbox = row.querySelector(".drenAnnetChk");
+
+      const erRegistrert =
+        !!checkbox?.checked || !!clean(input?.value);
+
+      if (erRegistrert) {
+        harRegistrertUtstyr = true;
+      }
+
+      setHidden(row, akutt && !erRegistrert);
+    });
+
+    setHidden(container, akutt && !harRegistrertUtstyr);
+  }
+}
+
 function updateMainVisibility() {
   const h = getBinaryValue("hast");
   const harHastegrad = !!h;
   const acute = isAcute();
+    document.body.classList.toggle("opsix-akutt", acute);
 
   setHidden(mainContent, !harHastegrad);
 
 if (!harHastegrad) {
   setHidden(acuteTop, true);
-  setHidden(acuteBottom, true);
   setHidden(fullTop, true);
   setHidden(fullBottom, true);
   setHidden(sharedEquipmentBlock, true);
@@ -1451,7 +1485,6 @@ if (!harHastegrad) {
 
   // Akutt-del
   visFeltgruppe("acuteTop", acute);
-  visFeltgruppe("acuteBottom", acute);
 
   // Ikke-akutt-del
   visFeltgruppe("fullTop", !acute);
@@ -1464,7 +1497,7 @@ if (!harHastegrad) {
   visFeltgruppe("acuteDoctorBlock", acute);
 
 // Tilganger og utstyr skjules ved Akutt
-visFeltgruppe("sharedEquipmentBlock", !acute);
+// Felles utstyr vises etter at de bevarte seksjonene er beregnet.
 
 // Full legeinfo skjules ved Akutt
 visFeltgruppe("sharedBottom", !acute);
@@ -1481,6 +1514,12 @@ visFeltgruppe("sharedBottom", !acute);
   }
 
   oppdaterSeksjonsvisning();
+
+  // T057: Én felles Utstyr-seksjon, ett pumpefelt i alle hastegrader.
+  setHidden(sharedEquipmentBlock, false);
+  setHidden(seksjoner["full-tilganger"], acute);
+  setHidden(seksjoner["full-utstyr"], false);
+oppdaterAkuttUtstyrVisning();
   updateTitle();
 }
 
@@ -1685,142 +1724,6 @@ function bindUtstyrPumpeEvents() {
     lagRapport();
   });
 }
-
-function updateAcutePumpeUI() {
-  setHidden(acutePumperAntall, !acutePumperChk?.checked);
-}
-
-function bindAcutePumpeEvents() {
-
-  updateAcutePumpeUI();
-
-  acutePumperAntall.addEventListener("input", () => {
-    acutePumperChk.checked = !!acutePumperAntall.value;
-    updateAcutePumpeUI();
-    lagRapport();
-  });
-
-  acutePumperAntall.addEventListener("change", () => {
-    acutePumperChk.checked = !!acutePumperAntall.value;
-    updateAcutePumpeUI();
-    lagRapport();
-  });
-
-  acutePumperChk.addEventListener("change", () => {
-
-    if (!acutePumperChk.checked) {
-      acutePumperAntall.value = "";
-    }
-
-    updateAcutePumpeUI();
-    lagRapport();
-  });
-}
-
-/* ======================================================
-   T056 – FELLES ANTALL SPRØYTEPUMPER
-
-   Siste endring gjelder i begge hastegradvisninger.
-   Avhuking og tømming synkroniseres.
-====================================================== */
-
-function bindFellesPumper() {
-
-  const akuttValg = $("acutePumperChk");
-  const akuttAntall = $("acutePumperAntall");
-
-  const vanligValg = $("utst_pumper");
-  const vanligAntall = $("utstPumpeAntall");
-
-  if (
-    !akuttValg ||
-    !akuttAntall ||
-    !vanligValg ||
-    !vanligAntall
-  ) {
-    return;
-  }
-
-  function synkroniser(fraAkutt) {
-
-    const kildeValg = fraAkutt
-      ? akuttValg
-      : vanligValg;
-
-    const kildeAntall = fraAkutt
-      ? akuttAntall
-      : vanligAntall;
-
-    const mottakerValg = fraAkutt
-      ? vanligValg
-      : akuttValg;
-
-    const mottakerAntall = fraAkutt
-      ? vanligAntall
-      : akuttAntall;
-
-    mottakerValg.checked = kildeValg.checked;
-
-    mottakerAntall.value = kildeValg.checked
-      ? kildeAntall.value
-      : "";
-
-    if (kildeValg.checked) {
-      const ingenUtstyr = $("utst_ingen");
-
-      if (ingenUtstyr) {
-        ingenUtstyr.checked = false;
-      }
-    }
-
-    updateAcutePumpeUI();
-    updateUtstyrPumpeUI();
-
-    lagRapport();
-  }
-
-  akuttValg.addEventListener("change", () => {
-    synkroniser(true);
-  });
-
-  vanligValg.addEventListener("change", () => {
-    synkroniser(false);
-  });
-
-  ["input", "change"].forEach(eventType => {
-
-    akuttAntall.addEventListener(eventType, () => {
-      synkroniser(true);
-    });
-
-    vanligAntall.addEventListener(eventType, () => {
-      synkroniser(false);
-    });
-
-  });
-
-  // "Ingen utstyr" skal også nullstille
-  // pumpene i Akutt-visningen.
-  $("utst_ingen")?.addEventListener(
-    "change",
-    () => {
-
-      if (!$("utst_ingen").checked) return;
-
-      akuttValg.checked = false;
-      vanligValg.checked = false;
-
-      akuttAntall.value = "";
-      vanligAntall.value = "";
-
-      updateAcutePumpeUI();
-      updateUtstyrPumpeUI();
-
-      lagRapport();
-    }
-  );
-}
-
 
 function bindToggleEvents() {
 
@@ -2135,6 +2038,7 @@ function bindSmitteEvents() {
 
         updateSmitteSpes();
         lagRapport();
+
       });
     });
 
@@ -2247,7 +2151,6 @@ bindRekvirerendeLegeSynkronisering();
   bindPvkEvents();
   bindCvkEvents();
   bindUtstyrPumpeEvents();
-  bindAcutePumpeEvents();
 
   bindAcuteSpontO2NumberOnly();
   bindHighFlowNumberOnly();
@@ -2266,7 +2169,6 @@ bindRekvirerendeLegeSynkronisering();
   bindAcuteTrachEvents();
 
   bindSmartChipLogic();
-  bindFellesPumper();
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
 
@@ -2573,8 +2475,9 @@ function lagRapport() {
 
   syncSpecMirrors();
   updateTitle();
+  oppdaterAkuttUtstyrVisning();
   oppdaterKliniskeFeltvarsler();
-
+  
   const h = getBinaryValue("hast");
 
   if (!h) {
@@ -2642,7 +2545,7 @@ function lagRapport() {
 
     if (
       harBeholdteSeksjoner("acute-") ||
-      ["acuteBottom", "acuteDoctorBlock"]
+      ["acuteDoctorBlock"]
         .some(id => beholdteFeltgrupper.has(id))
     ) {
 
@@ -2904,15 +2807,9 @@ lines.push(
 
   addMedicationSections(lines);
 
-  if (acutePumperChk.checked) {
-    const antall = clean(acutePumperAntall.value);
-
-    lines.push(
-      antall
-        ? "Sprøytepumper: " + antall + " stk"
-        : "Sprøytepumper: antall ikke oppgitt"
-    );
-  }
+  // En felles utstyrskilde også ved Akutt.
+  const utstyr = buildUtstyrList();
+  if (utstyr.length) lines.push("Utstyr: " + utstyr.join(", "));
 
     buildSmitteLines().forEach(l => lines.push(l));
   buildCaveLines().forEach(l => lines.push(l));
@@ -3542,6 +3439,7 @@ function buildFollowNeedLine() {
 
   return "Følgebehov ifølge rekvirent: " + valgt.join(", ");
 }
+
 
 function bindFollowNeedEvents() {
   const none = document.getElementById("follow_none");

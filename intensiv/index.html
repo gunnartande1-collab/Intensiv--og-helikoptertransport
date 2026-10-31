@@ -73,8 +73,9 @@
 <div class="followRow">
 
   <label class="followChip">
-<input type="checkbox" name="followNeed" id="follow_none" value="Ikke behov">  <span>Ikke behov</span>
-</label>
+    <input type="checkbox" name="followNeed" id="follow_none" value="Ikke behov">
+    <span>Ikke behov</span>
+  </label>
 
   <label class="followChip">
     <input
@@ -103,7 +104,7 @@
     <span>Anestesilege</span>
   </label>
 
-    <label class="followChip">
+  <label class="followChip">
     <input
       type="checkbox"
       name="followNeed"
@@ -111,7 +112,6 @@
     >
     <span>Jordmor</span>
   </label>
-
 
 </div>
 
@@ -121,14 +121,15 @@
   <div class="table spesialtransportRow">
 
     <div class="specCell toggleCell toggleInner" data-toggle="spec_ingen">
-  <input id="spec_ingen"
-         class="chk spec specChoice"
-         type="checkbox"
-         value="Ikke aktuelt"
-         data-spec="Ikke aktuelt">
-
-  <span class="specLabel">Ikke aktuelt</span>
-</div>
+      <input
+        id="spec_ingen"
+        class="chk spec specChoice"
+        type="checkbox"
+        value="Ikke aktuelt"
+        data-spec="Ikke aktuelt"
+      >
+      <span class="specLabel">Ikke aktuelt</span>
+    </div>
 
     <div class="specCell toggleCell toggleInner" data-toggle="spec_ecmo">
       <input id="spec_ecmo" class="chk spec specChoice" type="checkbox" value="ECMO" data-spec="ECMO">
@@ -152,7 +153,6 @@
 
   </div>
 </div>
-
 
 <div class="formGroup">
 
@@ -263,10 +263,16 @@
 </div>
 
 <div id="weightWrap">
-<label id="vektLabel" for="vekt">Vekt (kg) </label>
-<input id="vekt" type="number" inputmode="decimal" min="0" step="0.1" placeholder="">
+  <label id="vektLabel" for="vekt">Vekt (kg)</label>
+  <input
+    id="vekt"
+    type="number"
+    inputmode="decimal"
+    min="0"
+    step="0.1"
+    placeholder=""
+  >
 </div>
-
 
 <div id="acuteTop" class="hidden">
 
@@ -274,8 +280,10 @@
 <textarea id="acuteHovedproblem" class="autoGrow" placeholder="Skriv en kort rapport"></textarea>
 
 <div class="section airwaySection">Luftveier</div>
+
 <div class="binaryRow airwayRow">
-    <label class="binaryOpt">
+
+  <label class="binaryOpt">
     <input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Spontan uten O2" id="acute_air_spont_uten">
     <span>Spontan uten O2</span>
   </label>
@@ -304,6 +312,7 @@
     <input type="radio" name="acuteAirway" class="chk binOpt" data-group="acuteAirway" data-value="Trakeostomi" id="acute_air_trach">
     <span>Trakeostomi</span>
   </label>
+
 </div>
 
 <div id="acuteSpontO2Wrap" class="hidden">
@@ -311,16 +320,14 @@
   <div class="inlineRow" style="margin-top:10px;">
 
     <div class="unitInputWrap">
-      <input
-        id="acuteSpontO2Liter"
-        type="text"
-        inputmode="numeric"      >
+      <input id="acuteSpontO2Liter" type="text" inputmode="numeric">
       <span>l/min</span>
     </div>
 
   </div>
 
 </div>
+
 <div id="acuteHighFlowWrap" class="hidden">
 
   <div class="inlineRow" style="margin-top:10px; gap:14px; flex-wrap:wrap;">
@@ -348,6 +355,7 @@
 </div>
 
 <div id="acuteNivWrap" class="hidden">
+
   <div class="inlineRow" style="margin-top:10px;">
     <div class="unitInputWrap">
       <input
@@ -358,11 +366,13 @@
       <span>% FiO2</span>
     </div>
   </div>
+
 </div>
 
 <div id="acuteIntubWrap" class="hidden">
 
-<div class="intubRow" style="margin-top:10px;">
+  <div class="intubRow" style="margin-top:10px;">
+
     <div class="unitInputWrap">
       <input
         id="acuteIntubFio2"
@@ -393,6 +403,7 @@
   </div>
 
 </div>
+
 
 <div id="acuteTrachWrap" class="hidden">
 
@@ -523,7 +534,7 @@
 
     <div class="unitInputWrap">
       <input
-        id="highFlowFio2"        
+        id="highFlowFio2"
         type="text"
         inputmode="decimal"
       >
@@ -623,7 +634,6 @@
         class="chk trachOpt"
         type="radio"
         data-name="Koblet til respirator"
-
       >
       <span>Koblet til respirator</span>
     </label>
@@ -645,7 +655,7 @@
 
   </div>
 
-  </div>
+</div>
 
 <div id="trachVentWrap" class="hidden">
 
@@ -682,15 +692,16 @@
 
 </div>
 
-  </div>
+</div>
 
-  <div class="section vpTitle">Vitalparametre</div>
-  <div class="inlineVitals">
-    <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
-    <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
-    <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
+<div class="section vpTitle">Vitalparametre</div>
+<div class="inlineVitals">
+  <div class="vpField"><span>RF</span><input id="rf" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+  <div class="vpField"><span>SpO2</span><input id="spo2" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+  <div class="vpField"><span>Puls</span><input id="puls" type="text" inputmode="numeric" maxlength="3" autocomplete="off"></div>
+  <div class="btWrap"><div class="btMini"><span>SYS</span><input id="btSys" maxlength="3" inputmode="numeric"></div><div class="btSlash">/</div><div class="btMini"><span>DIA</span><input id="btDia" maxlength="3" inputmode="numeric"></div><div class="vpField"><span>MAP</span><input id="map" maxlength="3" inputmode="numeric"></div></div>
+  <div class="vpField"><span>Tmp</span><input id="temp" type="text" maxlength="4" autocomplete="off"></div>
+
 <div class="vpField vpGcsField">
 
   <span
@@ -712,35 +723,35 @@
 </div>
 </div> <!-- fullTop -->
 
-    <div class="minorTitle">Medikamenter og infusjoner</div>
+<div class="minorTitle">Medikamenter og infusjoner</div>
 
-  <div class="medGroup">
-    <div class="medGroupTitle">Sedasjon</div>
-    <div class="chipRow">
-      <label class="medChip"><input id="sed_nei" class="sed" type="checkbox" data-name="Nei"><span>Nei</span></label>
-      <label class="medChip"><input id="sed_fentanyl" class="sed" type="checkbox" data-name="Fentanyl"><span>Fentanyl</span></label>
-      <label class="medChip"><input id="sed_ketamin" class="sed" type="checkbox" data-name="Ketamin"><span>Ketamin</span></label>
-      <label class="medChip"><input id="sed_midazolam" class="sed" type="checkbox" data-name="Midazolam"><span>Midazolam</span></label>
-      <label class="medChip"><input id="sed_sufentanil" class="sed" type="checkbox" data-name="Sufentanil"><span>Sufentanil</span></label>
-      <label class="medChip"><input id="sed_propofol" class="sed" type="checkbox" data-name="Propofol"><span>Propofol</span></label>
-    </div>
-    <div id="sedDynamicBody" class="medDynamic"></div>
+<div class="medGroup">
+  <div class="medGroupTitle">Sedasjon</div>
+  <div class="chipRow">
+    <label class="medChip"><input id="sed_nei" class="sed" type="checkbox" data-name="Nei"><span>Nei</span></label>
+    <label class="medChip"><input id="sed_fentanyl" class="sed" type="checkbox" data-name="Fentanyl"><span>Fentanyl</span></label>
+    <label class="medChip"><input id="sed_ketamin" class="sed" type="checkbox" data-name="Ketamin"><span>Ketamin</span></label>
+    <label class="medChip"><input id="sed_midazolam" class="sed" type="checkbox" data-name="Midazolam"><span>Midazolam</span></label>
+    <label class="medChip"><input id="sed_sufentanil" class="sed" type="checkbox" data-name="Sufentanil"><span>Sufentanil</span></label>
+    <label class="medChip"><input id="sed_propofol" class="sed" type="checkbox" data-name="Propofol"><span>Propofol</span></label>
   </div>
+  <div id="sedDynamicBody" class="medDynamic"></div>
+</div>
 
-  <div class="medGroup">
-    <div class="medGroupTitle">Pressor</div>
-    <div class="chipRow">
-      <label class="medChip">
-  <input id="pre_nei" class="pre" type="checkbox" data-name="Nei">
-  <span>Nei</span>
-</label>
-      <label class="medChip"><input id="pre_adrenalin" class="pre" type="checkbox" data-name="Adrenalin"><span>Adrenalin</span></label>
-      <label class="medChip"><input id="pre_noradrenalin" class="pre" type="checkbox" data-name="Noradrenalin"><span>Noradrenalin</span></label>
-      <label class="medChip"><input id="pre_dobutamin" class="pre" type="checkbox" data-name="Dobutamin"><span>Dobutamin</span></label>
-      <label class="medChip"><input id="pre_vasopressin" class="pre" type="checkbox" data-name="Vasopressin"><span>Vasopressin</span></label>
-    </div>
-    <div id="pressorDynamicBody" class="medDynamic"></div>
+<div class="medGroup">
+  <div class="medGroupTitle">Pressor</div>
+  <div class="chipRow">
+    <label class="medChip">
+      <input id="pre_nei" class="pre" type="checkbox" data-name="Nei">
+      <span>Nei</span>
+    </label>
+    <label class="medChip"><input id="pre_adrenalin" class="pre" type="checkbox" data-name="Adrenalin"><span>Adrenalin</span></label>
+    <label class="medChip"><input id="pre_noradrenalin" class="pre" type="checkbox" data-name="Noradrenalin"><span>Noradrenalin</span></label>
+    <label class="medChip"><input id="pre_dobutamin" class="pre" type="checkbox" data-name="Dobutamin"><span>Dobutamin</span></label>
+    <label class="medChip"><input id="pre_vasopressin" class="pre" type="checkbox" data-name="Vasopressin"><span>Vasopressin</span></label>
   </div>
+  <div id="pressorDynamicBody" class="medDynamic"></div>
+</div>
 
 <div class="medGroup">
   <div class="medGroupTitle">Andre medikamenter / infusjoner</div>
@@ -772,36 +783,8 @@
     </label>
   </div>
 
-<div id="andreInfBody" class="medDynamic"></div>
+  <div id="andreInfBody" class="medDynamic"></div>
 </div>
-
-
-<div id="acuteBottom" class="hidden">
-
-<label>Antall sprøytepumper</label>
-
-<div class="chipRow">
-  <label class="medChip">
-    <input id="acutePumperChk" class="chk" type="checkbox">
-    <span>Sprøytepumper</span>
-  </label>
-
-  <select id="acutePumperAntall" class="pumperSelect hidden">
-    <option value="">Antall</option>
-    <option value="1">1 stk</option>
-    <option value="2">2 stk</option>
-    <option value="3">3 stk</option>
-    <option value="4">4 stk</option>
-    <option value="5">5 stk</option>
-    <option value="6">6 stk</option>
-    <option value="7">7 stk</option>
-    <option value="8">8 stk</option>
-    <option value="9">9 stk</option>
-    <option value="10">10 stk</option>
-  </select>
-</div>
-
-</div> <!-- acuteBottom -->
 
 <div id="sharedEquipmentBlock" class="hidden">
 
@@ -860,50 +843,55 @@
 
 <div class="utstyrGroup">
 
-  <div class="chipRow utstyrChipRow">
-<label class="medChip">
-    <input id="utst_ingen"
-         class="chk dren"
-         type="checkbox"
-         data-name="Ingen utstyr">
-  <span>Ingen utstyr</span>
-</label>
+<div class="chipRow utstyrChipRow">
 
-<label class="medChip">
-        <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
-      <span>Arteriekran</span>
-    </label>
-
-<label class="medChip">
-        <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
-<span>Thoraxdren</span>
-</label>
-
-<div class="pumpRow">
-  <label class="medChip">
-    <input id="utst_pumper"
-           class="chk dren"
-           type="checkbox"
-           data-name="Sprøytepumper">
-    <span>Sprøytepumper</span>
+  <label class="medChip akuttSkjulUtstyr">
+    <input
+      id="utst_ingen"
+      class="chk dren"
+      type="checkbox"
+      data-name="Ingen utstyr"
+    >
+    <span>Ingen utstyr</span>
   </label>
 
-  <select id="utstPumpeAntall" class="inlineSelect hidden">
-    <option value="">Antall</option>
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
-    <option>4</option>
-    <option>5</option>
-    <option>6</option>
-    <option>7</option>
-    <option>8</option>
-    <option>9</option>
-    <option>10</option>
-  </select>
-</div>
+  <label class="medChip akuttSkjulUtstyr">
+    <input id="utst_arterie" class="chk dren" type="checkbox" data-name="Arteriekran">
+    <span>Arteriekran</span>
+  </label>
 
-  </div> <!-- chipRow -->
+  <label class="medChip akuttSkjulUtstyr">
+    <input id="dren_thorax" class="chk dren" type="checkbox" data-name="Thoraxdren">
+    <span>Thoraxdren</span>
+  </label>
+
+  <div class="pumpRow">
+    <label class="medChip">
+      <input
+        id="utst_pumper"
+        class="chk dren"
+        type="checkbox"
+        data-name="Sprøytepumper"
+      >
+      <span>Sprøytepumper</span>
+    </label>
+
+    <select id="utstPumpeAntall" class="inlineSelect hidden">
+      <option value="">Antall</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+      <option>10</option>
+    </select>
+  </div>
+
+</div> <!-- chipRow -->
 
 <div id="utstyrDynamicBody" class="accessDynamic"></div>
 
@@ -919,6 +907,7 @@
     <label class="minorTitle">Smitte</label>
 
     <div class="smLine">
+
       <label class="followChip smChip">
         <input type="radio" class="chk smitteBase" name="smitteBase" data-name="Ingen kjente" id="sm_ingen">
         <span>Ingen kjente</span>
@@ -943,27 +932,24 @@
         <input type="checkbox" class="chk smitteBlood" data-name="Blodsmitte" id="sm_blod">
         <span>Blodsmitte</span>
       </label>
+
     </div>
 
+    <!-- T051 – Ett felles spesifiseringsfelt -->
+    <div id="smitteSpesWrap" class="hidden">
+      <input
+        id="smitteSpes"
+        type="text"
+        placeholder="Spesifiser smitte"
+        aria-label="Spesifiser valgte smittetyper"
+        autocomplete="off"
+      >
+    </div>
 
+  </div> <!-- Avslutter smitte sin infoGroup -->
 
-<!-- T051 – Ett felles spesifiseringsfelt -->
-
-
-<div id="smitteSpesWrap" class="hidden">
-  <input
-    id="smitteSpes"
-    type="text"
-    placeholder="Spesifiser smitte"
-    aria-label="Spesifiser valgte smittetyper"
-    autocomplete="off"
-  >
-</div>
-
-</div> <!-- Avslutter smitte sin infoGroup -->
-
-<div class="infoGroup">
-  <label class="minorTitle">CAVE?</label>
+  <div class="infoGroup">
+    <label class="minorTitle">CAVE?</label>
 
     <div class="chipRow caveRow">
       <label class="medChip">
@@ -974,6 +960,7 @@
           data-value="Nei"
           class="chk caveRadio"
         >
+
         <span>Nei</span>
       </label>
 
@@ -1033,7 +1020,7 @@
 
   </div>
 
-</div>
+</div> <!-- safetyBlock -->
 
 <div id="acuteDoctorBlock" class="hidden">
 
@@ -1047,31 +1034,30 @@
 
 </div>
 
-
 <div id="sharedBottom" class="hidden">
 
-<div class="accessGroup">
+  <div class="accessGroup">
 
-<label class="minorTitle">Rekvirerende lege</label>
+    <label class="minorTitle">Rekvirerende lege</label>
 
-<div class="doctorRow">
-  <input id="rekNavn" placeholder="Navn">
-  <input id="rekTlf" class="phoneInput" placeholder="Tlf">
-</div>
+    <div class="doctorRow">
+      <input id="rekNavn" placeholder="Navn">
+      <input id="rekTlf" class="phoneInput" placeholder="Tlf">
+    </div>
 
-<label class="minorTitle">Mottakende lege</label>
-<div class="doctorRow">
-  <input id="mottNavn" placeholder="Navn">
-  <input id="mottTlf" class="phoneInput" placeholder="Tlf">
-</div>
+    <label class="minorTitle">Mottakende lege</label>
+    <div class="doctorRow">
+      <input id="mottNavn" placeholder="Navn">
+      <input id="mottTlf" class="phoneInput" placeholder="Tlf">
+    </div>
 
-</div> <!-- accessGroup lege -->
+  </div> <!-- accessGroup lege -->
 
 </div> <!-- sharedBottom -->
 
 <div id="reportActions" class="btnbar">
 
-<button id="copyBtn" type="button" class="btn-copy actionBtn">
+  <button id="copyBtn" type="button" class="btn-copy actionBtn">
     <svg class="copyIcon" viewBox="0 0 24 24" aria-hidden="true">
       <path fill="currentColor" d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1z"/>
       <path fill="currentColor" d="M18 5H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zm0 16H10V7h8v14z"/>
@@ -1081,36 +1067,38 @@
 
   <span id="copyMsg" class="copyMsg"></span>
 
-
-<button
-  id="resetBtn"
-  type="button"
-  class="btn-red actionBtn push-right"
->
-  <svg
-    class="trashIcon"
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
+  <button
+    id="resetBtn"
+    type="button"
+    class="btn-red actionBtn push-right"
   >
-    <path d="M3 6h18"/>
-    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-    <path d="M19 6l-1 14H6L5 6"/>
-    <path d="M10 11v6"/>
-    <path d="M14 11v6"/>
-  </svg>
+    <svg
+      class="trashIcon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 6h18"/>
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+      <path d="M19 6l-1 14H6L5 6"/>
+      <path d="M10 11v6"/>
+      <path d="M14 11v6"/>
+    </svg>
 
-  <span>Tøm skjema</span>
-</button>
+    <span>Tøm skjema</span>
+  </button>
+
 </div>
+
 <textarea id="rapport" class="report" readonly placeholder="Rapportteksten oppdateres automatisk…"></textarea>
+
 <!-- ======================================================
      VERSJONSHISTORIKK OG TILBAKEMELDINGER
 ====================================================== -->
@@ -1119,7 +1107,7 @@
 
   <div class="versionInfo">
     <span class="versionNumber">
-Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
+      Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
     </span>
 
     <button
@@ -1140,6 +1128,7 @@ Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
   </button>
 
 </div>
+
 </div> <!-- mainContent -->
 
 </div> <!-- Avslutter .card -->
@@ -1151,7 +1140,8 @@ Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
 </div> <!-- Avslutter .wrap -->
 
 <!-- Popup for tilbakemeldinger -->
- <dialog id="feedbackDialog" class="feedbackDialog" aria-labelledby="feedbackDialogTitle">
+
+<dialog id="feedbackDialog" class="feedbackDialog" aria-labelledby="feedbackDialogTitle">
 
   <div class="feedbackDialogHeader">
     <h2 id="feedbackDialogTitle">Tilbakemeldinger</h2>
@@ -1184,6 +1174,7 @@ Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
   </div>
 
 </dialog>
+
 <!-- ======================================================
      POPUP – VERSJONSHISTORIKK
 ====================================================== -->
@@ -1243,6 +1234,7 @@ Versjon <span id="currentVersion" data-version="v1.0.1">1.0.1</span>
   </div>
 
 </dialog>
-<script src="../script.js?v=20261031-2"></script>
+
+<script src="../script.js?v=20261031-4"></script>
 </body>
 </html>

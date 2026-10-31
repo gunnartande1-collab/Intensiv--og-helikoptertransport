@@ -3595,3 +3595,14 @@ body .wrap > .opsix-footer {
   color: var(--muted, #aaa);
   opacity: 0.65;
 }
+/* ======================================================
+   OPSIX – UTSTYR VED AKUTT
+
+   Vis kun sprøytepumper ved Akutt.
+   Andre hastegrader beholder alle utstyrsvalg.
+====================================================== */
+
+body.opsix-akutt .pumpRow {
+  display: flex;
+  align-items: center;
+}
