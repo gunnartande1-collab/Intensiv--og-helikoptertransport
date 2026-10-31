@@ -3606,3 +3606,6 @@ body.opsix-akutt .pumpRow {
   display: flex;
   align-items: center;
 }
+body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
+  display: none !important;
+}

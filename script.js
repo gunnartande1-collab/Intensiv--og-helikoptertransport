@@ -137,14 +137,13 @@ function oppdaterSeksjonsvisning() {
     // Aktuelt skal aldri vises dobbelt.
     // Den aktive hastegraden bestemmer hvilket
     // Aktuelt-felt brukeren skal se.
-    if (id === "acute-aktuelt") {
-      skalVises = acute;
+    if (id === "acute-aktuelt" || id === "acute-luftveier") {
+    skalVises = acute;
     }
 
-    if (id === "full-aktuelt") {
-      skalVises = !acute;
+    if (id === "full-aktuelt" || id === "full-luftveier") {
+  skalVises = !acute;
     }
-
     setHidden(el, !skalVises);
 
   });
@@ -739,7 +738,9 @@ if (brukerGram && v !== "") {
 
 function buildUtstyrList() {
   const out = [];
-
+  if ($("utst_ingen")?.checked) {
+    return ["Ingen utstyr"];
+  }
   // Sprøytepumper – felles for alle hastegrader
   const n = clean(utstPumperAntall.value);
 
@@ -1072,7 +1073,7 @@ function handleVitalInput(evt){
 
   }else if(id==="spo2"){
 
-    normalizeNumericField(evt.target,3,100);
+  normalizeNumericField(evt.target,3);
 
   }else if(id==="puls"){
 
@@ -1422,6 +1423,46 @@ function syncVisibleSharedFieldsBeforeSwitch() {
 
 }
 
+/* ======================================================
+   TILGANGER VED AKUTT
+   Behold registrerte valg synlige, skjul ubesvarte.
+====================================================== */
+function oppdaterAkuttTilgangerVisning() {
+  const akutt = isAcute();
+  const seksjon = seksjoner["full-tilganger"];
+  if (!seksjon) return;
+
+  let harRegistrerteTilganger = false;
+
+  ["til_ingen", "til_cvk", "til_pvk"].forEach(id => {
+    const input = $(id);
+    const chip = input?.closest("label");
+    if (!input || !chip) return;
+
+    const erValgt = input.checked;
+    if (erValgt) harRegistrerteTilganger = true;
+
+    setHidden(chip, akutt && !erValgt);
+  });
+
+  // Behold allerede registrerte friteksttilganger.
+  document.querySelectorAll("#tilgangerDynamicBody tr").forEach(rad => {
+    const tekst = rad.querySelector(".tilgangText");
+    const avkrysset = rad.querySelector(".tilgangDynChk");
+
+    const registrert =
+      !!avkrysset?.checked || !!clean(tekst?.value);
+
+    if (registrert) harRegistrerteTilganger = true;
+
+    setHidden(rad, akutt && !registrert);
+  });
+
+  // Hele seksjonen skjules ved Akutt når ingen
+  // tilganger tidligere er registrert.
+  setHidden(seksjon, akutt && !harRegistrerteTilganger);
+}
+
 function oppdaterAkuttUtstyrVisning() {
   const akutt = isAcute();
 
@@ -1517,7 +1558,7 @@ visFeltgruppe("sharedBottom", !acute);
 
   // T057: Én felles Utstyr-seksjon, ett pumpefelt i alle hastegrader.
   setHidden(sharedEquipmentBlock, false);
-  setHidden(seksjoner["full-tilganger"], acute);
+  oppdaterAkuttTilgangerVisning();
   setHidden(seksjoner["full-utstyr"], false);
 oppdaterAkuttUtstyrVisning();
   updateTitle();
@@ -2411,13 +2452,15 @@ function formatGcsValue(raw) {
 
 function oppdaterKliniskeFeltvarsler() {
 
-  // GCS
 
+  // GCS – vis feil først når brukeren har forlatt feltet.
   const gcs = $("gcs");
 
   if (gcs) {
+    const redigeres = document.activeElement === gcs;
 
     const feil =
+      !redigeres &&
       !!clean(gcs.value) &&
       !kontrollerGcs(gcs.value).gyldig;
 
@@ -2433,6 +2476,27 @@ function oppdaterKliniskeFeltvarsler() {
       : "";
   }
 
+  // SpO2 – behold innskrevet verdi og marker fra 101 %.
+  const spo2 = $("spo2");
+
+  if (spo2) {
+    const verdi = clean(spo2.value);
+
+    const feil =
+      verdi !== "" &&
+      Number(verdi) > 100;
+
+    spo2.classList.toggle("kliniskUgyldig", feil);
+
+    spo2.setAttribute(
+      "aria-invalid",
+      String(feil)
+    );
+
+    spo2.title = feil
+      ? "Kontroller SpO₂ – over 100 %"
+      : "";
+  }
 
   // FiO2 – samtlige relevante felt
 
@@ -2475,9 +2539,10 @@ function lagRapport() {
 
   syncSpecMirrors();
   updateTitle();
+  oppdaterAkuttTilgangerVisning();
   oppdaterAkuttUtstyrVisning();
   oppdaterKliniskeFeltvarsler();
-  
+
   const h = getBinaryValue("hast");
 
   if (!h) {
@@ -3027,6 +3092,7 @@ function nullstillSkjema() {
     });
 
 
+  updateUtstyrPumpeUI();
   updateMainVisibility();
   updateSpedbarnUI();
   updateCaveUI();
