@@ -185,6 +185,36 @@ function oppdaterSeksjonsvisning() {
     acute && !fullHarSynligeSeksjoner
   );
 
+/* ======================================================
+   T053 – EN REKVIRERENDE LEGE PER HASTEGRAD
+====================================================== */
+
+const rekFull = seksjoner["full-rekvirerende"];
+const mottFull = seksjoner["full-mottakende"];
+
+if (acute) {
+
+  // Akutt: vis bare Akutt sitt rekvirerende legefelt.
+  setHidden(acuteDoctorBlock, false);
+  setHidden(rekFull, true);
+
+  // Behold mottakende lege dersom feltet er fylt ut.
+  const harMottakende = seksjonHarInnhold(mottFull);
+
+  setHidden(mottFull, !harMottakende);
+  setHidden(sharedBottom, !harMottakende);
+
+} else {
+
+  // Øvrige hastegrader: vis ordinært legefelt.
+  setHidden(acuteDoctorBlock, true);
+  setHidden(sharedBottom, false);
+  setHidden(rekFull, false);
+  setHidden(mottFull, false);
+
+}
+
+
 }
 
 function visFeltgruppe(id, normaltSynlig) {
@@ -205,13 +235,100 @@ if (id === "fullTop") {
 
 /* Supplerer rapporten med registreringer fra en annen hastegrad.
    Identiske linjer legges ikke inn to ganger. */
+
+/* ======================================================
+   T055 – SIKKER SAMMENSLÅING AV RAPPORTLINJER
+
+   - Beholder primærrapportens opplysninger
+   - Unngår duplikater fra tidligere hastegrad
+   - Behandler sprøytepumper som én opplysning
+   - Bevarer øvrig utstyr ved overgang til Akutt
+====================================================== */
+
 function leggTilUnikeRapportlinjer(mal, tillegg) {
+
   const finnes = new Set(mal);
-  tillegg.forEach(linje => {
-    if (linje && !finnes.has(linje)) {
-      mal.push(linje);
-      finnes.add(linje);
+
+  const unikeFelt = [
+    "Aktuelt:",
+    "Luftveier:",
+    "Vekt:",
+    "Smitte:",
+    "CAVE:",
+    "Rekvirerende lege:",
+    "Mottakende lege:",
+    "Sedasjon:",
+    "Pressor:",
+    "Andre medikamenter/infusjoner:",
+    "Tilganger:",
+    "Utstyr:",
+    "Sprøytepumper:",
+    "T:"
+  ];
+
+  function hentFeltType(linje) {
+    return unikeFelt.find(type =>
+      linje.startsWith(type)
+    ) || "";
+  }
+
+  const registrerteTyper = new Set(
+    mal.map(hentFeltType).filter(Boolean)
+  );
+
+  tillegg.forEach(originalLinje => {
+
+    if (!originalLinje) return;
+
+    let linje = originalLinje;
+
+    // Antall pumper kommer fra felles synkronisert
+    // pumpestatus, ikke fra gammel hastegrad.
+    if (linje.startsWith("Sprøytepumper:")) {
+      return;
     }
+
+    // I Akutt kan vi beholde øvrig utstyr fra
+    // Haster, men pumpene skal ikke stå to ganger.
+    if (
+      isAcute() &&
+      linje.startsWith("Utstyr:")
+    ) {
+
+      const utstyr = linje
+        .slice("Utstyr:".length)
+        .split(", ")
+        .map(x => x.trim())
+        .filter(x =>
+          x &&
+          !x.startsWith("Sprøytepumper:")
+        );
+
+      if (!utstyr.length) return;
+
+      linje = "Utstyr: " + utstyr.join(", ");
+    }
+
+    const type = hentFeltType(linje);
+
+    if (
+      type &&
+      registrerteTyper.has(type)
+    ) {
+      return;
+    }
+
+    if (finnes.has(linje)) {
+      return;
+    }
+
+    mal.push(linje);
+    finnes.add(linje);
+
+    if (type) {
+      registrerteTyper.add(type);
+    }
+
   });
 }
 
@@ -220,7 +337,30 @@ function leggTilUnikeRapportlinjer(mal, tillegg) {
 ====================================================== */
 const clean=v=>(v??"").toString().trim();
 function setHidden(el,hide){if(el)el.classList.toggle("hidden",!!hide)}
-function formatPhone(raw){const d=(raw||"").replace(/\D/g,"");return d.length===8?d.slice(0,3)+" "+d.slice(3,5):raw}
+
+/* ======================================================
+   T050 – TELEFONNUMMER
+
+   Godtar 8 siffer med eller uten mellomrom.
+   Rapportformat: XXX XX XXX.
+   Ufullstendige nummer beholdes synlig.
+====================================================== */
+
+function formatPhone(raw) {
+
+  const original = clean(raw);
+  const digits = original.replace(/\D/g, "");
+
+  if (digits.length === 8) {
+    return (
+      digits.slice(0, 3) + " " +
+      digits.slice(3, 5) + " " +
+      digits.slice(5, 8)
+    );
+  }
+
+  return original;
+}
 function getBinaryValue(group){if(group==="hast")return valgtHastegrad;const el=document.querySelector('.binOpt[data-group="'+group+'"]:checked');return el?el.dataset.value:""}
 function setBinaryValue(group,value){document.querySelectorAll('.binOpt[data-group="'+group+'"]').forEach(el=>el.checked=el.dataset.value===value)}
 function getSpedbarnValue(){const el=document.querySelector(".spedRadio:checked");return el?el.dataset.value:""}
@@ -628,7 +768,7 @@ function buildUtstyrList() {
   if (utstPumperChk.checked) {
     out.push(
       n
-        ? "Sprøytepumper: " + n + "stk"
+        ? "Sprøytepumper: " + n + " stk"
         : "Sprøytepumper"
     );
   }
@@ -654,37 +794,48 @@ function buildUtstyrList() {
   return out;
 }
 
+/* ======================================================
+   T051 – FELLES SMITTE I RAPPORT
+====================================================== */
+
 function buildSmitteLines() {
-  const base = document.querySelector(".smitteBase:checked");
-  const blod = $("sm_blod");
-  const spes = clean(smitteSpes.value);
 
-  if (!base || base.dataset.name === "Ingen kjente") {
+  const base = document.querySelector(
+    ".smitteBase:checked"
+  );
 
-    if (blod.checked) {
-      let line = "Smitte: Blodsmitte";
+  const blod = $("sm_blod")?.checked;
 
-      if (spes) {
-        line += " (" + spes + ")";
-      }
+  const spes = clean(
+    $("smitteSpes")?.value
+  );
 
-      return [line];
+  const typer = [];
+
+  if (base && base.id !== "sm_ingen") {
+    typer.push(base.dataset.name);
+  }
+
+  if (blod) {
+    typer.push("Blodsmitte");
+  }
+
+  if (typer.length > 0) {
+
+    let tekst = "Smitte: " + typer.join(" og ");
+
+    if (spes) {
+      tekst += " (" + spes + ")";
     }
 
-    return ["Smitte: Nei"];
+    return [tekst];
   }
 
-  let line = "Smitte: " + base.dataset.name;
-
-  if (blod.checked) {
-    line += " og blodsmitte";
+  if (base?.id === "sm_ingen") {
+    return ["Smitte: Ingen kjente"];
   }
 
-  if (spes) {
-    line += " (" + spes + ")";
-  }
-
-  return [line];
+  return [];
 }
 
 function buildCaveLines() {
@@ -966,19 +1117,37 @@ function handleVitalInput(evt){
 }
 
 function handleVitalSpace(evt){if(evt.key!==" ")return;const id=evt.target.id;let digits=(evt.target.value||"").replace(/\D/g,"");if(id==="temp"){const r=(evt.target.value||"").replace('.',',').split(',');digits=r[0]||''}const mins={rf:1,spo2:1,puls:1,btSys:1,btDia:1,map:1,temp:1}[id];if(mins==null||digits.length<mins)return;evt.preventDefault();focusNextField(id)}
+
+/* ======================================================
+   T051 – VISNING AV SMITTEFELTER
+====================================================== */
+
+
+/* ======================================================
+   T051 – FELLES SMITTEFELT
+====================================================== */
+
 function updateSmitteSpes() {
 
-  const valgt =
-    document.querySelector(".smitteBase:checked");
+  const valgt = document.querySelector(
+    ".smitteBase:checked"
+  );
+
+  const blodsmitte = $("sm_blod")?.checked;
+
+  const vanligSmitte =
+    !!valgt && valgt.id !== "sm_ingen";
 
   const skalVises =
-    valgt &&
-    valgt.id !== "sm_ingen";
+    vanligSmitte || !!blodsmitte;
 
-  setHidden(smitteSpesWrap, !skalVises);
+  setHidden(
+    $("smitteSpesWrap"),
+    !skalVises
+  );
 
   if (!skalVises) {
-    smitteSpes.value = "";
+    $("smitteSpes").value = "";
   }
 }
 
@@ -1063,6 +1232,40 @@ function bindAktueltSynkronisering() {
   });
 
 }
+
+/* ======================================================
+   T053 – FELLES REKVIRERENDE LEGE
+
+   Siste registrerte navn og telefonnummer
+   gjelder ved alle hastegrader.
+====================================================== */
+
+function bindRekvirerendeLegeSynkronisering() {
+
+  const feltpar = [
+    ["rekNavn", "acuteRekNavn"],
+    ["rekTlf", "acuteRekTlf"]
+  ];
+
+  feltpar.forEach(([fullId, acuteId]) => {
+
+    const full = $(fullId);
+    const acute = $(acuteId);
+
+    if (!full || !acute) return;
+
+    full.addEventListener("input", () => {
+      acute.value = full.value;
+    });
+
+    acute.addEventListener("input", () => {
+      full.value = acute.value;
+    });
+
+  });
+
+}
+
 function syncAcuteToFull(){copyVal("acuteHovedproblem","hovedproblem");const a=getBinaryValue("acuteAirway");if(a&&!getBinaryValue("airwayMain"))setBinaryValue("airwayMain",a);[["acuteSpontO2Liter","spontO2Liter"],["acuteHighFlowFio2","highFlowFio2"],["acuteHighFlowFlow","highFlowFlow"],["acuteNivFio2","nivFio2"],["acuteIntubFio2","intubFio2"],["acuteIntubPeep","intubPeep"],["acuteIntubTopp","intubTopp"],["acuteTrachO2Liter","trachO2Liter"],["acuteTrachVentFio2","trachVentFio2"],["acuteTrachVentPeep","trachVentPeep"],["acuteTrachVentTopp","trachVentTopp"],["acuteRekNavn","rekNavn"],["acuteRekTlf","rekTlf"]].forEach(x=>copyVal(...x));if($("acute_tr_spont").checked)$("tr_spont").checked=true;if($("acute_tr_o2").checked)$("tr_o2").checked=true;if($("acute_tr_vent").checked)$("tr_vent").checked=true;if(clean(acutePumperAntall.value)&&!clean(utstPumperAntall.value)){utstPumperAntall.value=acutePumperAntall.value;utstPumperChk.checked=true}}
 function syncFullToAcute(){copyVal("hovedproblem","acuteHovedproblem");const a=getBinaryValue("airwayMain");if(a&&!getBinaryValue("acuteAirway"))setBinaryValue("acuteAirway",a);[["spontO2Liter","acuteSpontO2Liter"],["highFlowFio2","acuteHighFlowFio2"],["highFlowFlow","acuteHighFlowFlow"],["nivFio2","acuteNivFio2"],["intubFio2","acuteIntubFio2"],["intubPeep","acuteIntubPeep"],["intubTopp","acuteIntubTopp"],["trachO2Liter","acuteTrachO2Liter"],["trachVentFio2","acuteTrachVentFio2"],["trachVentPeep","acuteTrachVentPeep"],["trachVentTopp","acuteTrachVentTopp"],["rekNavn","acuteRekNavn"],["rekTlf","acuteRekTlf"]].forEach(x=>copyVal(...x));if($("tr_spont").checked)$("acute_tr_spont").checked=true;if($("tr_o2").checked)$("acute_tr_o2").checked=true;if($("tr_vent").checked)$("acute_tr_vent").checked=true;if(clean(utstPumperAntall.value)&&!clean(acutePumperAntall.value)){acutePumperAntall.value=utstPumperAntall.value;acutePumperChk.checked=true}updateAcuteAirwayDetails()}
 /* ======================================================
@@ -1514,6 +1717,111 @@ function bindAcutePumpeEvents() {
   });
 }
 
+/* ======================================================
+   T056 – FELLES ANTALL SPRØYTEPUMPER
+
+   Siste endring gjelder i begge hastegradvisninger.
+   Avhuking og tømming synkroniseres.
+====================================================== */
+
+function bindFellesPumper() {
+
+  const akuttValg = $("acutePumperChk");
+  const akuttAntall = $("acutePumperAntall");
+
+  const vanligValg = $("utst_pumper");
+  const vanligAntall = $("utstPumpeAntall");
+
+  if (
+    !akuttValg ||
+    !akuttAntall ||
+    !vanligValg ||
+    !vanligAntall
+  ) {
+    return;
+  }
+
+  function synkroniser(fraAkutt) {
+
+    const kildeValg = fraAkutt
+      ? akuttValg
+      : vanligValg;
+
+    const kildeAntall = fraAkutt
+      ? akuttAntall
+      : vanligAntall;
+
+    const mottakerValg = fraAkutt
+      ? vanligValg
+      : akuttValg;
+
+    const mottakerAntall = fraAkutt
+      ? vanligAntall
+      : akuttAntall;
+
+    mottakerValg.checked = kildeValg.checked;
+
+    mottakerAntall.value = kildeValg.checked
+      ? kildeAntall.value
+      : "";
+
+    if (kildeValg.checked) {
+      const ingenUtstyr = $("utst_ingen");
+
+      if (ingenUtstyr) {
+        ingenUtstyr.checked = false;
+      }
+    }
+
+    updateAcutePumpeUI();
+    updateUtstyrPumpeUI();
+
+    lagRapport();
+  }
+
+  akuttValg.addEventListener("change", () => {
+    synkroniser(true);
+  });
+
+  vanligValg.addEventListener("change", () => {
+    synkroniser(false);
+  });
+
+  ["input", "change"].forEach(eventType => {
+
+    akuttAntall.addEventListener(eventType, () => {
+      synkroniser(true);
+    });
+
+    vanligAntall.addEventListener(eventType, () => {
+      synkroniser(false);
+    });
+
+  });
+
+  // "Ingen utstyr" skal også nullstille
+  // pumpene i Akutt-visningen.
+  $("utst_ingen")?.addEventListener(
+    "change",
+    () => {
+
+      if (!$("utst_ingen").checked) return;
+
+      akuttValg.checked = false;
+      vanligValg.checked = false;
+
+      akuttAntall.value = "";
+      vanligAntall.value = "";
+
+      updateAcutePumpeUI();
+      updateUtstyrPumpeUI();
+
+      lagRapport();
+    }
+  );
+}
+
+
 function bindToggleEvents() {
 
   document.addEventListener("change", e => {
@@ -1776,19 +2084,67 @@ lagRapport();
   });
 }
 
+
+/* ======================================================
+   T052 – SMITTECHIPS KAN VELGES BORT
+
+   Ett aktivt valg blant ordinære smittetyper.
+   Trykk på valgt chip igjen for å fjerne.
+   Blodsmitte kan kombineres med andre.
+====================================================== */
+
+
+/* ======================================================
+   T054 – GJENSIDIG UTELUKKENDE SMITTEVALG
+
+   Ingen kjente kan ikke kombineres med smitte.
+   Ordinære smittetyper kan velges bort.
+   Blodsmitte kan kombineres med øvrig smitte.
+====================================================== */
+
 function bindSmitteEvents() {
 
-  document
-    .querySelectorAll(".smitteBase")
-    .forEach(r =>
-      r.addEventListener("change", () => {
+  const ingen = $("sm_ingen");
+  const blod = $("sm_blod");
+
+  document.querySelectorAll(".smitteBase")
+    .forEach(radio => {
+
+      const chip = radio.closest("label");
+      if (!chip) return;
+
+      chip.addEventListener("click", event => {
+
+        event.preventDefault();
+
+        const varValgt = radio.checked;
+
+        document.querySelectorAll(".smitteBase")
+          .forEach(other => {
+            other.checked = false;
+          });
+
+        if (!varValgt) {
+          radio.checked = true;
+
+          // Ingen kjente utelukker blodsmitte.
+          if (radio === ingen) {
+            blod.checked = false;
+          }
+        }
 
         updateSmitteSpes();
         lagRapport();
-      })
-    );
+      });
+    });
 
-  $("sm_blod").addEventListener("change", () => {
+  blod?.addEventListener("change", () => {
+
+    // Registrert blodsmitte utelukker
+    // samtidig valg av Ingen kjente.
+    if (blod.checked && ingen) {
+      ingen.checked = false;
+    }
 
     updateSmitteSpes();
     lagRapport();
@@ -1886,6 +2242,7 @@ bindAutoGrowEvents();
 bindVitalEvents();
 bindGcsHurtigregistrering();
 bindAktueltSynkronisering();
+bindRekvirerendeLegeSynkronisering();
 
   bindPvkEvents();
   bindCvkEvents();
@@ -1909,6 +2266,7 @@ bindAktueltSynkronisering();
   bindAcuteTrachEvents();
 
   bindSmartChipLogic();
+  bindFellesPumper();
   bindAcuteAirwayInputEvents();
   bindToggleEvents();
 
@@ -2326,8 +2684,9 @@ function lagRapport() {
      FJERN MOTSTRIDENDE RAPPORTLINJER
   ========================================== */
 
-  let aktueltSattInn = false;
-  let luftveiSattInn = false;
+let aktueltSattInn = false;
+let luftveiSattInn = false;
+let rekvirerendeLegeSattInn = false;
 
   const ferdigeLinjer = [];
 
@@ -2371,8 +2730,22 @@ function lagRapport() {
     }
 
 
-    // Alle andre opplysninger beholdes
-    ferdigeLinjer.push(linje);
+
+// Rekvirerende lege skal bare komme én gang.
+// Gjeldende hastegrad bygges først, slik at
+// den aktive opplysningen får prioritet.
+
+if (linje.startsWith("Rekvirerende lege:")) {
+
+  if (rekvirerendeLegeSattInn) {
+    return;
+  }
+
+  rekvirerendeLegeSattInn = true;
+}
+
+// Alle øvrige opplysninger beholdes.
+ferdigeLinjer.push(linje);
 
   });
 
