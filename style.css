@@ -1,26 +1,81 @@
+:root {
+  --bg: #2f3136;
+  --panel: #3a3d43;
+  --text: #f1f1f1;
+  --muted: #cfcfcf;
+  --field: #e2e2e2;
+  --fieldText: #111;
+  --line: #50545c;
+  --green: #35c16a;
+  --greenHover: #2fb45f;
+  --red: #ef4444;
+  --redHover: #e03b3b;
+  --accent: #8fb0ff;
+  --hasteAkutt: #ef4444;
+  --hasteHaster: #facc15;
+  --hasteSamme: #7FAE7E;
+  --hastePlanlagt: #2F6B3B;
+  --hasteText: #111;
+}
 
-:root{
-  --bg:#2f3136;--panel:#3a3d43;--text:#f1f1f1;--muted:#cfcfcf;--field:#e2e2e2;--fieldText:#111;
-  --line:#50545c;--green:#35c16a;--greenHover:#2fb45f;--red:#ef4444;--redHover:#e03b3b;--accent:#8fb0ff;
-  --hasteAkutt:#ef4444;--hasteHaster:#facc15;--hasteSamme:#7FAE7E;--hastePlanlagt:#2F6B3B;
-  --hasteText:#111;
+* {
+  box-sizing: border-box;
 }
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-.wrap{max-width:1100px;margin:auto;padding:20px}
-.card{background:var(--panel);padding:20px;border-radius:16px;border:1px solid var(--line)}
-h1{text-align:center;margin:6px 0 28px;letter-spacing:1px}
-label{display:block;font-weight:900;margin-top:14px;margin-bottom:6px}
-input,select,textarea{width:100%;padding:9px;border-radius:10px;border:1px solid #999;background:var(--field);color:var(--fieldText);font-size:14px;margin-bottom:10px}
-textarea{
-  resize:vertical;
-  overflow:auto;
-  min-height:72px;
-  white-space:pre-wrap;
+
+body {
+  margin: 0;
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
-textarea::-webkit-resizer{
-  background:
-    linear-gradient(
+
+.wrap {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: var(--panel);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+}
+
+h1 {
+  text-align: center;
+  margin: 6px 0 28px;
+  letter-spacing: 1px;
+}
+
+label {
+  display: block;
+  font-weight: 900;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #999;
+  background: var(--field);
+  color: var(--fieldText);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  resize: vertical;
+  overflow: auto;
+  min-height: 72px;
+  white-space: pre-wrap;
+}
+
+textarea::-webkit-resizer {
+  background: linear-gradient(
       135deg,
       transparent 0%,
       transparent 50%,
@@ -30,618 +85,763 @@ textarea::-webkit-resizer{
       transparent 100%
     );
 }
-textarea.report{margin-top:15px;min-height:260px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;overflow:auto}
-.section{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-weight:900;font-size:15px;color:#ffffff}
-.hidden{display:none!important}
-#rapport{
-  min-height:180px;
-  overflow-y:hidden;
-  resize:none;
+
+textarea.report {
+  margin-top: 15px;
+  min-height: 260px;
+  white-space: pre-wrap;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  resize: vertical;
+  overflow: auto;
 }
 
-.medTable th{font-size:13px;color:#fff;text-align:left;background:#31343b;padding:8px}
-.chk{width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
-.binaryRow{
-  display:flex;
-  gap:20px;
-  flex-wrap:nowrap;
-  margin-bottom:10px;
-  overflow-x:auto;
+.hidden {
+  display: none!important;
 }
+
+#rapport {
+  min-height: 180px;
+  overflow-y: hidden;
+  resize: none;
+}
+
+.chk {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.binaryRow {
+  display: flex;
+  gap: 20px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
 .binaryOpt,
-.radioOpt,
-.clickableChoice{
-  display:inline-flex;
-  align-items:center;
+.clickableChoice {
+  display: inline-flex;
+  align-items: center;
   gap: 3px;
-  cursor:pointer;
-  font-weight:400;
-  margin:0 40px 0 0;
+  cursor: pointer;
+  font-weight: 400;
+  margin: 0 40px 0 0;
 }
-.radioOpt input{
-  margin:0;
+
+.binaryOpt input,
+.clickableChoice input {
+  margin: 0;
+  cursor: pointer;
 }
-.binaryOpt input,.radioOpt input,.clickableChoice input{margin:0;cursor:pointer}
-.clickableChoice span{font-weight:400}
-.toggleCell{cursor:pointer;user-select:none;border-radius:10px}
-.toggleCell:hover{background:rgba(255,255,255,.05)}
-.toggleInner{display:flex;align-items:center;gap:10px;min-height:32px;flex-wrap:wrap}
-.inlineVitals{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}
-.vpField,.btMini,.gestField{position:relative;height:44px}
-.vpField{width:95px;flex:0 0 95px}
-.btMini{width:82px;flex:0 0 82px}
-.gestField{width:120px}
-.vpField span,.btMini span,.gestField span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8c8c8c;font-size:13px;pointer-events:none;z-index:2}
-.vpField input,.btMini input,.gestField input{height:44px;line-height:44px;padding-top:0;padding-bottom:0;vertical-align:middle}
-.vpField input{padding-left:44px}.btMini input{padding-left:42px}.gestField input{padding-left:52px}
-.btWrap{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;flex:0 0 auto}
-.btSlash{font-weight:900;color:var(--muted);margin:11px 0 0;width:8px;text-align:center}
-.gestWrap,.dualRow,.inlineRow,.medRow,.dynamicRow,.nonToggleRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.dualRow input{flex:1 1 150px}
-.medRow{margin-top:8px}.medCol{flex:0 0 230px;min-width:220px}.medColWide{flex:1 1 0;min-width:280px}
-.dynamicRow{gap:8px;margin-top:4px}.dynamicRow input[type=text]{flex:1 1 auto}
-.pvkSelect,.pumperSelect{width:110px}.hint{color:var(--muted);font-weight:400;font-size:12px;margin-left:8px}
-.smLine{display:flex;flex-wrap:wrap;gap:14px 22px;margin-top:6px}.smOpt{display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer}
-.btnbar{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-button{border:none;border-radius:10px;font-weight:800;cursor:pointer;transition:.15s;font-size:14px}
-button:hover{opacity:.97}button:active{transform:translateY(1px)}
-.actionBtn{
-  min-height:52px;
-  padding:0 22px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  line-height:1;
-  white-space:nowrap;
 
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.08);
+.clickableChoice span {
+  font-weight: 400;
+}
 
-  font-weight:700;
-  font-size:14px;
-  letter-spacing:.2px;
+.toggleCell {
+  cursor: pointer;
+  user-select: none;
+  border-radius: 10px;
+}
 
-  transition:
-    background .18s ease,
+.toggleCell:hover {
+  background: rgba(255,255,255,.05);
+}
+
+.toggleInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 32px;
+  flex-wrap: wrap;
+}
+
+.inlineVitals {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.vpField,
+.btMini,
+.gestField {
+  position: relative;
+  height: 44px;
+}
+
+.vpField {
+  width: 95px;
+  flex: 0 0 95px;
+}
+
+.btMini {
+  width: 82px;
+  flex: 0 0 82px;
+}
+
+.gestField {
+  width: 120px;
+}
+
+.vpField span,
+.btMini span,
+.gestField span {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8c8c8c;
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vpField input,
+.btMini input,
+.gestField input {
+  height: 44px;
+  line-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+  vertical-align: middle;
+}
+
+.vpField input {
+  padding-left: 44px;
+}
+
+.btMini input {
+  padding-left: 42px;
+}
+
+.gestField input {
+  padding-left: 52px;
+}
+
+.btWrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+}
+
+.btSlash {
+  font-weight: 900;
+  color: var(--muted);
+  margin: 11px 0 0;
+  width: 8px;
+  text-align: center;
+}
+
+.gestWrap,
+.inlineRow,
+.dynamicRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.dynamicRow {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dynamicRow input[type=text] {
+  flex: 1 1 auto;
+}
+
+.pvkSelect {
+  width: 110px;
+}
+
+.btnbar {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .15s;
+  font-size: 14px;
+}
+
+button:hover {
+  opacity: .97;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.actionBtn {
+  min-height: 52px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .2px;
+  transition: background .18s ease,
     transform .12s ease,
     box-shadow .18s ease,
     border-color .18s ease;
-
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.22);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
 }
 
-.actionBtn:hover{
-  transform:translateY(-1px);
-
-  box-shadow:
-    0 8px 22px rgba(0,0,0,0.28);
+.actionBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
 }
 
-.actionBtn:active{
-  transform:translateY(0);
+.actionBtn:active {
+  transform: translateY(0);
 }
 
-.btn-copy{
-  background:#2f9e5b;
-  color:#ffffff;
-  min-width:220px;
+.btn-copy {
+  background: #2f9e5b;
 }
 
-.btn-copy:hover{
-  background:#36ad66;
+.btn-copy:hover {
+  background: #36ad66;
 }
 
-.btn-red{
-  background:#4a2b2b;
-  color:#f3d6d6;
-  min-width:160px;
+.btn-red {
+  background: #4a2b2b;
 }
 
-.btn-red:hover{
-  background:#5a3232;
+.btn-red:hover {
+  background: #5a3232;
 }
 
-.copyIcon{
-  width:18px;
-  height:18px;
-  opacity:.92;
-}
-.btn-copy{background:var(--green);color:#0b1a10;min-width:190px}.btn-copy:hover{background:var(--greenHover)}
-.btn-red{background:var(--red);color:#fff;min-width:140px}.btn-red:hover{background:var(--redHover)}
-.copyIcon{width:20px;height:20px;flex:0 0 auto}.push-right{margin-left:auto}.copyMsg{color:#a7f3c1;font-weight:700;min-height:20px;font-size:13px}
-.hasteLabel{display:block;font-weight:900;font-size:20px;letter-spacing:.6px;margin-top:14px;margin-bottom:12px;color:#ffffff}
-.hasteBar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;row-gap:18px;margin-top:4px;margin-bottom:6px}
-.hasteBtn{min-height:56px;padding:8px 18px;border-radius:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;min-width:170px;text-align:center;line-height:1.2}
-.haste-akutt{
-  background:#3a3d43;
-  border:2px solid var(--hasteAkutt);
+.copyIcon {
+  opacity: .92;
 }
 
-.haste-haster{
-  background:#3a3d43;
-  border:2px solid var(--hasteHaster);
+.btn-copy {
+  background: var(--green);
+  color: #0b1a10;
+  min-width: 190px;
 }
 
-.haste-samme{
-  background:#3a3d43;
-  border:2px solid var(--hasteSamme);
+.btn-copy:hover {
+  background: var(--greenHover);
 }
 
-.haste-planlagt{
-  background:#3a3d43;
-  border:2px solid var(--hastePlanlagt);
+.btn-red {
+  background: var(--red);
+  color: #fff;
+  min-width: 140px;
 }
-.hasteBtn{transition:transform .14s ease,box-shadow .14s ease,filter .14s ease;color:var(--hasteText)}
-.hasteBtn.active{filter:brightness(0.90) saturate(1.12);box-shadow:0 8px 20px rgba(0,0,0,0.34), inset 0 0 0 2px rgba(0,0,0,0.06);transform:translateY(-2px)}
-.hasteBtn:focus{outline:3px solid rgba(255,255,255,0.12);outline-offset:2px}
-.specCell input[type="checkbox"],.specCell span{cursor:pointer}
-.specLabel{position:relative;cursor:pointer;display:inline-flex;align-items:center}
-.specLabel::after{content:attr(data-tooltip);position:absolute;left:100%;top:50%;transform:translateX(10px) translateY(-50%);white-space:normal;max-width:240px;background:rgba(23,27,34,.96);color:#f8fafc;font-size:12px;padding:6px 10px;border-radius:10px;opacity:0;visibility:hidden;pointer-events:none;z-index:10;transition:opacity .18s ease,transform .18s ease;transition-delay:0s}
-.specLabel:hover::after{opacity:1;visibility:visible;transform:translateX(10px) translateY(-50%);transition-delay:.25s}
-@media(max-width:980px){.inlineVitals{flex-wrap:wrap}}
-@media(max-width:720px){.vpField,.btMini{width:46%;flex:1 1 46%}.btWrap{width:100%;flex-wrap:wrap}.medCol,.medColWide{flex:1 1 0}.push-right{margin-left:0}.actionBtn,.hasteBtn{width:100%;min-width:unset}.copyMsg{width:100%}}
 
-.specChoice{cursor:pointer}
+.btn-red:hover {
+  background: var(--redHover);
+}
 
-#tilgangerDynamicBody td,#dren_annet_container{width:100%}
+.push-right {
+  margin-left: auto;
+}
 
-#dren_annet_container .dynamicRow,#tilgangerDynamicBody .dynamicRow{width:100%}
+.copyMsg {
+  color: #a7f3c1;
+  font-weight: 700;
+  min-height: 20px;
+  font-size: 13px;
+}
+
+.hasteLabel {
+  display: block;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: .6px;
+  margin-top: 14px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.haste-akutt {
+  background: #3a3d43;
+  border: 2px solid var(--hasteAkutt);
+}
+
+.haste-haster {
+  background: #3a3d43;
+  border: 2px solid var(--hasteHaster);
+}
+
+.haste-samme {
+  background: #3a3d43;
+  border: 2px solid var(--hasteSamme);
+}
+
+.haste-planlagt {
+  background: #3a3d43;
+  border: 2px solid var(--hastePlanlagt);
+}
+
+.specCell input[type="checkbox"],
+.specCell span {
+  cursor: pointer;
+}
+
+.specLabel {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.specLabel::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateX(10px) translateY(-50%);
+  white-space: normal;
+  max-width: 240px;
+  background: rgba(23,27,34,.96);
+  color: #f8fafc;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity .18s ease,transform .18s ease;
+  transition-delay: 0s;
+}
+
+.specLabel:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(10px) translateY(-50%);
+  transition-delay: .25s;
+}
+
+@media(max-width:980px) {
+  .inlineVitals {
+    flex-wrap: wrap;
+  }
+}
+
+@media(max-width:720px) {
+  .vpField,
+  .btMini {
+    width: 46%;
+    flex: 1 1 46%;
+  }
+
+  .btWrap {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .push-right {
+    margin-left: 0;
+  }
+
+  .actionBtn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .copyMsg {
+    width: 100%;
+  }
+}
+
+.specChoice {
+  cursor: pointer;
+}
 
 /* Holder checkbox + tekstfelt på samme linje */
-#andreInfBody td,#tilgangerDynamicBody td,#dren_annet_container{width:100%}
 
-#andreInfBody .dynamicRow,#tilgangerDynamicBody .dynamicRow,#dren_annet_container .dynamicRow{display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;width:100%}
+#andreInfBody td,
+#tilgangerDynamicBody td {
+  width: 100%;
+}
 
 #andreInfBody input[type="text"],
-#tilgangerDynamicBody input[type="text"],
-#dren_annet_container input[type="text"]{
-  flex:0 0 420px!important;
-  width:420px!important;
-  min-width:0!important;
+#tilgangerDynamicBody input[type="text"] {
+  flex: 0 0 420px!important;
+  width: 420px!important;
+  min-width: 0!important;
 }
 
 /* Sedasjon + Pressor dynamiske fritekstlinjer */
-#sedDynamicBody .dynamicRow,#pressorDynamicBody .dynamicRow,#andreInfBody .dynamicRow,#tilgangerDynamicBody .dynamicRow,#dren_annet_container .dynamicRow{display:flex!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;width:100% !important;gap:8px !important}
 
-#sedDynamicBody .dynamicRow .chk,#pressorDynamicBody .dynamicRow .chk,#andreInfBody .dynamicRow .chk,#tilgangerDynamicBody .dynamicRow .chk,#dren_annet_container .dynamicRow .chk{flex:0 0 18px !important;width:18px !important;height:18px !important;margin:0 !important}
-
-#sedDynamicBody .dynamicRow input[type="text"],#pressorDynamicBody .dynamicRow input[type="text"],#andreInfBody .dynamicRow input[type="text"],#tilgangerDynamicBody .dynamicRow input[type="text"],#dren_annet_container .dynamicRow input[type="text"]{flex:1 1 auto !important;width:auto !important;min-width:0 !important;margin:0 !important;display:block !important}
-
-/* Hastegrad - PC-visning med beslutningsstøtte */
-.hasteBar{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px !important;row-gap:18px !important;margin-bottom:18px !important}
-
-.hasteBtn{min-height:64px !important;min-width:190px !important;font-size:16px !important;letter-spacing:.4px;text-transform:uppercase}
-
-.hasteSupport{
-  margin-top:12px;
-  margin-bottom:20px;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px;
+#sedDynamicBody .dynamicRow,
+#pressorDynamicBody .dynamicRow,
+#andreInfBody .dynamicRow,
+#tilgangerDynamicBody .dynamicRow {
+  flex-direction: row!important;
 }
 
-.hasteSupportTitle{font-weight:600;color:#d1d5db;margin-bottom:10px;font-size:13px;letter-spacing:.2px;text-transform:uppercase}
+#sedDynamicBody .dynamicRow .chk,
+#pressorDynamicBody .dynamicRow .chk,
+#andreInfBody .dynamicRow .chk,
+#tilgangerDynamicBody .dynamicRow .chk {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+}
 
-.hasteSupportGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+#sedDynamicBody .dynamicRow input[type="text"],
+#pressorDynamicBody .dynamicRow input[type="text"],
+#andreInfBody .dynamicRow input[type="text"],
+#tilgangerDynamicBody .dynamicRow input[type="text"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+}
 
-.hasteSupportItem{border-left:4px solid #777;background:#30333a;border-radius:10px;padding:10px 12px;min-height:118px}
-.hasteSupportItem.akutt{border-left-color:var(--hasteAkutt)}
-.hasteSupportItem.haster{border-left-color:var(--hasteHaster)}
-.hasteSupportItem.samme{border-left-color:var(--hasteSamme)}
-.hasteSupportItem.planlagt{border-left-color:var(--hastePlanlagt)}
-.hasteSupportItem strong{display:block;color:#fff;font-size:13px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
-.hasteSupportItem span{color:var(--muted);font-size:12px;line-height:1.35}
+#sedDynamicBody,
+#pressorDynamicBody,
+#andreInfBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
-@media(max-width:900px){.hasteSupportGrid{grid-template-columns:1fr 1fr}}
+#sedDynamicBody .dynamicRow,
+#pressorDynamicBody .dynamicRow,
+#andreInfBody .dynamicRow {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  gap: 8px !important;
+  margin-top: 0 !important;
+}
 
-.medCol,.medColWide{flex:1 1 100% !important;min-width:100% !important}
+#sedDynamicBody .dynamicRow .chk,
+#pressorDynamicBody .dynamicRow .chk,
+#andreInfBody .dynamicRow .chk {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+}
 
-/* Samlet medikamenttabell: tre vertikale kolonner */
-.medUnifiedTable{table-layout:fixed;width:100%}
-.medUnifiedTable th{width:33.333%;font-size:13px;color:#fff;text-align:left;background:#31343b;padding:10px;border-bottom:1px solid var(--line)}
-.medUnifiedTable td{width:33.333%;height:42px;vertical-align:top}
-.medUnifiedTable .toggleInner{min-height:28px}
-
-#sedDynamicCell,#pressorDynamicCell,#andreInfCell{padding:8px}
-#sedDynamicBody,#pressorDynamicBody,#andreInfBody{display:flex;flex-direction:column;gap:4px}
-#sedDynamicBody .dynamicRow,#pressorDynamicBody .dynamicRow,#andreInfBody .dynamicRow{display:flex !important;flex-direction:row !important;align-items:center !important;flex-wrap:nowrap !important;width:100% !important;gap:8px !important;margin-top:0 !important}
-#sedDynamicBody .dynamicRow .chk,#pressorDynamicBody .dynamicRow .chk,#andreInfBody .dynamicRow .chk{flex:0 0 18px !important;width:18px !important;height:18px !important;margin:0 !important}
-#sedDynamicBody .dynamicRow input[type="text"],#pressorDynamicBody .dynamicRow input[type="text"],#andreInfBody .dynamicRow input[type="text"]{flex:1 1 auto !important;width:auto !important;min-width:0 !important;margin:0 !important}
-
-.spedbarnRow{
-  gap:32px !important;
+#sedDynamicBody .dynamicRow input[type="text"],
+#pressorDynamicBody .dynamicRow input[type="text"],
+#andreInfBody .dynamicRow input[type="text"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
 }
 
 /* Fjern piler i Chrome, Safari, Edge */
+
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button{
-  -webkit-appearance:none;
-  margin:0;
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Fjern piler i Firefox */
-input[type=number]{
-  appearance:textfield;
-  -moz-appearance:textfield;
+
+input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
-.spesialtransportRow{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  gap:18px;
-  flex-wrap:wrap;
-  padding:8px;
+.spesialtransportRow .specCell {
+  margin: 0;
+  padding: 8px 12px;
+  cursor: pointer;
 }
 
-.spesialtransportRow .specCell{
-  margin:0;
-  padding:8px 12px;
-  cursor:pointer;
-}
-
-.spesialtransportRow .specLabel{
-  cursor:pointer;
+.spesialtransportRow .specLabel {
+  cursor: pointer;
 }
 
 .copyIcon,
-.trashIcon{
-  width:18px;
-  height:18px;
-  flex:0 0 auto;
+.trashIcon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
 }
 
-.section{
-  margin-top:28px;
-  padding-top:16px;
-  border-top:1px solid #5a5d66;
-  font-weight:900;
-  font-size:20px;
-
-  color:#fff;
-  width:100%;
+.section {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid #5a5d66;
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+  width: 100%;
 }
 
-.airwayRow{
-  flex-wrap:nowrap;
-  overflow-x:auto;
-}
-
-.bigSection{
-  display:block;
-  margin-top:26px;
-  margin-bottom:10px;
-  font-size:18px;
-  font-weight:800;
-  color:#fff;
+.airwayRow {
+  overflow-x: auto;
 }
 
 #hovedproblem,
-#acuteHovedproblem{
-  min-height:120px;
-  margin-top:10px;
-  margin-bottom:26px;
+#acuteHovedproblem {
+  min-height: 120px;
+  margin-top: 10px;
+  margin-bottom: 26px;
 }
 
-.blockTitle{
-  margin-top:34px;
-  margin-bottom:18px;
-  padding-left:14px;
-  border-left:4px solid #777;
-  font-size:15px;
-  font-weight:900;
-  color:#fff;
-  text-transform:uppercase;
-  letter-spacing:.04em;
+.phoneInput {
+  width: 150px;
 }
 
-.compactBlock{
-  margin-top:22px;
-  padding-top:12px;
-  border-top:1px solid #444;
-  font-size:13px;
-  color:#ccc;
+.section + .binaryRow {
+  margin-top: 12px;
 }
 
-.phoneInput{
-  width:150px;
+.minorTitle {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+  font-size: 20px;
+  font-weight: 800;
+  color: #f3f4f6;
 }
 
-.section + .binaryRow{
-  margin-top:12px;
-}
-
-.minorTitle{
-  display:block;
-
-  margin-top:18px;
-  margin-bottom:8px;
-
-  line-height:1.3;
-
-  font-size:20px;
-  font-weight:800;
-
-  color:#f3f4f6;
-}
-
-.vpTitle{
-  margin-bottom:14px;
+.vpTitle {
+  margin-bottom: 14px;
 }
 
 /* Felles høyrekant for legefelt og fritekstfelt i tilgang/utstyr */
-:root{
-  --adminRowWidth:570px;
+
+:root {
+  --adminRowWidth: 570px;
 }
 
-.doctorRow{
-  display:grid;
-  grid-template-columns:420px 145px;
-  gap:10px;
-  width:var(--adminRowWidth);
-  max-width:100%;
-  align-items:center;
+.doctorRow {
+  display: grid;
+  grid-template-columns: 420px 145px;
+  gap: 10px;
+  width: var(--adminRowWidth);
+  max-width: 100%;
+  align-items: center;
 }
 
-#tilgangerDynamicBody .dynamicRow,
-#dren_annet_container .dynamicRow{
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  gap:10px !important;
-  width:var(--adminRowWidth) !important;
-  max-width:100% !important;
+#tilgangerDynamicBody .dynamicRow {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  width: var(--adminRowWidth) !important;
+  max-width: 100% !important;
 }
 
-#tilgangerDynamicBody .dynamicRow input,
-#dren_annet_container .dynamicRow input{
-  flex:1 1 auto !important;
-  width:auto !important;
-  max-width:none !important;
-  min-width:0 !important;
-  margin-bottom:0 !important;
+#tilgangerDynamicBody .dynamicRow input {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-bottom: 0 !important;
 }
 
-.pvkSelect,
-.pumperSelect{
-  margin-bottom:0;
-  align-self:center;
+.pvkSelect {
+  margin-bottom: 0;
+  align-self: center;
 }
 
 /* ===============================
-   NY MEDIKAMENTSEKSJON
+MEDIKAMENTER
 ================================ */
 
-.medSection{
-  margin-top:22px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  border:0;
+.medGroup:first-of-type {
+  margin-top: 0;
 }
 
-.medSection .minorTitle{
-  margin-top:0;
-  margin-bottom:16px;
-  font-size:20px;
-  font-weight:900;
-  color:#fff;
+.medGroupTitle {
+  color: #d8d8d8;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-.medGroup{
-  margin-top:16px;
+.medDynamic {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 570px;
 }
 
-.medGroup:first-of-type{
-  margin-top:0;
+.medDynamic .dynamicRow {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  margin-top: 0 !important;
 }
 
-.medGroupTitle{
-  margin-bottom:8px;
-  font-size:13px;
-  font-weight:800;
-  color:#d8d8d8;
-  text-transform:uppercase;
-  letter-spacing:.04em;
+.medDynamic .dynamicRow .chk {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
 }
 
-.chipRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.medDynamic .dynamicRow input[type="text"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
 }
 
-
-.medDynamic{
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  max-width:570px;
-}
-
-.medDynamic .dynamicRow{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  gap:8px !important;
-  flex-wrap:nowrap !important;
-  width:100% !important;
-  margin-top:0 !important;
-}
-
-.medDynamic .dynamicRow .chk{
-  flex:0 0 18px !important;
-  width:18px !important;
-  height:18px !important;
-  margin:0 !important;
-}
-
-.medDynamic .dynamicRow input[type="text"]{
-  flex:1 1 auto !important;
-  width:auto !important;
-  min-width:0 !important;
-  margin:0 !important;
-}
-
-@media(max-width:720px){
-  .medSection{
-    padding:14px;
+@media(max-width:720px) {
+  .medChip {
+    flex: 1 1 auto;
   }
 
-  .medChip{
-    flex:1 1 auto;
-  }
-
-  .medDynamic{
-    max-width:100%;
+  .medDynamic {
+    max-width: 100%;
   }
 }
 
 /* ===============================
-   MODERNE LUFTVEIVALG
+MODERNE LUFTVEIVALG
 ================================ */
 
-.airwayRow{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
-  overflow:visible;
+.airwayRow {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  overflow: visible;
 }
 
-.airwayRow .binaryOpt{
-  margin:0;
-  min-height:48px;
-  padding:0 14px;
-  border-radius:14px;
-  background:#2f3238;
-  border:1px solid rgba(255,255,255,0.10);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#f1f1f1;
-  font-weight:750;
-  cursor:pointer;
-  transition:.15s ease;
+.airwayRow .binaryOpt {
+  background: #2f3238;
+  border: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  text-align: center;
 }
 
-.airwayRow .binaryOpt:hover{
-  background:#3a3e46;
+.airwayRow .binaryOpt:hover {
+  background: #3a3e46;
 }
 
-.airwayRow .binaryOpt input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.airwayRow .binaryOpt input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.airwayRow .binaryOpt:has(input:checked){
-  background:#8fb0ff;
-  color:#111;
-  border-color:#8fb0ff;
-  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
+.airwayRow .binaryOpt:has(input:checked) {
+  background: #8fb0ff;
 }
 
-.airwayRow .binaryOpt span{
-  line-height:1.2;
-}
-
-@media(max-width:720px){
-  .airwayRow{
-    grid-template-columns:1fr 1fr;
+@media(max-width:720px) {
+  .airwayRow {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 /* ===============================
-   MODERNE TRACHEOSTOMI-VALG
+MODERNE TRACHEOSTOMI-VALG
 ================================ */
 
 #trachWrap .table,
-#acuteTrachWrap .table{
-  margin-top:10px;
+#acuteTrachWrap .table {
+  margin-top: 10px;
 }
 
 #trachWrap table,
-#acuteTrachWrap table{
-  display:block;
-  width:100%;
+#acuteTrachWrap table {
+  display: block;
+  width: 100%;
 }
 
 #trachWrap tbody,
-#acuteTrachWrap tbody{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
+#acuteTrachWrap tbody {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 10px;
 }
 
 #trachWrap tr,
-#acuteTrachWrap tr{
-  display:block;
+#acuteTrachWrap tr {
+  display: block;
 }
 
 #trachWrap td,
-#acuteTrachWrap td{
-  display:block;
-  padding:0;
+#acuteTrachWrap td {
+  display: block;
+  padding: 0;
 }
 
 #trachWrap .toggleCell,
-#acuteTrachWrap .toggleCell{
-  min-height:40px;
-  padding:0 14px;
-  border-radius:14px;
-  background:#2a2d33;  
-  border:1px solid rgba(255,255,255,0.10);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#f1f1f1;
-
-  font-weight:650;
-  font-size:13px;
-  cursor:pointer;
-  transition:.15s ease;
+#acuteTrachWrap .toggleCell {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: #2a2d33;
+  border: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f1f1f1;
+  font-weight: 650;
+  font-size: 13px;
+  cursor: pointer;
+  transition: .15s ease;
 }
 
 #trachWrap .toggleCell:hover,
-#acuteTrachWrap .toggleCell:hover{
-  background:#3a3e46;
+#acuteTrachWrap .toggleCell:hover {
+  background: #3a3e46;
 }
 
 #trachWrap .toggleInner,
-#acuteTrachWrap .toggleInner{
-  justify-content:center;
+#acuteTrachWrap .toggleInner {
+  justify-content: center;
 }
 
 #trachWrap .toggleInner input,
-#acuteTrachWrap .toggleInner input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+#acuteTrachWrap .toggleInner input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 #trachWrap .toggleCell:has(input:checked),
-#acuteTrachWrap .toggleCell:has(input:checked){
-  background:#8fb0ff;
-  color:#111;
-  border-color:#8fb0ff;
-  box-shadow:0 0 0 2px rgba(143,176,255,0.18);
+#acuteTrachWrap .toggleCell:has(input:checked) {
+  background: #8fb0ff;
+  color: #111;
+  border-color: #8fb0ff;
+  box-shadow: 0 0 0 2px rgba(143,176,255,0.18);
 }
 
-@media(max-width:720px){
+@media(max-width:720px) {
   #trachWrap tbody,
-  #acuteTrachWrap tbody{
-    grid-template-columns:1fr;
+  #acuteTrachWrap tbody {
+    grid-template-columns: 1fr;
   }
 }
 
 /* ===============================
-   KOMPAKTE DETALJFELT
+KOMPAKTE DETALJFELT
 ================================ */
 
 #spontO2Wrap,
@@ -650,1679 +850,1102 @@ input[type=number]{
 #intubWrap,
 #trachO2Wrap,
 #trachVentWrap,
-
 #acuteSpontO2Wrap,
 #acuteHighFlowWrap,
 #acuteNivWrap,
 #acuteIntubWrap,
 #acuteTrachO2Wrap,
-#acuteTrachVentWrap{
-  margin-top:10px;
-  padding:8px 0;
-
-  background:transparent;
-  border:0;
-
-  max-width:560px;
+#acuteTrachVentWrap {
+  margin-top: 10px;
+  padding: 8px 0;
+  background: transparent;
+  border: 0;
+  max-width: 560px;
 }
 
-
 /* Fjern store labels inne i detaljfelt */
+
 #spontO2Wrap label,
 #highFlowWrap label,
 #nivWrap label,
 #intubWrap label,
 #trachO2Wrap label,
 #trachVentWrap label,
-
 #acuteSpontO2Wrap label,
 #acuteHighFlowWrap label,
 #acuteNivWrap label,
 #acuteIntubWrap label,
 #acuteTrachO2Wrap label,
-#acuteTrachVentWrap label{
-  margin-top:0;
-  margin-bottom:5px;
-
-  font-size:12px;
-  font-weight:700;
-  color:#cfcfcf;
-
-  text-transform:uppercase;
-  letter-spacing:.04em;
+#acuteTrachVentWrap label {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #cfcfcf;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
 /* Tettere inputs */
+
 #spontO2Wrap input,
 #highFlowWrap input,
 #nivWrap input,
 #intubWrap input,
 #trachO2Wrap input,
 #trachVentWrap input,
-
 #acuteSpontO2Wrap input,
 #acuteHighFlowWrap input,
 #acuteNivWrap input,
 #acuteIntubWrap input,
 #acuteTrachO2Wrap input,
-#acuteTrachVentWrap input{
-  margin-bottom:8px;
+#acuteTrachVentWrap input {
+  margin-bottom: 8px;
 }
 
 /* Siste input uten ekstra luft */
+
 #spontO2Wrap input:last-child,
 #highFlowWrap input:last-child,
 #nivWrap input:last-child,
 #intubWrap input:last-child,
 #trachO2Wrap input:last-child,
 #trachVentWrap input:last-child,
-
 #acuteSpontO2Wrap input:last-child,
 #acuteHighFlowWrap input:last-child,
 #acuteNivWrap input:last-child,
 #acuteIntubWrap input:last-child,
 #acuteTrachO2Wrap input:last-child,
-#acuteTrachVentWrap input:last-child{
-  margin-bottom:0;
+#acuteTrachVentWrap input:last-child {
+  margin-bottom: 0;
 }
-
 
 /* Smitte + CAVE som rolige infofelt */
 
-.infoGroup{
-  margin-top:22px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  border:0;
+.infoGroup {
+  margin-top: 22px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
 /* Overskrift */
-.infoGroup .section{
-  margin-top:0;
-  padding-top:0;
-  border-top:0;
+
+.infoGroup .section {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 /* Valg inni gruppen */
-.infoGroup .binaryRow,
-.infoGroup .toggleRow{
-  gap:14px;
-  margin-top:10px;
+
+.infoGroup .binaryRow {
+  gap: 14px;
+  margin-top: 10px;
 }
 
 /* Fritekst */
+
 .infoGroup textarea,
-.infoGroup input{
-  margin-top:10px;
+.infoGroup input {
+  margin-top: 10px;
 }
-
-#smitteSpes{
-  width:580px;
-  max-width:100%;
-}
-
 
 /* Tilganger – roligere kort/chip-følelse */
 
-.accessGroup{
-  margin-top:18px;
-  padding:14px 16px;
-  border-radius:16px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.04);
+.accessGroup {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
 }
-
-.accessGroup .minorTitle{
-  margin-top:0;
-}
-
-.accessGrid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px 12px;
-  margin-top:10px;
-}
-
-.accessGrid .clickableChoice,
-.accessGrid .radioOpt,
-.accessGrid label{
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.035);
-  border:1px solid rgba(255,255,255,0.05);
-}
-
-.accessGrid input{
-  margin:0;
-}
-
 
 /* Tilganger / Utstyr – kompakt kort */
 
-.accessGroup{
-  margin-top:22px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  border:0;
+.accessGroup {
+  margin-top: 22px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
-.accessGroup .minorTitle{
-  margin-top:0;
-  margin-bottom:8px;
+.accessGroup .minorTitle {
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
-.accessGroup .toggleCell,
-.accessGroup .nonToggleRow{
-  border-radius:12px;
-  padding:6px 9px;
-  background:rgba(255,255,255,0.022);
-}
-
-/* Skjul checkbox uten å ødelegge klikk */
-
-.specialGroup .specCell input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.accessGroup .toggleCell {
+  background: rgba(255,255,255,0.022);
 }
 
 /* Standard chip */
 
-.specialGroup .specCell{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.035);
-  border:1px solid rgba(255,255,255,0.05);
-  cursor:pointer;
-  transition:0.15s ease;
+.specialGroup .specCell {
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 /* Hover */
 
-.specialGroup .specCell:hover{
-  background:rgba(255,255,255,0.055);
+.specialGroup .specCell:hover {
+  background: rgba(255,255,255,0.055);
 }
 
 /* Valgt */
 
-.specialGroup .specCell.active{
-  background:rgba(255,255,255,0.12);
-  border-color:rgba(255,255,255,0.14);
+.specialGroup .specCell.active {
+  background: rgba(255,255,255,0.12);
 }
 
-.specialGroup .specCell input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.specialGroup .specCell input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.specialGroup .specCell.active{
-  background:var(--accent);
-  color:#111;
-  border-color:var(--accent);
-}
-
-.specialGroup .specCell.active span{
-  color:#111;
+.specialGroup .specCell.active {
+  background: var(--accent);
 }
 
 /* Tilganger / Utstyr – mer kompakte valgflater */
 
-.accessGroup .toggleCell,
-.accessGroup .nonToggleRow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  min-height:34px;
-  border-radius:12px;
-  padding:6px 10px;
-  background:rgba(255,255,255,0.025);
-  border:1px solid rgba(255,255,255,0.04);
+.accessGroup .toggleCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  border-radius: 12px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .accessGroup .toggleInner,
-.accessGroup .clickableChoice{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
+.accessGroup .clickableChoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.accessGroup input[type="checkbox"]{
-  margin:0;
+.accessGroup input[type="checkbox"] {
+  margin: 0;
 }
 
-.accessGroup select{
-  height:42px;
-  min-height:42px;
-  padding:0 10px;
-  line-height:normal;
-  border-radius:10px;
+.accessGroup select {
+  height: 42px;
+  min-height: 42px;
+  padding: 0 10px;
+  line-height: normal;
+  border-radius: 10px;
 }
-
 
 /* Roligere input- og tekstfelt */
 
 input,
 textarea,
-select{
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:12px;
+select {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
 }
 
 input:focus,
 textarea:focus,
-select:focus{
-  outline:none;
-  border-color:rgba(255,255,255,0.16);
+select:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.16);
 }
 
 /* Strammere rytme mellom seksjoner */
 
-.bigSection{
-  display:block;
-
-  margin-top:30px;
-  margin-bottom:14px;
-
-  font-size:20px;
-  font-weight:850;
-
-  letter-spacing:.01em;
-
-  color:#ffffff;
+.bigSection {
+  display: block;
+  margin-top: 30px;
+  margin-bottom: 14px;
+  font-size: 20px;
+  font-weight: 850;
+  letter-spacing: .01em;
+  color: #ffffff;
 }
 
 .binaryRow,
-.nonToggleRow,
 .smLine,
-.airwayRow{
-  margin-top:4px;
-  margin-bottom:4px;
+.airwayRow {
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 /* Mykere global linjestil */
 
-:root{
+:root {
   --line: rgba(255,255,255,0.05);
 }
 
-.toggleCell,
-.nonToggleRow{
-  border-color:rgba(255,255,255,0.04);
+.toggleCell {
+  border-color: rgba(255,255,255,0.04);
 }
 
 /* Mindre aggressive bokser */
 
 input,
 textarea,
-select{
-  box-shadow:none;
+select {
+  box-shadow: none;
 }
 
 /* Tydeligere valgt status uten hard border */
 
 .toggleCell.active,
-.binaryOpt:has(input:checked){
-  background:rgba(70,130,180,0.85);
-  color:#111;
-  border-color:rgba(70,130,180,0.9);
-}
-
-.toggleCell.active span,
-.binaryOpt:has(input:checked) span{
-  color:#111;
+.binaryOpt:has(input:checked) {
+  background: rgba(70,130,180,0.85);
+  color: #111;
+  border-color: rgba(70,130,180,0.9);
 }
 
 .toggleCell.active span,
 .binaryOpt:has(input:checked) span,
-.radioOpt:has(input:checked) span,
-.clickableChoice:has(input:checked) span{
-  color:#111;
+.clickableChoice:has(input:checked) span {
+  color: #111;
 }
 
 /* Luftveier som moderne valggruppe */
 
-.airwayRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:8px;
+.airwayRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 
-.airwayRow .binaryOpt{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.05);
-}
-
-.airwayRow .binaryOpt:has(input:checked) span{
-  color:#111;
-}
-
-.chipOption{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.05);
+.airwayRow .binaryOpt {
+  gap: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 /* Medikamenter – mer raffinert chip-layout */
 
-.medGroup{
-  margin-top:12px;
-  padding:12px 14px;
-  border-radius:14px;
-  background:rgba(255,255,255,0.025);
-  border:1px solid rgba(255,255,255,0.05);
+.medGroup {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-.medGroupTitle{
-  font-size:13px;
-  font-weight:600;
-  opacity:0.72;
-  margin-bottom:8px;
+.medGroupTitle {
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.72;
+  margin-bottom: 8px;
 }
 
-.chipRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.medChip{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:7px 11px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.05);
+.medChip {
+  gap: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 /* skjul checkbox visuelt */
 
-.medChip input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.medChip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* valgt */
 
-.medChip:has(input:checked){
-  background:rgba(70,130,180,0.88);
-  border-color:rgba(70,130,180,0.95);
-  color:#111;
+.medChip:has(input:checked) {
+  background: rgba(70,130,180,0.88);
 }
 
-.medChip:has(input:checked) span{
-  color:#111;
+.medChip:has(input:checked) span {
+  color: #111;
 }
 
 /* Fjern blå valgtmarkering kun på disse */
-.radioOpt:has(#spedbarn_ja:checked),
-.radioOpt:has(#spedbarn_nei:checked),
-.radioOpt:has(#cave_ja:checked),
-.radioOpt:has(#cave_nei:checked),
+
 .clickableChoice:has(#til_cvk:checked),
 .clickableChoice:has(#til_pvk:checked),
 .clickableChoice:has(#utst_pumper:checked),
-.clickableChoice:has(#acutePumperChk:checked){
-  background:transparent !important;
-  color:#f1f1f1 !important;
-  border-color:transparent !important;
-  box-shadow:none !important;
+.clickableChoice:has(#acutePumperChk:checked) {
+  background: transparent !important;
+  color: #f1f1f1 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Behold hvit tekst */
-.radioOpt:has(#spedbarn_ja:checked) span,
-.radioOpt:has(#spedbarn_nei:checked) span,
-.radioOpt:has(#cave_ja:checked) span,
-.radioOpt:has(#cave_nei:checked) span,
+
 .clickableChoice:has(#til_cvk:checked) span,
 .clickableChoice:has(#til_pvk:checked) span,
 .clickableChoice:has(#utst_pumper:checked) span,
-.clickableChoice:has(#acutePumperChk:checked) span{
-  color:#f1f1f1 !important;
+.clickableChoice:has(#acutePumperChk:checked) span {
+  color: #f1f1f1 !important;
 }
 
 .binaryOpt:has(#transport_kuvose:checked),
 .binaryOpt:has(#transport_pedimate:checked),
 .binaryOpt:has(#transport_barnibag:checked),
-.binaryOpt:has(#transport_kengufix:checked){
-  background:transparent !important;
-  color:#f1f1f1 !important;
-  border-color:transparent !important;
-  box-shadow:none !important;
+.binaryOpt:has(#transport_kengufix:checked) {
+  background: transparent !important;
+  color: #f1f1f1 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .binaryOpt:has(#transport_kuvose:checked) span,
 .binaryOpt:has(#transport_pedimate:checked) span,
 .binaryOpt:has(#transport_barnibag:checked) span,
-.binaryOpt:has(#transport_kengufix:checked) span{
-  color:#f1f1f1 !important;
+.binaryOpt:has(#transport_kengufix:checked) span {
+  color: #f1f1f1 !important;
 }
 
-.feedbackBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  min-height:44px;
-  padding:0 16px;
-
-  border-radius:12px;
-
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.06);
-
-  color:#d1d5db;
-  text-decoration:none;
-
-  font-size:13px;
-  font-weight:600;
-
-  transition:.15s ease;
+.feedbackBtn {
+  min-height: 44px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px;
 }
 
-.feedbackBtn:hover{
-  background:rgba(255,255,255,0.035);
-  color:#f3f4f6;
+.feedbackBtn:hover {
+  background: rgba(255,255,255,0.035);
+  color: #f3f4f6;
 }
 
-.doctorGroup{
-  margin-top:22px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  border:0;
+.doctorGroup {
+  margin-top: 22px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
-.flowDivider{
-  margin-top:30px;
-  margin-bottom:12px;
-  padding:8px 12px;
-
-  border-left:4px solid rgba(143,176,255,0.55);
-  border-radius:10px;
-
-  background:rgba(255,255,255,0.025);
-
-  color:#e5e7eb;
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:.05em;
-  text-transform:uppercase;
+.hasteGrid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 24px;
 }
 
-.flowDivider.subtle{
-  border-left-color:rgba(255,255,255,0.18);
-  color:#cfcfcf;
-  background:transparent;
-}
-
-.hasteGrid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-  margin-top:10px;
-  margin-bottom:24px;
-}
-
-.hasteCard{
-  min-height:118px;
-  padding:14px 14px 12px;
-
-  border-radius:16px;
-  border:2px solid transparent;
-
-  display:flex !important;
-  flex-direction:column !important;
-
-  align-items:flex-start;
-  justify-content:flex-start;
-
-  gap:8px;
-
-  text-align:left;
-
-  white-space:normal !important;
-
-  color:#111;
-
-  box-shadow:0 4px 14px rgba(0,0,0,0.22);
+.hasteCard {
+  min-height: 118px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  text-align: left;
+  white-space: normal !important;
+  color: #111;
 }
 
 .hasteCardTitle,
-.hasteCardText{
-  display:block;
-  width:100%;
+.hasteCardText {
+  display: block;
+  width: 100%;
 }
 
-.hasteCardTitle{
-  font-size:17px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.04em;
+.hasteCardTitle {
+  font-size: 17px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
-.hasteCardText{
-  font-size:12px;
-  font-weight:650;
-  line-height:1.35;
-  opacity:.88;
+.hasteCardText {
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.35;
+  opacity: .88;
 }
 
-.hasteCard.active{
-  transform:translateY(-2px);
-  filter:brightness(0.92) saturate(1.12);
-  box-shadow:
-    0 9px 24px rgba(0,0,0,0.35),
+.hasteCard.active {
+  filter: brightness(0.92) saturate(1.12);
+  box-shadow: 0 9px 24px rgba(0,0,0,0.35),
     inset 0 0 0 2px rgba(0,0,0,0.18);
 }
 
-@media(max-width:900px){
-  .hasteGrid{
-    grid-template-columns:1fr 1fr;
+@media(max-width:900px) {
+  .hasteGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media(max-width:560px){
-  .hasteGrid{
-    grid-template-columns:1fr;
+@media(max-width:560px) {
+  .hasteGrid {
+    grid-template-columns: 1fr;
   }
 }
 
-.hasteCard{
-  position:relative;
-}
-
-.hasteCard{
-  position:relative;
-
-  transition:
-    transform .08s ease,
+.hasteCard {
+  position: relative;
+  transition: transform .08s ease,
     filter .12s ease,
     box-shadow .12s ease,
     border-color .12s ease,
     background .12s ease;
-
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.22);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
 }
 
-.hasteCard.active{
-  transform:translateY(1px);
-  color:#111;
+.hasteCard.active {
+  transform: translateY(1px);
+  color: #111;
 }
 
-.haste-akutt.active{
-  background:var(--hasteAkutt);
+.haste-akutt.active {
+  background: var(--hasteAkutt);
 }
 
-.haste-haster.active{
-  background:var(--hasteHaster);
+.haste-haster.active {
+  background: var(--hasteHaster);
 }
 
-.haste-samme.active{
-  background:var(--hasteSamme);
+.haste-samme.active {
+  background: var(--hasteSamme);
 }
 
-.haste-planlagt.active{
-  background:var(--hastePlanlagt);
+.haste-planlagt.active {
+  background: var(--hastePlanlagt);
 }
 
-.formGroup{
-  margin-top:22px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  border:0;
+.formGroup {
+  margin-top: 22px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
 .formGroup .section,
 .formGroup .minorTitle,
-.formGroup label:first-child{
-  margin-top:0;
+.formGroup label:first-child {
+  margin-top: 0;
 }
 
-.feedbackWrap{
-  width:100%;
-  display:flex;
-  justify-content:flex-end;
-  padding-right:0;
-  margin-top:14px;
+.feedbackWrap {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+  margin-top: 14px;
 }
 
-.feedbackBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:10px 16px;
-  border-radius:12px;
-
-  background:#3f4249;
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-
-  transition:0.15s ease;
+.feedbackBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #3f4249;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.15s ease;
 }
 
-.feedbackBtn:hover{
-  opacity:0.9;
-  transform:translateY(-1px);
+.feedbackBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 /* Hastegrad: rolig standard + farget ramme */
-.hasteGrid .hasteCard{
-  background:#3a3d43 !important;
-  border:2px solid transparent !important;
-  color:#f1f1f1 !important;
+
+.hasteGrid .hasteCard {
+  background: #3a3d43 !important;
+  border: 2px solid transparent !important;
+  color: #f1f1f1 !important;
 }
 
-.hasteGrid .hasteCard.haste-akutt{
-  border-color:var(--hasteAkutt) !important;
+.hasteGrid .hasteCard.haste-akutt {
+  border-color: var(--hasteAkutt) !important;
 }
 
-.hasteGrid .hasteCard.haste-haster{
-  border-color:var(--hasteHaster) !important;
+.hasteGrid .hasteCard.haste-haster {
+  border-color: var(--hasteHaster) !important;
 }
 
-.hasteGrid .hasteCard.haste-samme{
-  border-color:var(--hasteSamme) !important;
+.hasteGrid .hasteCard.haste-samme {
+  border-color: var(--hasteSamme) !important;
 }
 
-.hasteGrid .hasteCard.haste-planlagt{
-  border-color:var(--hastePlanlagt) !important;
+.hasteGrid .hasteCard.haste-planlagt {
+  border-color: var(--hastePlanlagt) !important;
 }
 
 /* Når valgt: fyll hele kortet med samme farge */
-.hasteGrid .hasteCard.haste-akutt.active{
-  background:var(--hasteAkutt) !important;
-  color:#111 !important;
+
+.hasteGrid .hasteCard.haste-akutt.active {
+  background: var(--hasteAkutt) !important;
+  color: #111 !important;
 }
 
-.hasteGrid .hasteCard.haste-haster.active{
-  background:var(--hasteHaster) !important;
-  color:#111 !important;
+.hasteGrid .hasteCard.haste-haster.active {
+  background: var(--hasteHaster) !important;
+  color: #111 !important;
 }
 
-.hasteGrid .hasteCard.haste-samme.active{
-  background:var(--hasteSamme) !important;
-  color:#111 !important;
+.hasteGrid .hasteCard.haste-samme.active {
+  background: var(--hasteSamme) !important;
+  color: #111 !important;
 }
 
-.hasteGrid .hasteCard.haste-planlagt.active{
-  background:var(--hastePlanlagt) !important;
-  color:#111 !important;
+.hasteGrid .hasteCard.haste-planlagt.active {
+  background: var(--hastePlanlagt) !important;
+  color: #111 !important;
 }
 
-.followRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-
-  margin-top:10px;
-  margin-bottom:20px;
+.followRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
-.followChip{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  min-height:40px;
-  padding:0 14px;
-
-  border-radius:999px;
-
-  background:#2f3238;
-  border:1px solid rgba(255,255,255,0.08);
-
-  color:#f1f1f1;
-
-  font-size:14px;
-  font-weight:650;
-
-  cursor:pointer;
-  transition:.15s ease;
+.followChip {
+  background: #2f3238;
+  color: #f1f1f1;
 }
 
-.followChip:hover{
-  background:#3a3e46;
+.followChip:hover {
+  background: #3a3e46;
 }
 
-.followChip input{
-  position:absolute;
-  opacity:0;
-  pointer-events:none;
+.followChip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.followChip:has(input:checked){
-  background:#8fb0ff;
-  border-color:#8fb0ff;
-  color:#111;
+.followChip:has(input:checked) {
+  background: #8fb0ff;
 }
 
-.followChip:has(input:checked) span{
-  color:#111;
+.followChip:has(input:checked) span {
+  color: #111;
 }
 
-
-.smLine{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:10px;
+.smLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.smChip{
-  min-width:145px;
-  justify-content:center;
+.smChip {
+  min-width: 145px;
 }
 
-.smChip input{
-  display:none;
+.smChip:has(input:checked) {
+  background: #1f4f7a;
 }
 
-.smChip:has(input:checked){
-  background:#1f4f7a;
-  border-color:#4f9fe0;
-  color:#fff;
+#smitteSpes {
+  max-width: 100%;
 }
 
-#smitteSpes{
-  width:340px;
-  max-width:100%;
+.caveRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
-.trachInline{
-  margin-top:10px;
-  padding:10px 0 0;
+.accessChipRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.trachChoiceRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
+.accessChipRow select {
+  width: 100px;
+  margin: 0;
 }
 
-.trachChoice{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin:0;
-  font-weight:400;
-  cursor:pointer;
+.accessDynamic {
+  margin-top: 12px;
+  max-width: 570px;
 }
 
-.trachChoice input{
-  margin:0;
+.accessDynamic .dynamicRow {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 8px !important;
 }
 
-.caveRow{
-  display:flex;
-  gap:10px;
-  flex-wrap:nowrap;
-  align-items:center;
+.accessDynamic .dynamicRow .chk {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
 }
 
-.caveChip{
-  cursor:pointer;
+.accessDynamic .dynamicRow input[type="text"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  margin: 0 !important;
 }
 
-.caveChip input{
-  display:none;
+.utstyrGroup {
+  margin-top: 8px;
 }
 
-.caveChip span{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:38px;
-  padding:0 16px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.14);
-  background:#2f3238;
-  color:#fff;
-  font-weight:700;
+.utstyrChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
-.caveChip input:checked + span{
-
-  background:#1f4f7a;
-  border-color:#3f8fd2;
-  color:#fff;
+.inlineSelect {
+  width: 90px;
+  min-width: 90px;
+  margin: 0;
 }
 
-.accessChipRow{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:10px;
+#utstyrDynamicBody {
+  margin-top: 12px;
+  max-width: 580px;
 }
 
-.accessChip{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:38px;
-  padding:0 16px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.14);
-  background:#2f3238;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
+#utstyrDynamicBody .dynamicRow {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 8px !important;
 }
 
-.accessChip input{
-  display:none;
+#utstyrDynamicBody .dynamicRow .chk {
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
 }
 
-.accessChip:has(input:checked){
-  background:#1f4f7a;
-  border-color:#3f8fd2;
-  color:#fff;
+#utstyrDynamicBody .dynamicRow input[type="text"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  margin: 0 !important;
 }
 
-.accessChip:has(input:checked) span{
-  color:#fff;
+#caveTextWrap {
+  max-width: 580px;
 }
 
-.accessChipRow select{
-  width:100px;
-  margin:0;
+#caveText {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.accessDynamic{
-  margin-top:12px;
-  max-width:570px;
+#smitteSpesWrap {
+  max-width: 580px;
 }
 
-.accessDynamic .dynamicRow{
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  gap:8px !important;
-  width:100% !important;
-  margin-top:8px !important;
-}
-
-.accessDynamic .dynamicRow .chk{
-  flex:0 0 18px !important;
-  width:18px !important;
-  height:18px !important;
-  margin:0 !important;
-}
-
-.accessDynamic .dynamicRow input[type="text"]{
-  flex:1 1 auto !important;
-  width:auto !important;
-  margin:0 !important;
-}
-
-.utstyrGroup{
-  margin-top:8px;
-}
-
-.utstyrChipRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-}
-
-.utstyrChip{
-  display:inline-flex;
-  align-items:center;
-  cursor:pointer;
-}
-
-.utstyrChip input{
-  display:none;
-}
-
-.utstyrChip span{
-  padding:9px 14px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#2f3238;
-  color:#fff;
-  font-weight:700;
-  font-size:14px;
-}
-
-.utstyrChip input:checked + span{
-  background:#1f4f73;
-  border-color:#3478a8;
-  color:#fff;
-}
-
-.utstyrExtra{
-  margin-top:10px;
-}
-
-.utstyrExtra textarea{
-  width:100%;
-  min-height:42px;
-  resize:none;
-}
-
-.pumpRow{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:nowrap;
-}
-
-.inlineSelect{
-  width:90px;
-  min-width:90px;
-  margin:0;
-}
-
-.utstyrExtra{
-  margin-top:12px;
-  max-width:580px;
-}
-
-#utstyrFritekst{
-  width:100%;
-  min-height:44px;
-  resize:none;
-  border-radius:12px;
-}
-
-#utstyrDynamicBody{
-  margin-top:12px;
-  max-width:580px;
-}
-
-#utstyrDynamicBody .dynamicRow{
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  gap:8px !important;
-  width:100% !important;
-  margin-top:8px !important;
-}
-
-#utstyrDynamicBody .dynamicRow .chk{
-  flex:0 0 18px !important;
-  width:18px !important;
-  height:18px !important;
-  margin:0 !important;
-}
-
-#utstyrDynamicBody .dynamicRow input[type="text"]{
-  flex:1 1 auto !important;
-  width:auto !important;
-  margin:0 !important;
-}
-
-#caveTextWrap{
-  max-width:580px;
-}
-
-#caveText{
-  width:100%;
-  box-sizing:border-box;
-}
-
-#smitteSpesWrap{
-  max-width:580px;
-}
-
-#smitteSpes{
-  width:100%;
-  box-sizing:border-box;
-}
-
-#andreMedikamenterText{
-  max-width:580px;
-  width:100%;
-  box-sizing:border-box;
-}
-
-#hlrTextWrap,
-#respTextWrap{
-  max-width:580px;
-}
-
-#hlrText,
-#respText{
-  width:100%;
-  box-sizing:border-box;
+#smitteSpes {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ======================================================
-   UNIVERSELL CHIP-STANDARD
+UNIVERSELL CHIP-STANDARD
 ====================================================== */
 
 .medChip,
 .followChip,
-.caveChip,
-.utstyrChip,
 .binaryOpt,
 .smChip,
-.spedChip{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  min-height:42px;
-  padding:10px 16px;
-
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.08);
-
-  background:#2f333b;
-
-  font-size:14px;
-  font-weight:500;
-  line-height:1.2;
-
-  cursor:pointer;
-  transition:0.15s ease;
-
-  box-sizing:border-box;
+.spedChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #2f333b;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: 0.15s ease;
+  box-sizing: border-box;
 }
 
 .medChip span,
 .followChip span,
-.caveChip span,
-.accessChip span,
-.utstyrChip span,
 .binaryOpt span,
 .smChip span,
-.spedChip span{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.spedChip span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .medChip input,
 .followChip input,
-.caveChip input,
-.accessChip input,
-.utstyrChip input,
 .binaryOpt input,
 .smChip input,
-.spedChip input{
-  display:none;
+.spedChip input {
+  display: none;
 }
 
 .medChip:has(input:checked),
 .followChip:has(input:checked),
-.caveChip:has(input:checked),
-.accessChip:has(input:checked),
-.utstyrChip:has(input:checked),
 .binaryOpt:has(input:checked),
 .smChip:has(input:checked),
-.spedChip:has(input:checked){
-  background:#2b5cab;
-  border-color:#4f83d1;
-  color:#fff;
+.spedChip:has(input:checked) {
+  background: #2b5cab;
+  border-color: #4f83d1;
+  color: #fff;
 }
 
 .medChip:hover,
 .followChip:hover,
-.caveChip:hover,
-.accessChip:hover,
-.utstyrChip:hover,
 .binaryOpt:hover,
 .smChip:hover,
-.spedChip:hover{
-  background:#3a404b;
+.spedChip:hover {
+  background: #3a404b;
 }
 
-.hudRow .medChip,
 .medicationOtherRow .medChip,
-.medGroup .medChip{
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-  margin:0 !important;
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  line-height:1.2 !important;
+.medGroup .medChip {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.2 !important;
 }
 
-
-.hudRow .medChip span,
 .medicationOtherRow .medChip span,
-.medGroup .medChip span{
-  line-height:1.2 !important;
+.medGroup .medChip span {
+  line-height: 1.2 !important;
 }
 
-.pumpRow{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
+.pumpRow {
+  display: flex;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.pumpRow{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
+.unitInputWrap {
+  width: 180px;
+  max-width: 100%;
 }
 
-.pumpRow .utstyrChip{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  min-height:42px;
-  padding:10px 16px;
-
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.08);
-
-  background:#2f333b;
-  color:#f1f1f1;
-
-  font-size:14px;
-  font-weight:500;
-  line-height:1.2;
-
-  cursor:pointer;
-  transition:0.15s ease;
-  box-sizing:border-box;
+.unitInputWrap input {
+  width: 100%;
 }
 
-.pumpRow .utstyrChip input{
-  display:none;
+.intubRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
 }
 
-.pumpRow .utstyrChip span{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  background:transparent;
-  border:0;
-  color:inherit;
-  font:inherit;
-}
-
-.pumpRow .utstyrChip:has(input:checked){
-  background:#2b5cab;
-  border-color:#4f83d1;
-  color:#fff;
-}
-
-.pumpRow .utstyrChip:hover{
-  background:#3a404b;
-}
-
-.hudRow{
-  display:grid !important;
-  grid-template-columns:repeat(4, max-content);
-  gap:10px;
-  justify-content:start;
-}
-
-.hudRow .medChip{
-  margin:0 !important;
-}
-
-.hudTooltip{
-  position:relative;
-}
-
-.hudTooltip::after{
-  content:attr(data-tooltip);
-
-  position:absolute;
-  left:50%;
-  bottom:calc(100% + 8px);
-  transform:translateX(-50%);
-
-  background:rgba(20,20,20,0.96);
-  color:#fff;
-
-  font-size:12px;
-  font-weight:600;
-  white-space:nowrap;
-
-  padding:6px 10px;
-  border-radius:10px;
-
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-
-  transition:opacity .18s ease, visibility .18s ease;
-  transition-delay:.3s;
-
-  z-index:9999;
-}
-
-.hudTooltip:hover::after{
-  opacity:1;
-  visibility:visible;
-}
-
-.unitInputWrap{
-  position:relative;
-  width:180px;
-  max-width:100%;
-}
-
-.unitInputWrap input{
-  width:100%;
-  padding-right:58px;
-}
-
-.unitInputWrap span{
-  position:absolute;
-  right:14px;
-  top:50%;
-  transform:translateY(-50%);
-  color:#8c8c8c;
-  font-size:13px;
-  pointer-events:none;
-}
-
-.intubRow{
-  display:flex;
-  gap:14px;
-  flex-wrap:nowrap;
-  align-items:center;
-}
-
-.intubRow .unitInputWrap{
-  width:160px;
-  flex:0 0 160px;
-}
-
-.intubRow{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  gap:14px;
-  flex-wrap:nowrap;
-}
-
-.intubRow .unitInputWrap{
-  width:150px;
-  flex:0 0 150px;
+.intubRow .unitInputWrap {
+  width: 150px;
+  flex: 0 0 150px;
 }
 
 /* Midtstill benevning inni luftveisfeltene */
-.unitInputWrap{
-  position:relative;
-  display:flex;
-  align-items:center;
+
+.unitInputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.unitInputWrap input{
-  height:42px;
-  margin:0 !important;
-  padding-right:70px;
+.unitInputWrap input {
+  height: 42px;
+  margin: 0 !important;
+  padding-right: 70px;
 }
 
-.unitInputWrap span{
-  position:absolute;
-  right:14px;
-  top:50%;
-  transform:translateY(-50%);
-  display:flex;
-  align-items:center;
-  height:100%;
-
-  color:#8c8c8c;
-  font-size:13px;
-  line-height:1;
-  pointer-events:none;
+.unitInputWrap span {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #8c8c8c;
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
 }
 
-.spedChip{
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-  margin:0 !important;
-
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  border-radius:999px !important;
-  background:#2f333b !important;
-  border:1px solid rgba(255,255,255,0.08) !important;
-
-  color:#f1f1f1 !important;
-  font-size:14px !important;
-  font-weight:500 !important;
-  line-height:1.2 !important;
+.spedChip {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 999px !important;
+  background: #2f333b !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: #f1f1f1 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
 }
 
-.spedChip input{
-  display:none !important;
+.spedChip input {
+  display: none !important;
 }
 
-.spedChip:has(input:checked){
-  background:#2b5cab !important;
-  border-color:#4f83d1 !important;
-  color:#fff !important;
+.spedChip:has(input:checked) {
+  background: #2b5cab !important;
+  border-color: #4f83d1 !important;
+  color: #fff !important;
 }
 
-.spedChip:has(input:checked) span{
-  color:#fff !important;
+.spedChip:has(input:checked) span {
+  color: #fff !important;
 }
 
 /* Luftveier: samme chip-stil som øvrige valg */
-.airwayRow .binaryOpt{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
 
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-  margin:0 !important;
-
-  border-radius:999px !important;
-  border:1px solid rgba(255,255,255,0.08) !important;
-
-  background:#2f333b !important;
-  color:#f1f1f1 !important;
-
-  font-size:14px !important;
-  font-weight:500 !important;
-  line-height:1.2 !important;
-
-  cursor:pointer;
-  transition:0.15s ease;
-  box-sizing:border-box;
+.airwayRow .binaryOpt {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: #2f333b !important;
+  color: #f1f1f1 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  cursor: pointer;
+  transition: 0.15s ease;
+  box-sizing: border-box;
 }
 
-.airwayRow .binaryOpt input{
-  display:none !important;
+.airwayRow .binaryOpt input {
+  display: none !important;
 }
 
-.airwayRow .binaryOpt span{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  color:inherit !important;
-  line-height:1.2 !important;
+.airwayRow .binaryOpt span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: inherit !important;
+  line-height: 1.2 !important;
 }
 
-.airwayRow .binaryOpt:hover{
-  background:#3a404b !important;
+.airwayRow .binaryOpt:hover {
+  background: #3a404b !important;
 }
 
-.airwayRow .binaryOpt:has(input:checked){
-  background:#2b5cab !important;
-  border-color:#4f83d1 !important;
-  color:#fff !important;
-  box-shadow:none !important;
+.airwayRow .binaryOpt:has(input:checked) {
+  background: #2b5cab !important;
+  border-color: #4f83d1 !important;
+  color: #fff !important;
+  box-shadow: none !important;
 }
 
-.airwayRow .binaryOpt:has(input:checked) span{
-  color:#fff !important;
+.airwayRow .binaryOpt:has(input:checked) span {
+  color: #fff !important;
 }
 
 /* Spesialtransport: samme chip-stil som øvrige valg */
-.specialGroup .specCell{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
 
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-  margin:0 !important;
-
-  border-radius:999px !important;
-  border:1px solid rgba(255,255,255,0.08) !important;
-
-  background:#2f333b !important;
-  color:#f1f1f1 !important;
-
-  font-size:14px !important;
-  font-weight:500 !important;
-  line-height:1.2 !important;
-
-  cursor:pointer;
-
-  transition:0.15s ease;
-  box-sizing:border-box;
+.specialGroup .specCell {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: 0 14px !important;
+  margin: 0 !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: #2f333b !important;
+  color: #f1f1f1 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  cursor: pointer;
+  transition: 0.15s ease;
+  box-sizing: border-box;
 }
 
-.specialGroup .specCell input{
-  display:none !important;
+.specialGroup .specCell input {
+  display: none !important;
 }
 
 .specialGroup .specCell span,
-.specialGroup .specCell .specLabel{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  color:inherit !important;
-  font-size:inherit !important;
-  font-weight:inherit !important;
-  line-height:1.2 !important;
+.specialGroup .specCell .specLabel {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: 1.2 !important;
 }
 
-.specialGroup .specCell:hover{
-  background:#3a404b !important;
+.specialGroup .specCell:hover {
+  background: #3a404b !important;
 }
 
 .specialGroup .specCell:has(input:checked),
-.specialGroup .specCell.active{
-  background:#2b5cab !important;
-  border-color:#4f83d1 !important;
-  color:#fff !important;
-  box-shadow:none !important;
+.specialGroup .specCell.active {
+  background: #2b5cab !important;
+  border-color: #4f83d1 !important;
+  color: #fff !important;
+  box-shadow: none !important;
 }
 
 .specialGroup .specCell:has(input:checked) span,
-.specialGroup .specCell.active span{
-  color:#fff !important;
+.specialGroup .specCell.active span {
+  color: #fff !important;
 }
 
-.spesialtransportRow{
-  display:flex !important;
-  flex-direction:row !important;
-  align-items:center !important;
-  gap:8px !important;
-  flex-wrap:wrap !important;
-  padding:0 !important;
-}
-
-/* Respirasjonsarbeid spedbarn – samme chip-standard */
-.spedRespArbeidRow{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:8px !important;
-  margin-top:10px !important;
-}
-
-.spedRespArbeidRow .medChip{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  min-height:40px !important;
-  height:40px !important;
-  padding:0 14px !important;
-  margin:0 !important;
-
-  border-radius:999px !important;
-  border:1px solid rgba(255,255,255,0.08) !important;
-
-  background:#2f333b !important;
-  color:#f1f1f1 !important;
-
-  font-size:14px !important;
-  font-weight:500 !important;
-  line-height:1.2 !important;
-
-  cursor:pointer;
-  transition:0.15s ease;
-  box-sizing:border-box;
-}
-
-.spedRespArbeidRow .medChip input{
-  display:none !important;
-}
-
-.spedRespArbeidRow .medChip span{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  color:inherit !important;
-  font-size:inherit !important;
-  font-weight:inherit !important;
-  line-height:1.2 !important;
-}
-
-.spedRespArbeidRow .medChip:hover{
-  background:#3a404b !important;
-}
-
-.spedRespArbeidRow .medChip:has(input:checked){
-  background:#2b5cab !important;
-  border-color:#4f83d1 !important;
-  color:#fff !important;
-  box-shadow:none !important;
-}
-
-.spedRespArbeidRow .medChip:has(input:checked) span{
-  color:#fff !important;
+.spesialtransportRow {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  padding: 0 !important;
 }
 
 /* Fremhev vektfeltet */
-#weightWrap{
-  margin-top:18px;
-  max-width:240px;
 
-  padding:12px 14px;
-  border:2px solid rgba(239,68,68,0.75);
-  border-radius:14px;
-  background:rgba(239,68,68,0.06);
+#weightWrap {
+  margin-top: 18px;
+  max-width: 240px;
+  padding: 12px 14px;
+  border: 2px solid rgba(239,68,68,0.75);
+  border-radius: 14px;
+  background: rgba(239,68,68,0.06);
 }
 
-#weightWrap label{
-  margin-top:0;
-  color:#ffd7d7;
+#weightWrap label {
+  margin-top: 0;
+  color: #ffd7d7;
 }
 
-#weightWrap #vekt{
-  width:100%;
-  margin-bottom:0;
-  border:2px solid rgba(239,68,68,0.65);
+#weightWrap #vekt {
+  width: 100%;
+  margin-bottom: 0;
+  border: 2px solid rgba(239,68,68,0.65);
 }
 
-#weightWrap #vekt:focus{
-  border-color:#ef4444;
-  box-shadow:0 0 0 3px rgba(239,68,68,0.16);
+#weightWrap #vekt:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.16);
 }
 
 /* Transportform – tving identisk størrelse */
-#transportWrap .transportRow > label{
-  flex:0 0 125px !important;
-  width:125px !important;
-  min-width:125px !important;
-  max-width:125px !important;
 
-  height:40px !important;
-  min-height:40px !important;
-  max-height:40px !important;
-
-  padding:0 !important;
-  margin:0 !important;
-
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  box-sizing:border-box !important;
-  border-radius:999px !important;
+#transportWrap .transportRow > label {
+  flex: 0 0 125px !important;
+  width: 125px !important;
+  min-width: 125px !important;
+  max-width: 125px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  border-radius: 999px !important;
 }
 
-#transportWrap .transportRow > label span{
-  width:auto !important;
-  margin:0 !important;
-  padding:0 !important;
-  line-height:1 !important;
+#transportWrap .transportRow > label span {
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
 }
 
 /* Aldersforklaring for barn-kategorier */
-.childTooltip{
-  position:relative;
+
+.childTooltip {
+  position: relative;
 }
 
-.childTooltip::after{
-  content:attr(data-tooltip);
-  position:absolute;
-  left:50%;
-  bottom:calc(100% + 8px);
-  transform:translateX(-50%);
-  white-space:nowrap;
-  background:rgba(20,20,20,0.96);
-  color:#fff;
-  font-size:12px;
-  font-weight:600;
-  padding:6px 10px;
-  border-radius:10px;
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:opacity .18s ease, visibility .18s ease;
-  transition-delay:.3s;
-  z-index:9999;
+.childTooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(20,20,20,0.96);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 10px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .18s ease, visibility .18s ease;
+  transition-delay: .3s;
+  z-index: 9999;
 }
 
-.childTooltip:hover::after{
-  opacity:1;
-  visibility:visible;
+.childTooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
-
 
 /* CVK- og PVK-meny – bedre visning i Edge */
+
 #cvkLumen,
-#pvkAntall{
-  width:155px !important;
-  min-width:155px !important;
-
-  height:46px !important;
-  min-height:46px !important;
-
-  padding:0 38px 0 12px !important;
-  margin:0 !important;
-
-  font-size:15px !important;
-  line-height:normal !important;
-
-  box-sizing:border-box !important;
-  vertical-align:middle;
+#pvkAntall {
+  width: 155px !important;
+  min-width: 155px !important;
+  height: 46px !important;
+  min-height: 46px !important;
+  padding: 0 38px 0 12px !important;
+  margin: 0 !important;
+  font-size: 15px !important;
+  line-height: normal !important;
+  box-sizing: border-box !important;
+  vertical-align: middle;
 }
+
 /* ======================================================
-   POPUP – TILBAKEMELDINGER OG INNSPILL
+POPUP – TILBAKEMELDINGER OG INNSPILL
 ====================================================== */
 
 .feedbackDialog {
@@ -2406,7 +2029,6 @@ select{
   border-radius: 8px;
   background: var(--green, #35c16a);
   color: #111;
-
   font: inherit;
   font-size: 14px;
   font-weight: 650;
@@ -2422,8 +2044,9 @@ select{
   outline: 2px solid var(--accent, #8fb0ff);
   outline-offset: 3px;
 }
+
 /* ======================================================
-   VERSJONSLOGG – PLASSERING NEDERST
+VERSJONSLOGG – PLASSERING NEDERST
 ====================================================== */
 
 #feedbackWrap {
@@ -2469,7 +2092,7 @@ select{
 }
 
 /* ======================================================
-   POPUP – VERSJONSHISTORIKK
+POPUP – VERSJONSHISTORIKK
 ====================================================== */
 
 .versionHistoryDialog {
@@ -2655,15 +2278,7 @@ select{
   }
 }
 
-/* ======================================================
-   T048 – RESPONSIV MOBILVISNING
-
-   Hindrer at innhold strekker seg utenfor skjermen.
-   Tilpasser legefelter, tilganger og dynamiske felt.
-====================================================== */
-
 @media (max-width: 720px) {
-
   .wrap,
   .card,
   #mainContent,
@@ -2674,9 +2289,8 @@ select{
     max-width: 100%;
   }
 
-
   /* ==========================================
-     LEGEFELTER
+  LEGEFELTER
   ========================================== */
 
   .doctorRow {
@@ -2693,9 +2307,8 @@ select{
     max-width: 100%;
   }
 
-
   /* ==========================================
-     DYNAMISKE TILGANGSFELTER
+  DYNAMISKE TILGANGSFELTER
   ========================================== */
 
   #tilgangerDynamicBody,
@@ -2723,9 +2336,8 @@ select{
     max-width: 100% !important;
   }
 
-
   /* ==========================================
-     VALGGRUPPER
+  VALGGRUPPER
   ========================================== */
 
   .chipRow,
@@ -2737,17 +2349,18 @@ select{
   }
 
   /* HLR og respiratorvalg skal brytes ved behov */
+
   .caveRow {
     flex-wrap: wrap;
   }
 
-
   /* ==========================================
-     TOOLTIPS OG OVERSKRIFT
+  TOOLTIPS OG OVERSKRIFT
   ========================================== */
 
   /* Skjul hover-tooltip for spesialtransport
-     på små skjermer */
+  på små skjermer */
+
   .specialGroup .specLabel::after {
     display: none;
   }
@@ -2756,10 +2369,10 @@ select{
     overflow-wrap: anywhere;
     font-size: clamp(19px, 5vw, 30px);
   }
-
 }
+
 /* ======================================================
-   KLINISK VALIDERING – GCS OG FiO2
+KLINISK VALIDERING – GCS OG FiO2
 ====================================================== */
 
 input.kliniskUgyldig {
@@ -2768,9 +2381,8 @@ input.kliniskUgyldig {
   background: #fff1f2 !important;
 }
 
-
 /* ======================================================
-   STØRRE GCS-FELT
+STØRRE GCS-FELT
 ====================================================== */
 
 .vpGcsField {
@@ -2782,27 +2394,19 @@ input.kliniskUgyldig {
   padding-left: 46px;
 }
 
-.gcsHelp {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-
 /* ======================================================
-   GCS PÅ SMÅ SKJERMER
+GCS PÅ SMÅ SKJERMER
 ====================================================== */
 
 @media (max-width: 720px) {
-
   .vpGcsField {
     width: 100%;
     flex: 1 1 100%;
   }
-
 }
+
 /* ======================================================
-   OPSIX – DAG / NATT
+OPSIX – DAG / NATT
 ====================================================== */
 
 .pageHeader {
@@ -2871,13 +2475,11 @@ input.kliniskUgyldig {
   }
 }
 
-
 /* ======================================================
-   LYST FARGETEMA
+LYST FARGETEMA
 ====================================================== */
 
 body.theme-light {
-  --bg: #dfe5eb;
   --panel: #f7f9fb;
   --text: #1f2a3d;
   --muted: #5b677a;
@@ -2885,24 +2487,14 @@ body.theme-light {
   --fieldText: #1f2a3d;
   --line: #c5cfda;
   --accent: #2a5fb8;
-
-  background: var(--bg);
-  color: var(--text);
 }
 
 .theme-light .card {
-  background: var(--panel);
   border: 1px solid var(--line);
-  box-shadow: 0 2px 8px rgba(31, 42, 61, 0.06);
-}
-
-.theme-light .pageHeader #pageTitle {
-  color: #172338;
 }
 
 .theme-light .themeToggle {
   background: #e3e8ee;
-  color: #1f2a3d;
   border-color: #b8c3cf;
 }
 
@@ -2912,106 +2504,32 @@ body.theme-light {
 
 /* Overskrifter */
 
-.theme-light .hasteLabel,
-.theme-light .section,
-.theme-light .bigSection,
-.theme-light .minorTitle,
-.theme-light .blockTitle,
-.theme-light .medSection .minorTitle,
-.theme-light .hasteSupportTitle,
-.theme-light .flowDivider,
-.theme-light .vpTitle {
-  color: #172338;
-}
-
-.theme-light .medGroupTitle {
-  color: #334155;
-  opacity: 1;
-}
-
-.theme-light .hint,
-.theme-light .gcsHelp {
-  color: #475569;
-}
-
-
 /* Registreringsfelter */
 
-.theme-light input:not([type="checkbox"]):not([type="radio"]):not(.kliniskUgyldig),
-.theme-light textarea,
-.theme-light select {
-  background: #ffffff;
-  color: #172338;
-  border-color: #b9c6d8;
-}
-
-.theme-light input::placeholder,
-.theme-light textarea::placeholder {
-  color: #68788d;
-  opacity: 1;
-}
-
 /* Behold rød markering ved ugyldige verdier */
-
-.theme-light input.kliniskUgyldig {
-  color: #b91c1c !important;
-  border: 2px solid #dc2626 !important;
-  background: #fff1f2 !important;
-}
-
 
 /* Seksjoner og grupper */
 
 .theme-light .medGroup,
-.theme-light .hasteSupport,
 .theme-light .accessGroup,
 .theme-light .doctorGroup,
 .theme-light .infoGroup {
-  border-color: #d8e1ed;
   background: #f8fafc;
 }
 
-.theme-light .accessGroup .toggleCell,
-.theme-light .accessGroup .nonToggleRow,
-.theme-light .flowDivider {
+.theme-light .accessGroup .toggleCell {
   background: #f1f5f9;
-  border-color: #e2e8f0;
 }
-
-.theme-light .medUnifiedTable th,
-.theme-light .medTable th {
-  background: #e7edf5;
-  color: #172338;
-}
-
-.theme-light .hasteSupportItem {
-  background: #f1f5f9;
-  color: #172338;
-}
-
-.theme-light .hasteSupportItem strong {
-  color: #172338;
-}
-
-.theme-light .hasteSupportItem span {
-  color: #334155;
-}
-
 
 /* Ikke-valgte knapper blir lyse */
 
 .theme-light .medChip:not(:has(input:checked)),
 .theme-light .followChip:not(:has(input:checked)),
-.theme-light .caveChip:not(:has(input:checked)),
-.theme-light .accessChip:not(:has(input:checked)),
-.theme-light .utstyrChip:not(:has(input:checked)),
 .theme-light .spedChip:not(:has(input:checked)),
 .theme-light .smChip:not(:has(input:checked)),
 .theme-light .binaryOpt:not(:has(input:checked)),
 .theme-light .specialGroup .specCell:not(.active):not(:has(input:checked)),
-.theme-light .airwayRow .binaryOpt:not(:has(input:checked)),
-.theme-light .spedRespArbeidRow .medChip:not(:has(input:checked)),
-.theme-light .pumpRow .utstyrChip:not(:has(input:checked)) {
+.theme-light .airwayRow .binaryOpt:not(:has(input:checked)) {
   background: #f5f7fa !important;
   color: #1f2a3d !important;
   border: 1px solid #bcc8d4 !important;
@@ -3019,13 +2537,10 @@ body.theme-light {
 
 .theme-light .medChip:not(:has(input:checked)) span,
 .theme-light .followChip:not(:has(input:checked)) span,
-.theme-light .caveChip:not(:has(input:checked)) span,
-.theme-light .utstyrChip:not(:has(input:checked)) span,
 .theme-light .spedChip:not(:has(input:checked)) span,
 .theme-light .binaryOpt:not(:has(input:checked)) span,
 .theme-light .specialGroup .specCell:not(.active):not(:has(input:checked)) span,
-.theme-light .airwayRow .binaryOpt:not(:has(input:checked)) span,
-.theme-light .spedRespArbeidRow .medChip:not(:has(input:checked)) span {
+.theme-light .airwayRow .binaryOpt:not(:has(input:checked)) span {
   color: #233044 !important;
   font-weight: 500;
 }
@@ -3042,96 +2557,38 @@ body.theme-light {
 
 .theme-light .hasteGrid .hasteCard:not(.active) {
   background: #f9fbfc !important;
-  color: #1f2a3d !important;
-  box-shadow: 0 3px 10px rgba(31, 42, 61, 0.06);
-}
-
-.theme-light .hasteGrid .hasteCard:not(.active) .hasteCardText {
-  color: #4c5b70;
 }
 
 /* Vektfelt */
 
 .theme-light #weightWrap {
   background: #fff4f4;
-  border-color: #e76a6a;
 }
-
-.theme-light #weightWrap label {
-  color: #8f1d1d;
-}
-
-.theme-light #weightWrap input {
-  background: #ffffff;
-}
-
 
 /* Tilbakemelding og versjonshistorikk */
 
 .theme-light .feedbackBtn {
   background: #e9eef6;
-  color: #172338;
-  border-color: #cbd5e1;
 }
 
 .theme-light .feedbackBtn:hover {
   background: #dde8f6;
-  color: #172338;
 }
-
-.theme-light .versionHistoryBtn {
-  color: #1d4ed8;
-}
-
-.theme-light .versionHistoryBtn:hover {
-  color: #1e40af;
-}
-
-.theme-light .versionHistoryStatus,
-.theme-light .versionHistoryDate {
-  color: #475569;
-}
-
-.theme-light .versionHistoryEntry {
-  border-color: #d5dde8;
-}
-
-.theme-light .versionHistoryEntryTitle {
-  color: #172338;
-}
-
 
 /* ======================================================
-   MOBIL – RESPIRATORFELTER
+MOBIL – RESPIRATORFELTER
 ====================================================== */
 
-@media (max-width: 720px) {
-
-  .intubRow {
-    flex-wrap: wrap;
-  }
-
-  .intubRow .unitInputWrap {
-    flex: 1 1 140px;
-    width: auto;
-    min-width: 0;
-    max-width: 100%;
-  }
-
-}
-
 /* ======================================================
-   OPSIX – FINJUSTERING AV LYS VISNING
-   Mattere uttrykk, tydeligere rammer og bedre kontrast
+OPSIX – FINJUSTERING AV LYS VISNING
+Mattere uttrykk, tydeligere rammer og bedre kontrast
 ====================================================== */
 
-
-
 /* ======================================================
-   OPSIX – DAGMODUS: ROLIG GRÅ, HVITE CHIPS
+OPSIX – DAGMODUS: ROLIG GRÅ, HVITE CHIPS
 
-   Samlet lyst fargetema.
-   Nattmodus påvirkes ikke.
+Samlet lyst fargetema.
+Nattmodus påvirkes ikke.
 ====================================================== */
 
 body.theme-light {
@@ -3143,14 +2600,12 @@ body.theme-light {
   --fieldText: #202b39;
   --line: #bdc9d4;
   --accent: #526a84;
-
   background: var(--bg);
   color: var(--text);
 }
 
-
 /* ======================================================
-   BAKGRUNN OG HOVEDPANEL
+BAKGRUNN OG HOVEDPANEL
 ====================================================== */
 
 .theme-light .card {
@@ -3159,9 +2614,8 @@ body.theme-light {
   box-shadow: 0 2px 9px rgba(32, 43, 57, 0.045);
 }
 
-
 /* ======================================================
-   OVERSKRIFTER
+OVERSKRIFTER
 ====================================================== */
 
 .theme-light .pageHeader #pageTitle,
@@ -3169,28 +2623,20 @@ body.theme-light {
 .theme-light .section,
 .theme-light .bigSection,
 .theme-light .minorTitle,
-.theme-light .blockTitle,
-.theme-light .medSection .minorTitle,
-.theme-light .hasteSupportTitle,
-.theme-light .flowDivider,
 .theme-light .vpTitle {
   color: #202b39;
 }
 
-.theme-light .medGroupTitle,
-.theme-light .hint,
-.theme-light .gcsHelp {
+.theme-light .medGroupTitle {
   color: #48586b;
   opacity: 1;
 }
 
-
 /* ======================================================
-   SEKSJONER OG GRUPPER
+SEKSJONER OG GRUPPER
 ====================================================== */
 
 .theme-light .medGroup,
-.theme-light .hasteSupport,
 .theme-light .accessGroup,
 .theme-light .doctorGroup,
 .theme-light .infoGroup {
@@ -3198,35 +2644,13 @@ body.theme-light {
   border-color: #c8d2dc;
 }
 
-.theme-light .accessGroup .toggleCell,
-.theme-light .accessGroup .nonToggleRow,
-.theme-light .flowDivider {
+.theme-light .accessGroup .toggleCell {
   background: rgba(255,255,255,0.18);
   border-color: #cbd5df;
 }
 
-.theme-light .medUnifiedTable th,
-.theme-light .medTable th {
-  background: #dce5ec;
-  color: #202b39;
-}
-
-.theme-light .hasteSupportItem {
-  background: #e4ebf0;
-  color: #202b39;
-}
-
-.theme-light .hasteSupportItem strong {
-  color: #202b39;
-}
-
-.theme-light .hasteSupportItem span {
-  color: #536172;
-}
-
-
 /* ======================================================
-   REGISTRERINGSFELTER
+REGISTRERINGSFELTER
 ====================================================== */
 
 .theme-light input:not([type="checkbox"]):not([type="radio"]):not(.kliniskUgyldig),
@@ -3250,9 +2674,8 @@ body.theme-light {
   outline-offset: 1px;
 }
 
-
 /* ======================================================
-   KLINISKE FEILMARKERINGER
+KLINISKE FEILMARKERINGER
 ====================================================== */
 
 .theme-light input.kliniskUgyldig {
@@ -3261,9 +2684,8 @@ body.theme-light {
   border: 2px solid #dc2626 !important;
 }
 
-
 /* ======================================================
-   DAG / NATT-KNAPP
+DAG / NATT-KNAPP
 ====================================================== */
 
 .theme-light .themeToggle {
@@ -3277,13 +2699,12 @@ body.theme-light {
   background: #cddbe5;
 }
 
-
 /* ======================================================
-   HASTEGRADER
+HASTEGRADER
 
-   Grå bakgrunn når ikke valgt.
-   Farget ramme.
-   Farget fyll når hastegrad er valgt.
+Grå bakgrunn når ikke valgt.
+Farget ramme.
+Farget fyll når hastegrad er valgt.
 ====================================================== */
 
 .theme-light .hasteGrid .hasteCard:not(.active) {
@@ -3301,13 +2722,11 @@ body.theme-light {
   border-style: solid !important;
 }
 
-
 /* Akutt – rød ramme */
 
 .theme-light .hasteGrid .hasteCard.haste-akutt {
   border-color: #de4549 !important;
 }
-
 
 /* Haster – gul ramme */
 
@@ -3315,20 +2734,17 @@ body.theme-light {
   border-color: #c79400 !important;
 }
 
-
 /* Samme døgn – grønn ramme */
 
 .theme-light .hasteGrid .hasteCard.haste-samme {
   border-color: #5c946c !important;
 }
 
-
 /* Planlagt – mørkegrønn ramme */
 
 .theme-light .hasteGrid .hasteCard.haste-planlagt {
   border-color: #27663f !important;
 }
-
 
 /* Hvit tekst ved valgt Planlagt */
 
@@ -3338,26 +2754,20 @@ body.theme-light {
   color: #ffffff !important;
 }
 
-
 /* ======================================================
-   CHIPS – GENERELL UTFORMING
+CHIPS – GENERELL UTFORMING
 
-   Hvit bakgrunn.
-   Mørk tekst.
-   Rolig grå ramme.
+Hvit bakgrunn.
+Mørk tekst.
+Rolig grå ramme.
 ====================================================== */
 
 .theme-light .medChip,
 .theme-light .followChip,
-.theme-light .caveChip,
-.theme-light .accessChip,
-.theme-light .utstyrChip,
 .theme-light .spedChip,
 .theme-light .smChip,
 .theme-light .binaryOpt,
-.theme-light .pumpRow .utstyrChip,
 .theme-light .airwayRow .binaryOpt,
-.theme-light .spedRespArbeidRow .medChip,
 .theme-light .specialGroup .specCell,
 .theme-light #trachWrap .toggleCell,
 .theme-light #acuteTrachWrap .toggleCell {
@@ -3367,49 +2777,37 @@ body.theme-light {
   box-shadow: none !important;
 }
 
-
 /* ======================================================
-   TEKST INNI CHIPS
+TEKST INNI CHIPS
 ====================================================== */
 
 .theme-light .medChip span,
 .theme-light .followChip span,
-.theme-light .caveChip span,
-.theme-light .accessChip span,
-.theme-light .utstyrChip span,
 .theme-light .spedChip span,
 .theme-light .smChip span,
 .theme-light .binaryOpt span,
-.theme-light .pumpRow .utstyrChip span,
 .theme-light .airwayRow .binaryOpt span,
-.theme-light .spedRespArbeidRow .medChip span,
 .theme-light .specialGroup .specCell span,
 .theme-light #trachWrap .toggleCell span,
 .theme-light #acuteTrachWrap .toggleCell span {
   color: #1c2634 !important;
 }
 
-
 /* ======================================================
-   AKTIVE CHIPS
+AKTIVE CHIPS
 
-   Fortsatt hvit bakgrunn.
-   Tydeligere mørk ramme.
-   Svak skygge.
-   Fetere tekst.
+Fortsatt hvit bakgrunn.
+Tydeligere mørk ramme.
+Svak skygge.
+Fetere tekst.
 ====================================================== */
 
 .theme-light .medChip:has(input:checked),
 .theme-light .followChip:has(input:checked),
-.theme-light .caveChip:has(input:checked),
-.theme-light .accessChip:has(input:checked),
-.theme-light .utstyrChip:has(input:checked),
 .theme-light .spedChip:has(input:checked),
 .theme-light .smChip:has(input:checked),
 .theme-light .binaryOpt:has(input:checked),
-.theme-light .pumpRow .utstyrChip:has(input:checked),
 .theme-light .airwayRow .binaryOpt:has(input:checked),
-.theme-light .spedRespArbeidRow .medChip:has(input:checked),
 .theme-light .specialGroup .specCell.active,
 .theme-light .specialGroup .specCell:has(input:checked),
 .theme-light #trachWrap .toggleCell:has(input:checked),
@@ -3417,28 +2815,21 @@ body.theme-light {
   background: #ffffff !important;
   color: #1c2634 !important;
   border: 2px solid #50647a !important;
-  box-shadow:
-    0 2px 6px rgba(35,51,69,0.12),
+  box-shadow: 0 2px 6px rgba(35,51,69,0.12),
     inset 0 0 0 1px rgba(80,100,122,0.10) !important;
   font-weight: 750 !important;
 }
 
-
 /* ======================================================
-   TEKST I AKTIVE CHIPS
+TEKST I AKTIVE CHIPS
 ====================================================== */
 
 .theme-light .medChip:has(input:checked) span,
 .theme-light .followChip:has(input:checked) span,
-.theme-light .caveChip:has(input:checked) span,
-.theme-light .accessChip:has(input:checked) span,
-.theme-light .utstyrChip:has(input:checked) span,
 .theme-light .spedChip:has(input:checked) span,
 .theme-light .smChip:has(input:checked) span,
 .theme-light .binaryOpt:has(input:checked) span,
-.theme-light .pumpRow .utstyrChip:has(input:checked) span,
 .theme-light .airwayRow .binaryOpt:has(input:checked) span,
-.theme-light .spedRespArbeidRow .medChip:has(input:checked) span,
 .theme-light .specialGroup .specCell.active span,
 .theme-light .specialGroup .specCell:has(input:checked) span,
 .theme-light #trachWrap .toggleCell:has(input:checked) span,
@@ -3447,11 +2838,10 @@ body.theme-light {
   font-weight: 750 !important;
 }
 
-
 /* ======================================================
-   HOVER-EFFEKT
+HOVER-EFFEKT
 
-   Diskret endring ved musepeker over chip.
+Diskret endring ved musepeker over chip.
 ====================================================== */
 
 .theme-light .medChip:hover,
@@ -3463,7 +2853,6 @@ body.theme-light {
   background: #f1f5f8 !important;
 }
 
-
 /* Valgt chip forblir hvit ved hover */
 
 .theme-light .medChip:has(input:checked):hover,
@@ -3474,9 +2863,8 @@ body.theme-light {
   background: #ffffff !important;
 }
 
-
 /* ======================================================
-   VEKT – FORTSATT TYDELIG MARKERT
+VEKT – FORTSATT TYDELIG MARKERT
 ====================================================== */
 
 .theme-light #weightWrap {
@@ -3492,9 +2880,8 @@ body.theme-light {
   background: #ffffff;
 }
 
-
 /* ======================================================
-   TILBAKEMELDINGER OG VERSJONSHISTORIKK
+TILBAKEMELDINGER OG VERSJONSHISTORIKK
 ====================================================== */
 
 .theme-light .feedbackBtn {
@@ -3529,16 +2916,14 @@ body.theme-light {
   color: #202b39;
 }
 
-
 /* ======================================================
-   MOBIL – RESPIRATORFELTER
+MOBIL – RESPIRATORFELTER
 
-   Hindrer horisontal scrolling ved små skjermer.
-   Gjelder både dag- og nattmodus.
+Hindrer horisontal scrolling ved små skjermer.
+Gjelder både dag- og nattmodus.
 ====================================================== */
 
 @media (max-width: 720px) {
-
   .intubRow {
     flex-wrap: wrap;
   }
@@ -3549,10 +2934,10 @@ body.theme-light {
     min-width: 0;
     max-width: 100%;
   }
-
 }
+
 /* ======================================================
-   SØPPELBØTTE – TØM SKJEMA
+SØPPELBØTTE – TØM SKJEMA
 ====================================================== */
 
 #resetBtn .trashIcon {
@@ -3571,41 +2956,37 @@ body.theme-light {
   justify-content: center;
   gap: 10px;
 }
+
 /* ==========================================
-   OPSIX – FOOTER
+OPSIX – FOOTER
 ========================================== */
 
 body .wrap > .opsix-footer {
   display: block !important;
   position: relative;
-
   width: 100% !important;
   max-width: none !important;
-
   margin: 18px auto 24px !important;
   padding: 0 12px !important;
-
   box-sizing: border-box;
   text-align: center !important;
-
   font-size: 12px !important;
   font-weight: 400;
   line-height: 1.5;
-
   color: var(--muted, #aaa);
   opacity: 0.65;
 }
-/* ======================================================
-   OPSIX – UTSTYR VED AKUTT
 
-   Vis kun sprøytepumper ved Akutt.
-   Andre hastegrader beholder alle utstyrsvalg.
+/* ======================================================
+OPSIX – UTSTYR VED AKUTT
+
 ====================================================== */
 
 body.opsix-akutt .pumpRow {
   display: flex;
   align-items: center;
 }
+
 body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   display: none !important;
 }
