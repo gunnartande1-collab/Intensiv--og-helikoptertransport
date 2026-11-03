@@ -2049,7 +2049,7 @@ POPUP – TILBAKEMELDINGER OG INNSPILL
 VERSJONSLOGG – PLASSERING NEDERST
 ====================================================== */
 
-#feedbackWrap {
+#opsixFooterActions {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2087,7 +2087,7 @@ VERSJONSLOGG – PLASSERING NEDERST
   color: var(--text, #f1f1f1);
 }
 
-#feedbackWrap .feedbackBtn {
+#opsixFooterActions .feedbackBtn {
   margin-left: auto;
 }
 
@@ -2259,12 +2259,12 @@ POPUP – VERSJONSHISTORIKK
 }
 
 @media (max-width: 560px) {
-  #feedbackWrap {
+  #opsixFooterActions {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  #feedbackWrap .feedbackBtn {
+  #opsixFooterActions .feedbackBtn {
     margin-left: 0;
   }
 
@@ -2991,7 +2991,7 @@ body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   display: none !important;
 }
 /* Tilbakemeldingslenke på den opprinnelige knappens plass */
-#feedbackWrap a.feedbackBtn {
+#opsixFooterActions a.feedbackBtn {
   position: static;
   display: inline-flex;
   align-items: center;
@@ -3012,11 +3012,11 @@ body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   cursor: pointer;
 }
 
-#feedbackWrap a.feedbackBtn:hover {
+#opsixFooterActions a.feedbackBtn:hover {
   border-color: var(--accent, #8fb0ff);
 }
 
-#feedbackWrap a.feedbackBtn:focus-visible {
+#opsixFooterActions a.feedbackBtn:focus-visible {
   outline: 2px solid var(--accent, #8fb0ff);
   outline-offset: 3px;
 }
