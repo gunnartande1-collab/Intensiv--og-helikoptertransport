@@ -2599,7 +2599,8 @@ function buildFollowNeedLine() {
     ================================================ */
 
     function normalizeVersion(value) {
-      return String(value || "").trim().replace(/^v/i, "").toLowerCase();
+      // GitHub-taggen kan bruke både v1.0.0 og v.1.0.0.
+      return String(value || "").trim().replace(/^v\.?(?=\d)/i, "").toLowerCase();
     }
     function formatDate(dateString) {
       if (!dateString) {
@@ -2640,7 +2641,8 @@ function buildFollowNeedLine() {
     function createReleaseEntry(release) {
       const entry = createElement("article", "versionHistoryEntry");
       const header = createElement("div", "versionHistoryEntryHeader");
-      const versionName = release.tag_name || release.name || "Ukjent versjon";
+      const versionName = (release.tag_name || release.name || "Ukjent versjon")
+        .replace(/^v\.(?=\d)/i, "v");
       const title = createElement("h3", "versionHistoryEntryTitle", versionName);
       header.appendChild(title);
       const isCurrent = normalizeVersion(release.tag_name) === normalizeVersion(currentVersion);
