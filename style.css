@@ -3020,3 +3020,11 @@ body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   outline: 2px solid var(--accent, #8fb0ff);
   outline-offset: 3px;
 }
+
+#opsixFooterActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
