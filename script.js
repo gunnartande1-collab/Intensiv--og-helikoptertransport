@@ -1166,7 +1166,7 @@ function updateMainVisibility() {
     setHidden(sharedBottom, true);
     setHidden($("reportActions"), true);
     setHidden($("rapport"), true);
-    setHidden($("feedbackWrap"), true);
+   setHidden($("feedbackWrap"), false);
     rapport.value = "";
     return;
   }
