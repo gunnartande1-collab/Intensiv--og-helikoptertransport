@@ -3021,10 +3021,21 @@ body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   outline-offset: 3px;
 }
 
+/* Versjon til venstre, tilbakemelding til høyre */
 #opsixFooterActions {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
   flex-wrap: wrap;
+  width: 100%;
+  gap: 16px;
+}
+
+#opsixFooterActions .versionInfo {
+  margin-right: auto;
+}
+
+#opsixFooterActions .feedbackBtn {
+  margin-left: auto;
 }
