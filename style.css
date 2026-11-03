@@ -2990,3 +2990,33 @@ body.opsix-akutt .pumpRow {
 body.opsix-akutt #utstyrDynamicBody .dynamicRow.hidden {
   display: none !important;
 }
+/* Tilbakemeldingslenke på den opprinnelige knappens plass */
+#feedbackWrap a.feedbackBtn {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+  border: 1px solid var(--line, #50545c);
+  border-radius: 8px;
+
+  background: var(--panel, #3a3d43);
+  color: var(--text, #f1f1f1);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#feedbackWrap a.feedbackBtn:hover {
+  border-color: var(--accent, #8fb0ff);
+}
+
+#feedbackWrap a.feedbackBtn:focus-visible {
+  outline: 2px solid var(--accent, #8fb0ff);
+  outline-offset: 3px;
+}
