@@ -44,7 +44,7 @@ const osloTime = new Intl.DateTimeFormat('nb-NO', {
  timeZone:'Europe/Oslo', hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23'
 });
 const osloDate = new Intl.DateTimeFormat('nb-NO', {
- timeZone:'Europe/Oslo', day:'numeric', month:'long', year:'numeric'
+ timeZone:'Europe/Oslo', day:'numeric', month:'numeric', year:'numeric'
 });
 let displayedSecond;
 function renderFloatingClock(now) {
