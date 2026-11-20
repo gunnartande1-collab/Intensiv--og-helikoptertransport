@@ -1642,14 +1642,12 @@ function bindEvents() {
   bindLuftveiDetaljer();
   $("copyBtn")?.addEventListener("click", kopierRapport);
   $("resetBtn")?.addEventListener("click", nullstillSkjema);
-  document.addEventListener("input", () => {
+  function oppdaterRapportFraFelt() {
     huskUtfylteFeltgrupper();
     lagRapport();
-  });
-  document.addEventListener("change", () => {
-    huskUtfylteFeltgrupper();
-    lagRapport();
-  });
+  }
+  document.addEventListener("input", oppdaterRapportFraFelt);
+  document.addEventListener("change", oppdaterRapportFraFelt);
 }
 
 /* ======================================================
@@ -2511,60 +2509,6 @@ function buildFollowNeedLine() {
   return "Følgebehov ifølge rekvirent: " + valgt.join(", ");
 }
 
-/* ======================================================
-   POPUP – TILBAKEMELDINGER OG INNSPILL
-====================================================== */
-
-(() => {
-  "use strict";
-
-  function initFeedbackDialog() {
-    const feedbackBtn = document.getElementById("feedbackBtn");
-    const feedbackDialog = document.getElementById("feedbackDialog");
-    const closeBtn = document.getElementById("feedbackDialogClose");
-    const okBtn = document.getElementById("feedbackDialogOk");
-
-    // Avslutt dersom elementene ikke finnes.
-    if (!feedbackBtn || !feedbackDialog || !closeBtn || !okBtn) {
-      return;
-    }
-
-    // Åpne popup.
-    feedbackBtn.addEventListener("click", () => {
-      if (!feedbackDialog.open) {
-        feedbackDialog.showModal();
-      }
-    });
-
-    // Lukk med X.
-    closeBtn.addEventListener("click", () => {
-      feedbackDialog.close();
-    });
-
-    // Lukk med knappen "Lukk".
-    okBtn.addEventListener("click", () => {
-      feedbackDialog.close();
-    });
-
-    // Lukk ved klikk utenfor popup-vinduet.
-    feedbackDialog.addEventListener("click", event => {
-      if (event.target === feedbackDialog) {
-        const rect = feedbackDialog.getBoundingClientRect();
-        const inside = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
-        if (!inside) {
-          feedbackDialog.close();
-        }
-      }
-    });
-
-    // Escape-tasten håndteres automatisk av dialog-elementet.
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initFeedbackDialog);
-  } else {
-    initFeedbackDialog();
-  }
-})();
 /* ======================================================
    VERSJONSHISTORIKK – GITHUB RELEASES
 ====================================================== */
