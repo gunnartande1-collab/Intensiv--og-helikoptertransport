@@ -38,7 +38,6 @@ let floatingWindow = null;
 const defaultStripHeight = 80;
 const maximumPanelHeight = 230;
 let collapsedFloatingHeight = defaultStripHeight;
-
 const floatingTime = $('floatingTime');
 const floatingDate = $('floatingDate');
 const osloTime = new Intl.DateTimeFormat('nb-NO', {
@@ -56,7 +55,6 @@ function renderFloatingClock(now) {
 }
 let lastTool = tabs.find(button => button.classList.contains('active')).dataset.tab;
 let activeTool = lastTool;
-
 function tab(id) {
  activeTool = id;
  if (id) lastTool = id;
@@ -77,7 +75,6 @@ function tab(id) {
    toggleFloatingPane.setAttribute('aria-label', id ? 'Skjul verktøypanelet' : 'Vis sist brukte verktøy');
  }
 }
-
 function panelOpensAbove(popup) {
  const {screenY, outerHeight, screen} = popup;
  const {availTop, availHeight} = screen;
@@ -85,7 +82,6 @@ function panelOpensAbove(popup) {
  const railCenter = screenY + (outerHeight || popup.innerHeight) / 2;
  return railCenter > availTop + availHeight / 2;
 }
-
 function toggleTool(id) {
  const wasOpen = !!activeTool;
  if (floatingWindow && !wasOpen && id) {
@@ -116,14 +112,12 @@ for (const button of tabs) {
  });
 }
 toggleFloatingPane.addEventListener('click', () => toggleTool(activeTool ? null : lastTool));
-
 const floatingNotice = $('floatingNotice');
 const floatingError = $('floatingError');
 const floatingLaunch = $('openFloating');
 const clockStylesheet = document.querySelector('link[rel="stylesheet"]').href;
 const toolHome = tool.parentNode;
 const toolNext = tool.nextSibling;
-
 floatingLaunch.addEventListener('click', async () => {
  floatingError.hidden = true;
  if (!window.documentPictureInPicture || window.top !== window) {
@@ -145,7 +139,6 @@ floatingLaunch.addEventListener('click', async () => {
    const popupDocument = popup.document;
    popupDocument.documentElement.lang = document.documentElement.lang;
    popupDocument.title = 'OPSIX Klokkeverktøy';
-
    const stylesheet = popupDocument.createElement('link');
    stylesheet.rel = 'stylesheet';
    stylesheet.href = clockStylesheet;
@@ -170,7 +163,6 @@ floatingLaunch.addEventListener('click', async () => {
    }, {once:true});
    popupDocument.head.append(stylesheet);
    if (!(await stylesheetReady) || popup.closed || floatingWindow !== popup) return;
-
    popupDocument.body.classList.add('floating-clocks');
    syncFloatingAppearance();
    tab(null);
@@ -190,7 +182,6 @@ floatingLaunch.addEventListener('click', async () => {
  }
 });
 $('returnFloating').addEventListener('click', () => floatingWindow?.close());
-
 function syncFloatingAppearance() {
  if (!floatingWindow) return;
  floatingWindow.document.body.dataset.theme = document.body.dataset.theme;
@@ -210,7 +201,6 @@ settings.addEventListener('keydown', event => {
  showSettings(false);
  settingsToggle.focus();
 });
-
 const theme = $('theme');
 const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
 function applyTheme() {
@@ -316,7 +306,6 @@ function drawBeatCursor() {
  }
  clockFrame = clockWindow.requestAnimationFrame(drawBeatCursor);
 }
-
 function timeParts(id) {
  const group = $(id);
  const inputs = [...group.querySelectorAll('input')];
@@ -484,7 +473,6 @@ const pendingPauseAlarms = new Set();
 const pauseSignalLimit = 3;
 let pauseAlarmStarted = null;
 let pauseSoundSlot = -1;
-
 async function unlockPauseAudio() {
  if (!state.options.pauseSound) return;
  const context = getAudio(false);
@@ -493,7 +481,6 @@ async function unlockPauseAudio() {
  } catch {}
  $('pauseSoundError').hidden = context?.state === 'running' || !state.options.pauseSound;
 }
-
 function savePause(type, field, parts, now) {
  const [hours, minutes] = parts;
  const date = new Date(now);
@@ -506,7 +493,6 @@ function savePause(type, field, parts, now) {
  state.pauses = state.pauses.filter(pause => pause.field !== field);
  state.pauses.push({type, field, time, label, triggered:false});
 }
-
 for (const [type, field] of pauseFields) {
  field.group.addEventListener('input', () => {
    $('pauseError').hidden = true;
@@ -518,7 +504,6 @@ for (const [type, field] of pauseFields) {
    render();
  });
 }
-
 $('pauseSave').addEventListener('click', () => {
  const now = Date.now();
  const entries = [];
@@ -585,7 +570,6 @@ function renderPauses(now) {
  const message = due ? [...new Set([...pendingPauseAlarms].map(pause => pause.type))].join(' + ') + ' nå' : '';
  if ($('pauseState').textContent !== message) $('pauseState').textContent = message;
 }
-
 const defaultLandingDuration = 180000;
 const defaultLandingWarning = 90000;
 const landingDuration = timeParts('heliDuration');
@@ -707,9 +691,7 @@ function confirmBeforeLeaving(event) {
  event.preventDefault();
  event.returnValue = '1';
 }
-
 window.addEventListener('beforeunload', confirmBeforeLeaving);
-
 function updateActiveClockIndicator(now) {
  const {metro, count, stop, heli, pauses} = state;
  const pausedCountdown = count.paused && count.remaining > 0;
@@ -718,12 +700,10 @@ function updateActiveClockIndicator(now) {
    pausedCountdown || count.finished || stop.running || stop.elapsed > 0 || hasPendingPause || pendingPauseAlarms.size > 0;
  document.documentElement.toggleAttribute('data-opsix-active-clock', hasActiveClock);
 }
-
 function updateClockButton(id, label) {
  const button = $(id);
  if (button.textContent !== label) button.textContent = label;
 }
-
 function render(){const now=Date.now(),m=state.metro,c=state.count,s=state.stop;
  if (c.running && remaining() <= 0) finishCountdown();
  const displayedTime = formatCountdown(remaining());
@@ -773,7 +753,6 @@ function runClockUpdates(target) {
 }
 document.addEventListener('visibilitychange', render);
 window.addEventListener('focus', render);
-
 setMode('voksen');
 runClockUpdates(window);
 })();
