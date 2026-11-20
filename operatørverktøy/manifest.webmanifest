@@ -1,0 +1,23 @@
+{
+  "id": "/operatørverktøy/",
+  "name": "OPSIX Operatørverktøy",
+  "short_name": "OPSIX Klokker",
+  "lang": "nb-NO",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071426",
+  "theme_color": "#071426",
+  "icons": [
+    {
+      "src": "opsix-x-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "opsix-x-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
