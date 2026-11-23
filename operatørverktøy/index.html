@@ -8,8 +8,8 @@
     <link rel="icon" href="opsix-x-192.png" sizes="192x192" type="image/png">
     <link rel="apple-touch-icon" href="opsix-x-192.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="klokker.css?v=20261123-1">
-    <script src="klokker.js?v=20261123-1" defer></script>
+    <link rel="stylesheet" href="klokker.css?v=20261123-2">
+    <script src="klokker.js?v=20261123-2" defer></script>
 </head>
 <body data-theme="natt">
     <section class="tool floating-notice" id="floatingNotice" aria-labelledby="floatingNoticeTitle" hidden>
@@ -23,7 +23,7 @@
                 <strong>Støtteverktøy</strong>
             </div>
             <div class="header-actions">
-                <button class="btn floating-launch" id="openFloating" type="button">Åpne flytende verktøy</button>
+                <button class="btn floating-launch" id="openFloating" type="button">Vis flytende verktøylinje</button>
                 <button id="openWindow" class="icon-button" type="button" title="Åpne nytt klokkevindu" aria-label="Åpne nytt klokkevindu">↗</button>
                 <button id="settingsToggle" class="icon-button" type="button" title="Innstillinger" aria-label="Innstillinger" aria-expanded="false" aria-controls="clockSettings">⚙</button>
             </div>
@@ -43,22 +43,8 @@
                 <option value="dempet">Dempet</option>
                 <option value="natt">Natt</option>
             </select>
-            <div class="toggle-row clock-sound-setting">
-                <span id="countSoundLabel">Lyd ved endt nedtelling</span>
-                <div class="binary" data-setting="countSound" role="group" aria-labelledby="countSoundLabel">
-                    <button type="button" class="selected" data-value="yes" aria-pressed="true">På</button>
-                    <button type="button" data-value="no" aria-pressed="false">Av</button>
-                </div>
-            </div>
-            <div class="toggle-row clock-sound-setting">
-                <span id="pauseSoundLabel">Lyd ved pausestart</span>
-                <div class="binary" data-setting="pauseSound" role="group" aria-labelledby="pauseSoundLabel">
-                    <button type="button" class="selected" data-value="yes" aria-pressed="true">På</button>
-                    <button type="button" data-value="no" aria-pressed="false">Av</button>
-                </div>
-            </div>
         </div>
-        <nav class="tabs" aria-label="Klokkeverktøy">
+        <nav class="tabs" aria-label="Verktøylinje">
             <div class="floating-clock" id="floatingClock" hidden>
                 <time id="floatingTime" aria-label="Norsk tid"></time>
                 <time id="floatingDate"></time>
@@ -71,34 +57,32 @@
                         <path d="M29 29h6l3-6 3 10 3-4h3" stroke="#ff5466" stroke-width="2"/>
                     </svg>
                 </span>
-                Metronom
+                <span class="tab-label">Metronom</span>
             </button>
             <button class="tab" data-tab="helikopter" aria-selected="false">
                 <span class="tab-symbol">🚁</span>
-                Helikopter
+                <span class="tab-label">Helikopter</span>
                 <small id="heliBadge" class="tab-status" hidden></small>
             </button>
             <button class="tab" data-tab="pause" aria-selected="false">
                 <span class="tab-symbol">☕</span>
-                Pause
+                <span class="tab-label">Pause</span>
                 <small id="pauseBadge" class="tab-status" hidden></small>
             </button>
             <button class="tab" data-tab="nedtelling" aria-selected="false">
                 <span class="tab-symbol tool-symbol" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 32 32"><path d="M8 3h16v3l-2 5-5 5 5 5 2 5v3H8v-3l2-5 5-5-5-5-2-5Z" fill="#56a9f5" stroke="#0d294b" stroke-width="2"/><path d="M10 6h12l-2 5-4 4-4-4zm1 20 5-6 5 6Z" fill="#fff0ab"/><path d="M7 3h18M7 29h18" stroke="#0d294b" stroke-width="3" stroke-linecap="round"/></svg></span>
-                Nedtelling
+                <span class="tab-label">Nedtelling</span>
                 <small id="countBadge" class="tab-status" hidden></small>
             </button>
             <button class="tab" data-tab="stoppeklokke" aria-selected="false">
                 <span class="tab-symbol tool-symbol" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 32 32"><path d="M16 4v5m-3-5h6m4 6 2-2" stroke="#0d294b" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="19" r="10" fill="#63b6fa" stroke="#0d294b" stroke-width="2"/><circle cx="16" cy="19" r="7" fill="#eef9ff"/><path d="M16 14v5l3 2" fill="none" stroke="#164d80" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="19" r="1.25" fill="#164d80"/></svg></span>
-                Stoppeklokke
+                <span class="tab-label">Stoppeklokke</span>
                 <small id="stopBadge" class="tab-status" hidden></small>
             </button>
             <button class="tab active" data-tab="pusteteller" aria-selected="true">
                 <span class="tab-symbol tool-symbol" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 32 32"><path d="M13 10c-3-5-7 0-9 5-2 5-2 10 1 11 3 1 8-1 8-5Zm6 0c3-5 7 0 9 5 2 5 2 10-1 11-3 1-8-1-8-5Z" fill="#ff8299" stroke="#7d314a" stroke-width="2"/><path d="M16 4v10m0 0-5 5m5-5 5 5" fill="none" stroke="#ffe2ec" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                Pusteteller
+                <span class="tab-label">Pusteteller</span>
             </button>
-            <button class="tab floating-toggle" id="toggleFloatingPane" type="button"
-                aria-expanded="false" aria-controls="clockPanes" aria-label="Vis sist brukte verktøy" hidden>Utvid</button>
         </nav>
         <div class="tool-panes" id="clockPanes">
             <section class="pane" id="metronom" aria-label="Metronom" hidden inert>

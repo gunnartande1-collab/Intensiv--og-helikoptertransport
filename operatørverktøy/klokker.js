@@ -28,14 +28,13 @@ function playSignal(notes, tones) {
  }
  return true;
 }
-const state={metro:{running:false,bpm:110,anchor:0,step:0},count:{running:false,remaining:0,initial:0,end:0,finished:false,paused:false},stop:{running:false,elapsed:0,start:0},breaths:[],options:{countSound:true,pauseSound:true},pauses:[],heli:{start:null,lastAlarm:null,acknowledged:false}};
+const state={metro:{running:false,bpm:110,anchor:0,step:0},count:{running:false,remaining:0,initial:0,end:0,finished:false,paused:false},stop:{running:false,elapsed:0,start:0},breaths:[],pauses:[],heli:{start:null,lastAlarm:null,acknowledged:false}};
 const tabs = [...tool.querySelectorAll('[data-tab]')];
 const panes = $('clockPanes');
 const toolPanels = [...panes.querySelectorAll('.pane')];
-const toggleFloatingPane = $('toggleFloatingPane');
 let floatingWindow = null;
+let floatingLayoutObserver = null;
 const defaultStripHeight = 80;
-const maximumPanelHeight = 230;
 let collapsedFloatingHeight = defaultStripHeight;
 const floatingTime = $('floatingTime');
 const floatingDate = $('floatingDate');
@@ -46,11 +45,33 @@ const osloDate = new Intl.DateTimeFormat('nb-NO', {
  timeZone:'Europe/Oslo', day:'numeric', month:'numeric', year:'numeric'
 });
 let displayedSecond;
+function fitFloatingClock() {
+ if (!floatingWindow || floatingTime.ownerDocument !== floatingWindow.document) return;
+ const clock = $('floatingClock');
+ if (clock.hidden) return;
+ const width = clock.clientWidth - 6;
+ const height = clock.clientHeight - 2;
+ if (width <= 0 || height <= 0) return;
+
+ const dateFont = Math.min(15, Math.max(10, width / 13));
+ floatingDate.style.fontSize = `${dateFont.toFixed(1)}px`;
+ const availableHeight = height - dateFont - 2;
+ const context = floatingWindow.document.createElement('canvas').getContext('2d');
+ if (!context) return;
+ const style = floatingWindow.getComputedStyle(floatingTime);
+ context.font = `${style.fontWeight} 100px ${style.fontFamily}`;
+ const timeText = floatingTime.textContent || '23:59:59';
+ // Ta høyde for bokstavmellomrom i tillegg til målt skriftbredde.
+ const relativeWidth = context.measureText(timeText).width / 100 - (timeText.length - 1) * .02;
+ const fontSize = Math.min(64, availableHeight, width / relativeWidth * .97);
+ floatingTime.style.fontSize = `${Math.max(15, fontSize).toFixed(1)}px`;
+}
 function renderFloatingClock(now) {
  if (!floatingWindow || Math.floor(now / 1000) === displayedSecond) return;
  displayedSecond = Math.floor(now / 1000);
  floatingTime.textContent = osloTime.format(now).replace(/\./g, ':');
  floatingDate.textContent = osloDate.format(now);
+ fitFloatingClock();
 }
 let lastTool = tabs.find(button => button.classList.contains('active')).dataset.tab;
 let activeTool = lastTool;
@@ -61,6 +82,7 @@ function tab(id) {
    const selected = button.dataset.tab === id;
    button.classList.toggle('active', selected);
    button.setAttribute('aria-selected', String(selected));
+   button.setAttribute('aria-expanded', String(selected));
  }
  for (const pane of toolPanels) {
    pane.hidden = pane.id !== id;
@@ -69,9 +91,6 @@ function tab(id) {
  if (floatingWindow) {
    panes.hidden = !id;
    tool.classList.toggle('floating-expanded', !!id);
-   toggleFloatingPane.textContent = id ? 'Kollaps' : 'Utvid';
-   toggleFloatingPane.setAttribute('aria-expanded', String(!!id));
-   toggleFloatingPane.setAttribute('aria-label', id ? 'Skjul verktøypanelet' : 'Vis sist brukte verktøy');
  }
 }
 function panelOpensAbove(popup) {
@@ -81,23 +100,26 @@ function panelOpensAbove(popup) {
  const railCenter = screenY + (outerHeight || popup.innerHeight) / 2;
  return railCenter > availTop + availHeight / 2;
 }
+function resizeFloatingToContent() {
+ if (!floatingWindow) return;
+ const activePane = activeTool ? $(activeTool) : null;
+ const panelHeight = activePane ? Math.ceil(activePane.scrollHeight + 2) : 0;
+ const availableHeight = Math.max(defaultStripHeight, (floatingWindow.screen.availHeight || 900) - 24);
+ const targetHeight = Math.min(availableHeight, collapsedFloatingHeight + panelHeight);
+ const difference = Math.round(targetHeight - floatingWindow.innerHeight);
+ try {
+   if (Math.abs(difference) > 2) floatingWindow.resizeBy(0, difference);
+ } catch {
+   // Enkelte nettlesere begrenser vindusstørrelsen.
+ }
+}
 function toggleTool(id) {
- const wasOpen = !!activeTool;
- if (floatingWindow && !wasOpen && id) {
+ if (floatingWindow && !activeTool && id) {
    collapsedFloatingHeight = floatingWindow.innerHeight;
    tool.classList.toggle('floating-panel-above', panelOpensAbove(floatingWindow));
  }
  tab(id);
- if (!floatingWindow || (!id && !wasOpen)) return;
- const availableHeight = floatingWindow.screen.availHeight;
- const limit = Math.min(maximumPanelHeight, Math.floor((availableHeight || 900) / 3));
- const panelHeight = id ? Math.min($(id).offsetHeight + 2, limit) : 0;
- const difference = collapsedFloatingHeight + panelHeight - floatingWindow.innerHeight;
- try {
-   if (difference) floatingWindow.resizeBy(0, difference);
- } catch {
-   // The browser can limit resizing. The window can still be resized manually.
- }
+ resizeFloatingToContent();
 }
 for (const button of tabs) {
  button.addEventListener('click', () => {
@@ -110,7 +132,6 @@ for (const button of tabs) {
    toggleTool(floatingWindow && activeTool === id ? null : id);
  });
 }
-toggleFloatingPane.addEventListener('click', () => toggleTool(activeTool ? null : lastTool));
 const floatingNotice = $('floatingNotice');
 const floatingError = $('floatingError');
 const floatingLaunch = $('openFloating');
@@ -128,10 +149,10 @@ floatingLaunch.addEventListener('click', async () => {
  }
  if (floatingWindow) return;
  floatingLaunch.disabled = true;
- if (state.options.countSound || state.options.pauseSound) getAudio();
+ getAudio();
  try {
    const popup = await window.documentPictureInPicture.requestWindow({
-     width: Math.min(720, Math.round(window.screen.availWidth * .9)),
+     width: Math.min(840, Math.max(320, Math.round(window.screen.availWidth - 24))),
      height: defaultStripHeight
    });
    floatingWindow = popup;
@@ -148,12 +169,16 @@ floatingLaunch.addEventListener('click', async () => {
    });
    popup.addEventListener('pagehide', () => {
      if (floatingWindow !== popup) return;
+     floatingLayoutObserver?.disconnect();
+     floatingLayoutObserver = null;
      floatingWindow = null;
+     displayedSecond = undefined;
+     floatingTime.style.removeProperty('font-size');
+     floatingDate.style.removeProperty('font-size');
      if (tool.ownerDocument !== popupDocument) return;
      tool.classList.remove('floating-expanded', 'floating-panel-above');
      toolHome.insertBefore(tool, toolNext);
      panes.hidden = false;
-     toggleFloatingPane.hidden = true;
      $('floatingClock').hidden = true;
      floatingNotice.hidden = true;
      tab(lastTool);
@@ -165,13 +190,20 @@ floatingLaunch.addEventListener('click', async () => {
    popupDocument.body.classList.add('floating-clocks');
    syncFloatingAppearance();
    tab(null);
-   toggleFloatingPane.hidden = false;
    $('floatingClock').hidden = false;
-   renderFloatingClock(Date.now());
    popupDocument.body.append(tool);
+   displayedSecond = undefined;
+   renderFloatingClock(Date.now());
    floatingNotice.hidden = false;
+   if (popup.ResizeObserver) {
+     floatingLayoutObserver = new popup.ResizeObserver(() => {
+       fitFloatingClock();
+       if (activeTool) resizeFloatingToContent();
+     });
+     floatingLayoutObserver.observe($('floatingClock'));
+     for (const pane of toolPanels) floatingLayoutObserver.observe(pane);
+   }
    runClockUpdates(popup);
-   tabs[0].focus();
  } catch {
    floatingWindow?.close();
    floatingError.textContent = 'Kunne ikke åpne flytende verktøy. Du kan fortsette å bruke denne fanen.';
@@ -375,7 +407,6 @@ const countInput = timeParts('countDisplay');
 const baseTitle = document.title;
 const countTab = document.querySelector('[data-tab="nedtelling"]');
 const countBox = $('countBox');
-const countSoundButtons = tool.querySelectorAll('[data-setting="countSound"] button');
 for (const group of document.querySelectorAll('.adjustable-time')) {
  group.addEventListener('click', event => {
    const button = event.target.closest('[data-step]');
@@ -428,7 +459,7 @@ $('countStart').addEventListener('click', () => {
  }
  if (!countdown.remaining) return;
  clearCountAlert();
- if (state.options.countSound) getAudio();
+ getAudio();
  countdown.end = Date.now() + countdown.remaining;
  countdown.running = true;
  countdown.paused = false;
@@ -457,7 +488,6 @@ $('countReset').addEventListener('click', () => {
  $('countError').hidden = true;
  render();
 });
-for(const holder of document.querySelectorAll('[data-setting]'))holder.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const opt=holder.dataset.setting;state.options[opt]=b.dataset.value==='yes';if(opt==='pauseSound'){if(state.options.pauseSound) unlockPauseAudio();else stopTones(pauseTones)}render();holder.querySelectorAll('button').forEach(other=>{const sel=other===b;other.classList.toggle('selected',sel);other.setAttribute('aria-pressed',String(sel))})}));
 $('stopStart').addEventListener('click', () => {
  const stopwatch = state.stop;
  const now = Date.now();
@@ -475,18 +505,16 @@ $('stopReset').addEventListener('click', () => {
 });
 $('breathTap').addEventListener('click',()=>{state.breaths.push(Date.now());render()});$('breathUndo').addEventListener('click',()=>{state.breaths.pop();render()});$('breathReset').addEventListener('click',()=>{state.breaths=[];render()});
 const pauseFields = [['Matpause', timeParts('mealTime')], ['Skjermpause', timeParts('screenTime')]];
-const pauseSoundButtons = tool.querySelectorAll('[data-setting="pauseSound"] button');
 const pendingPauseAlarms = new Set();
 const pauseSignalLimit = 3;
 let pauseAlarmStarted = null;
 let pauseSoundSlot = -1;
 async function unlockPauseAudio() {
- if (!state.options.pauseSound) return;
  const context = getAudio(false);
  try {
    if (context && context.state !== 'running') await context.resume();
  } catch {}
- $('pauseSoundError').hidden = context?.state === 'running' || !state.options.pauseSound;
+ $('pauseSoundError').hidden = context?.state === 'running';
 }
 function savePause(type, field, parts, now) {
  const [hours, minutes] = parts;
@@ -564,14 +592,13 @@ function renderPauses(now) {
      pendingPauseAlarms.clear();
      pauseAlarmStarted = null;
      stopTones(pauseTones);
-   } else if (state.options.pauseSound && slot > pauseSoundSlot && playSignal(pauseSignal, pauseTones)) {
+   } else if (slot > pauseSoundSlot && playSignal(pauseSignal, pauseTones)) {
      pauseSoundSlot = slot;
    }
  }
  const due = pendingPauseAlarms.size > 0;
  $('pauseBox').classList.toggle('pause-due', due);
  tool.querySelector('[data-tab="pause"]').classList.toggle('pause-due', due);
- for (const button of pauseSoundButtons) button.disabled = due && state.options.pauseSound;
  $('pauseBadge').hidden = !due;
  $('pauseBadge').textContent = due ? 'NÅ' : '';
  const message = due ? [...new Set([...pendingPauseAlarms].map(pause => pause.type))].join(' + ') + ' nå' : '';
@@ -716,7 +743,7 @@ function render(){const now=Date.now(),m=state.metro,c=state.count,s=state.stop;
  const displayedTime = formatCountdown(remaining());
  if (!c.edited && countInput.value() !== displayedTime) countInput.write(displayedTime);
  countInput.readOnly(c.running || c.finished);
- if (c.finished && state.options.countSound && (c.lastAlarm === null || now - c.lastAlarm >= alertRepeat)) {
+ if (c.finished && (c.lastAlarm === null || now - c.lastAlarm >= alertRepeat)) {
    if (playSignal(countdownSignal, countTones)) c.lastAlarm = now;
  }
  const countMessage = c.running ? 'Nedtelling pågår' : c.paused ? 'Pauset' : '';
@@ -739,7 +766,6 @@ function render(){const now=Date.now(),m=state.metro,c=state.count,s=state.stop;
  updateClockButton('countStart', c.running ? 'Ⅱ Pause' : c.paused ? '▶ Fortsett' : '▶ Start');
  updateClockButton('stopStart', s.running ? 'Ⅱ Pause' : s.elapsed > 0 ? '▶ Fortsett' : '▶ Start');
  $('countStart').disabled = c.finished;
- for (const button of countSoundButtons) button.disabled = c.finished && state.options.countSound;
  renderFloatingClock(now);
  const landingTime = renderLanding();
  const title = c.running ? formatCountdown(remaining()) + ' | Nedtelling'
