@@ -34,7 +34,7 @@ const panes = $('clockPanes');
 const toolPanels = [...panes.querySelectorAll('.pane')];
 let floatingWindow = null;
 let floatingLayoutObserver = null;
-const defaultStripHeight = 80;
+const defaultStripHeight = 92;
 let collapsedFloatingHeight = defaultStripHeight;
 const floatingTime = $('floatingTime');
 const floatingDate = $('floatingDate');
@@ -528,15 +528,41 @@ function savePause(type, field, parts, now) {
  state.pauses = state.pauses.filter(pause => pause.field !== field);
  state.pauses.push({type, field, time, label, triggered:false});
 }
-for (const [type, field] of pauseFields) {
+// Pauser aktiveres bare ved eksplisitt lagring. Statusen følger av hva som
+// er skrevet i feltene sammenlignet med aktive varsler i minnet.
+function renderPauseSaveStatus(due = pendingPauseAlarms.size > 0) {
+ const unsaved = pauseFields.some(([, field]) => {
+   const value = field.value() === ':' ? '' : field.value();
+   const saved = state.pauses.find(pause => pause.field === field)?.label ?? '';
+   return value !== saved;
+ });
+ const status = $('pauseSaveStatus');
+ let kind = 'empty';
+ let message = 'Ingen pauser lagret';
+ if (unsaved) {
+   kind = 'pending';
+   message = state.pauses.length
+     ? 'Endringer ikke lagret – tidligere lagrede varsler gjelder.'
+     : 'Ikke lagret – trykk «Lagre pauser» for å aktivere varsler.';
+ } else if (state.pauses.length) {
+   kind = 'saved';
+   message = '✓ Lagret: ' + pauseFields
+     .map(([type, field]) => {
+       const pause = state.pauses.find(entry => entry.field === field);
+       return pause ? `${type} ${pause.label}` : null;
+     }).filter(Boolean).join(' · ');
+ }
+ if (status.dataset.state !== kind) status.dataset.state = kind;
+ if (status.textContent !== message) status.textContent = message;
+ const badge = $('pauseBadge');
+ const badgeText = due ? 'NÅ' : unsaved ? 'IKKE LAGRET' : state.pauses.length ? 'LAGRET' : '';
+ if (badge.textContent !== badgeText) badge.textContent = badgeText;
+ badge.hidden = !badgeText;
+}
+for (const [, field] of pauseFields) {
  field.group.addEventListener('input', () => {
    $('pauseError').hidden = true;
-   if (!/^\d{2}:\d{2}$/.test(field.value())) return;
-   const parts = field.read({requireAll:true, silent:true});
-   if (!parts) return;
-   unlockPauseAudio();
-   savePause(type, field, parts, Date.now());
-   render();
+   renderPauseSaveStatus();
  });
 }
 $('pauseSave').addEventListener('click', () => {
@@ -545,10 +571,18 @@ $('pauseSave').addEventListener('click', () => {
  for (const [type, field] of pauseFields) {
    const parts = field.value() === ':' ? [] : field.read({requireAll:true});
    if (!parts) {
+     $('pauseError').textContent = 'Skriv gyldig klokkeslett mellom 00:00 og 23:59.';
      $('pauseError').hidden = false;
+     renderPauseSaveStatus();
      return;
    }
    entries.push([type, field, parts]);
+ }
+ if (!entries.some(([, , parts]) => parts.length)) {
+   $('pauseError').textContent = 'Skriv inn minst ett klokkeslett før du lagrer.';
+   $('pauseError').hidden = false;
+   renderPauseSaveStatus();
+   return;
  }
  for (const [type, field, parts] of entries) {
    if (parts.length) {
@@ -557,6 +591,15 @@ $('pauseSave').addEventListener('click', () => {
    } else {
      state.pauses = state.pauses.filter(pause => pause.field !== field);
    }
+ }
+ // Tidligere aktive alarmer som ble erstattet, skal ikke fortsette å varsle.
+ for (const pause of pendingPauseAlarms) {
+   if (!state.pauses.includes(pause)) pendingPauseAlarms.delete(pause);
+ }
+ if (!pendingPauseAlarms.size) {
+   pauseAlarmStarted = null;
+   pauseSoundSlot = -1;
+   stopTones(pauseTones);
  }
  $('pauseError').hidden = true;
  unlockPauseAudio();
@@ -599,8 +642,7 @@ function renderPauses(now) {
  const due = pendingPauseAlarms.size > 0;
  $('pauseBox').classList.toggle('pause-due', due);
  tool.querySelector('[data-tab="pause"]').classList.toggle('pause-due', due);
- $('pauseBadge').hidden = !due;
- $('pauseBadge').textContent = due ? 'NÅ' : '';
+ renderPauseSaveStatus(due);
  const message = due ? [...new Set([...pendingPauseAlarms].map(pause => pause.type))].join(' + ') + ' nå' : '';
  if ($('pauseState').textContent !== message) $('pauseState').textContent = message;
 }
@@ -716,7 +758,7 @@ function renderLanding() {
  $('heliStart').hidden = alert;
  heliTab.classList.toggle('heli-alert', alert);
  $('heliBadge').hidden = !active;
- $('heliBadge').textContent = alert ? 'VARSLING' : time;
+ $('heliBadge').textContent = time;
  return active ? time : '';
 }
 $('feedbackButton').addEventListener('click',()=>{window.open(CONFIG.feedbackUrl,'_blank','noopener')});
@@ -753,7 +795,12 @@ function render(){const now=Date.now(),m=state.metro,c=state.count,s=state.stop;
  $('countBox').classList.toggle('finished', countAlert);
  countTab.classList.toggle('count-finished', countAlert);
  const elapsed=s.elapsed+(s.running?now-s.start:0);$('stopDisplay').textContent=fmtStop(elapsed);
- $('countBadge').hidden=!c.running;$('countBadge').textContent=c.running?displayedTime:'';$('stopBadge').hidden=!s.running;$('stopBadge').textContent=fmtStop(elapsed);
+ const showCountdown = c.running || c.paused || c.finished;
+ $('countBadge').hidden = !showCountdown;
+ $('countBadge').textContent = showCountdown ? displayedTime : '';
+ const showStopwatch = s.running || elapsed > 0;
+ $('stopBadge').hidden = !showStopwatch;
+ $('stopBadge').textContent = showStopwatch ? fmtStop(elapsed) : '';
  $('breathUndo').disabled = !state.breaths.length;
  let b=state.breaths,age=b.length?now-b[0]:0;$('breathCount').textContent=b.length;$('breathTime').textContent=`Observasjon ${fmtCount(age)} / 01:00`;
  // Et intervallbasert anslag, ikke antall pust x 60/sekunder siden første pust.

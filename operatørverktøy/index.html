@@ -8,8 +8,8 @@
     <link rel="icon" href="opsix-x-192.png" sizes="192x192" type="image/png">
     <link rel="apple-touch-icon" href="opsix-x-192.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="klokker.css?v=20261123-2">
-    <script src="klokker.js?v=20261123-2" defer></script>
+    <link rel="stylesheet" href="klokker.css?v=20261124-2">
+    <script src="klokker.js?v=20261124-2" defer></script>
 </head>
 <body data-theme="natt">
     <section class="tool floating-notice" id="floatingNotice" aria-labelledby="floatingNoticeTitle" hidden>
@@ -23,8 +23,21 @@
                 <strong>Støtteverktøy</strong>
             </div>
             <div class="header-actions">
-                <button class="btn floating-launch" id="openFloating" type="button">Vis flytende verktøylinje</button>
-                <button id="openWindow" class="icon-button" type="button" title="Åpne nytt klokkevindu" aria-label="Åpne nytt klokkevindu">↗</button>
+                <button id="openFloating" class="icon-button" type="button" title="Flytende knapper" aria-label="Åpne flytende knapper">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <rect x="3" y="4" width="18" height="4" rx="1"/>
+                        <rect x="3" y="10" width="18" height="4" rx="1"/>
+                        <rect x="3" y="16" width="18" height="4" rx="1"/>
+                    </svg>
+                </button>
+                <button id="openWindow" class="icon-button" type="button" title="Åpne nytt klokkevindu" aria-label="Åpne nytt klokkevindu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false">
+                        <rect x="3" y="3.5" width="18" height="17" rx="2"/>
+                        <path d="M3 8.5h18"/>
+                        <circle cx="6.5" cy="6" r=".65" fill="currentColor" stroke="none"/>
+                        <circle cx="9.5" cy="6" r=".65" fill="currentColor" stroke="none"/>
+                    </svg>
+                </button>
                 <button id="settingsToggle" class="icon-button" type="button" title="Innstillinger" aria-label="Innstillinger" aria-expanded="false" aria-controls="clockSettings">⚙</button>
             </div>
         </header>
@@ -235,6 +248,7 @@
                     </div>
                     <p id="pauseState" role="status"></p>
                 </div>
+                <p id="pauseSaveStatus" class="pause-save-status" role="status" aria-live="polite" data-state="empty">Ingen pauser lagret</p>
                 <p id="pauseError" role="alert" hidden>Skriv et klokkeslett mellom 00:00 og 23:59.</p>
                 <p id="pauseSoundError" role="status" hidden>Lydvarsel er utilgjengelig i nettleseren. Pause markeres visuelt.</p>
                 <div class="actions two">
