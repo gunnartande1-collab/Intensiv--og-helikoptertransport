@@ -28,8 +28,7 @@ function playSignal(notes, tones) {
  }
  return true;
 }
-const state={metro:{running:false,mode:'voksen',bpm:110,anchor:0,step:0},count:{running:false,remaining:0,initial:0,end:0,finished:false,paused:false},stop:{running:false,elapsed:0,start:0},breaths:[],options:{countSound:true,pauseSound:true},pauses:[],heli:{start:null,lastAlarm:null,acknowledged:false}};
-const modes={voksen:110,nyfodt:120};
+const state={metro:{running:false,bpm:110,anchor:0,step:0},count:{running:false,remaining:0,initial:0,end:0,finished:false,paused:false},stop:{running:false,elapsed:0,start:0},breaths:[],options:{countSound:true,pauseSound:true},pauses:[],heli:{start:null,lastAlarm:null,acknowledged:false}};
 const tabs = [...tool.querySelectorAll('[data-tab]')];
 const panes = $('clockPanes');
 const toolPanels = [...panes.querySelectorAll('.pane')];
@@ -223,21 +222,29 @@ textSize.addEventListener('change', () => {
  syncFloatingAppearance();
  try { localStorage.setItem('opsix-clocks-text', textSize.value); } catch {}
 });
-function setMode(mode){const m=state.metro;m.mode=mode;m.bpm=modes[mode];$('metronomeHint').hidden=mode!=='nyfodt';tool.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('selected',b.dataset.mode===mode));$('bpmAdjust').hidden=mode==='nyfodt';$('bpmLabel').disabled=mode==='nyfodt';$('bpmLabel').title=mode==='nyfodt'?'Fast 3:1-rytme':'Klikk for å endre takt';$('bpmDirect').hidden=true;$('bpmLabel').hidden=false;updateBpmView();restartMetroCycle();$('ecgFourth').toggleAttribute('hidden',mode==='nyfodt');$('ecgVent').toggleAttribute('hidden',mode!=='nyfodt')}
-function updateBpmView(){const m=state.metro;$('bpmLabel').innerHTML=m.mode==='nyfodt'?'3:1 <span>HLR</span>':`${m.bpm} <span>BPM</span>`;$('bpmInput').value=m.bpm;$('bpmDirect').value=m.bpm}
+function updateBpmView() {
+ const bpm = state.metro.bpm;
+ $('bpmLabel').innerHTML = `${bpm} <span>BPM</span>`;
+ $('bpmInput').value = bpm;
+ $('bpmDirect').value = bpm;
+}
 function setBpm(value) {
- const metro = state.metro;
- if (metro.mode === 'nyfodt') return;
  const bpm = Number(value);
  if (Number.isSafeInteger(bpm) && bpm > 0) {
-   metro.bpm = bpm;
-   restartMetroCycle();
+  state.metro.bpm = bpm;
+  restartMetroCycle();
  }
  updateBpmView();
 }
-tool.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
-$('bpmDown').addEventListener('click',()=>setBpm(state.metro.bpm-1));$('bpmUp').addEventListener('click',()=>setBpm(state.metro.bpm+1));$('bpmInput').addEventListener('change',e=>setBpm(e.target.value));
-$('bpmLabel').addEventListener('click',()=>{if(state.metro.mode==='nyfodt')return;$('bpmLabel').hidden=true;$('bpmDirect').hidden=false;$('bpmDirect').focus();$('bpmDirect').select()});
+$('bpmDown').addEventListener('click',()=>setBpm(state.metro.bpm-1));
+$('bpmUp').addEventListener('click',()=>setBpm(state.metro.bpm+1));
+$('bpmInput').addEventListener('change',e=>setBpm(e.target.value));
+$('bpmLabel').addEventListener('click',()=>{
+ $('bpmLabel').hidden=true;
+ $('bpmDirect').hidden=false;
+ $('bpmDirect').focus();
+ $('bpmDirect').select();
+});
 function closeBpm(){setBpm($('bpmDirect').value);$('bpmDirect').hidden=true;$('bpmLabel').hidden=false}
 $('bpmDirect').addEventListener('keydown',e=>{if(e.key==='Enter')closeBpm();if(e.key==='Escape'){$('bpmDirect').hidden=true;$('bpmLabel').hidden=false}});$('bpmDirect').addEventListener('blur',()=>{if(!$('bpmDirect').hidden)closeBpm()});
 const metroTones = new Set();
@@ -275,7 +282,8 @@ $('metroStart').addEventListener('click', () => {
 });
 $('metroReset').addEventListener('click', () => {
  state.metro.running = false;
- setMode('voksen');
+ stopTones(metroTones);
+ setBpm(110);
  render();
 });
 function scheduleMetro() {
@@ -288,9 +296,8 @@ function scheduleMetro() {
  for (let scheduled = 0; scheduled < 8; scheduled++) {
    const when = metro.anchor + metro.step * interval;
    if (when >= now + .12) break;
-   const ventilation = metro.mode === 'nyfodt' && metro.step % 4 === 3;
-   const duration = Math.min(ventilation ? .16 : .065, Math.max(.012, interval * .7));
-   trackTone(metroTones, tone(when, ventilation ? 500 : 880, duration, ventilation ? .468 : .442));
+   const duration = Math.min(.065, Math.max(.012, interval * .7));
+   trackTone(metroTones, tone(when, 880, duration, .442));
    metro.step++;
  }
 }
@@ -753,6 +760,6 @@ function runClockUpdates(target) {
 }
 document.addEventListener('visibilitychange', render);
 window.addEventListener('focus', render);
-setMode('voksen');
+updateBpmView();
 runClockUpdates(window);
 })();

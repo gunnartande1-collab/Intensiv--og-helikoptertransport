@@ -8,8 +8,8 @@
     <link rel="icon" href="opsix-x-192.png" sizes="192x192" type="image/png">
     <link rel="apple-touch-icon" href="opsix-x-192.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="klokker.css?v=20261119-18">
-    <script src="klokker.js?v=20261119-18" defer></script>
+    <link rel="stylesheet" href="klokker.css?v=20261123-1">
+    <script src="klokker.js?v=20261123-1" defer></script>
 </head>
 <body data-theme="natt">
     <section class="tool floating-notice" id="floatingNotice" aria-labelledby="floatingNoticeTitle" hidden>
@@ -119,21 +119,13 @@
                                 <use href="#ecgComplex"/>
                                 <use href="#ecgComplex" x="60"/>
                                 <use href="#ecgComplex" x="120"/>
-                                <use id="ecgFourth" href="#ecgComplex" x="180"/>
-                                <path id="ecgVent" d="M180 25 H240" hidden/>
+                                <use href="#ecgComplex" x="180"/>
                             </g>
                             <line id="beatCursor" x1="30" x2="30" y1="1" y2="41" hidden/>
                         </svg>
                     </div>
                 </div>
                 <div class="metro-controls">
-                    <div class="metro-categories">
-                        <label class="field-label">Pasientkategori</label>
-                        <div class="choices">
-                            <button type="button" class="choice selected" data-mode="voksen">Voksen og barn</button>
-                            <button type="button" class="choice" data-mode="nyfodt">Nyfødt ved fødsel</button>
-                        </div>
-                    </div>
                     <div class="adjuster" id="bpmAdjust">
                         <label for="bpmInput">Juster takt</label>
                         <div>
@@ -142,7 +134,6 @@
                             <button id="bpmUp" type="button" aria-label="Øk BPM">+</button>
                         </div>
                     </div>
-                    <p id="metronomeHint" class="hint compact" hidden>90 kompresjoner og 30 ventilasjoner/min</p>
                     <div class="actions two">
                         <button id="metroStart" class="btn primary">▶ Start</button>
                         <button id="metroReset" class="btn">↻ Nullstill</button>
