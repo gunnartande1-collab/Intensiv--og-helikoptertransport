@@ -67,7 +67,7 @@ function fitFloatingClock() {
  floatingTime.style.fontSize = `${Math.max(15, fontSize).toFixed(1)}px`;
 }
 function renderFloatingClock(now) {
- if (!floatingWindow || Math.floor(now / 1000) === displayedSecond) return;
+ if (Math.floor(now / 1000) === displayedSecond) return;
  displayedSecond = Math.floor(now / 1000);
  floatingTime.textContent = osloTime.format(now).replace(/\./g, ':');
  floatingDate.textContent = osloDate.format(now);
@@ -158,7 +158,7 @@ floatingLaunch.addEventListener('click', async () => {
    floatingWindow = popup;
    const popupDocument = popup.document;
    popupDocument.documentElement.lang = document.documentElement.lang;
-   popupDocument.title = 'OPSIX Klokkeverktøy';
+   popupDocument.title = 'OPSIX Operatørverktøy';
    const stylesheet = popupDocument.createElement('link');
    stylesheet.rel = 'stylesheet';
    stylesheet.href = clockStylesheet;
@@ -179,7 +179,7 @@ floatingLaunch.addEventListener('click', async () => {
      tool.classList.remove('floating-expanded', 'floating-panel-above');
      toolHome.insertBefore(tool, toolNext);
      panes.hidden = false;
-     $('floatingClock').hidden = true;
+     tool.querySelector('.top').insertBefore($('floatingClock'), tool.querySelector('.header-actions'));
      floatingNotice.hidden = true;
      tab(lastTool);
      runClockUpdates(window);
@@ -190,7 +190,7 @@ floatingLaunch.addEventListener('click', async () => {
    popupDocument.body.classList.add('floating-clocks');
    syncFloatingAppearance();
    tab(null);
-   $('floatingClock').hidden = false;
+   tabs[0].parentNode.insertBefore($('floatingClock'), tabs[0]);
    popupDocument.body.append(tool);
    displayedSecond = undefined;
    renderFloatingClock(Date.now());
@@ -542,20 +542,20 @@ function renderPauseSaveStatus(due = pendingPauseAlarms.size > 0) {
  if (unsaved) {
    kind = 'pending';
    message = state.pauses.length
-     ? 'Endringer ikke lagret – tidligere lagrede varsler gjelder.'
-     : 'Ikke lagret – trykk «Lagre pauser» for å aktivere varsler.';
+     ? 'Endringer ikke lagret – tidligere varsler gjelder.'
+     : 'Ikke lagret – trykk «Lagre pauser».';
  } else if (state.pauses.length) {
    kind = 'saved';
    message = '✓ Lagret: ' + pauseFields
      .map(([type, field]) => {
        const pause = state.pauses.find(entry => entry.field === field);
-       return pause ? `${type} ${pause.label}` : null;
+       return pause ? `${type === 'Matpause' ? 'Mat' : 'Skjerm'} ${pause.label}` : null;
      }).filter(Boolean).join(' · ');
  }
  if (status.dataset.state !== kind) status.dataset.state = kind;
  if (status.textContent !== message) status.textContent = message;
  const badge = $('pauseBadge');
- const badgeText = due ? 'NÅ' : unsaved ? 'IKKE LAGRET' : state.pauses.length ? 'LAGRET' : '';
+ const badgeText = due ? 'NÅ' : '';
  if (badge.textContent !== badgeText) badge.textContent = badgeText;
  badge.hidden = !badgeText;
 }
@@ -569,7 +569,7 @@ $('pauseSave').addEventListener('click', () => {
  const now = Date.now();
  const entries = [];
  for (const [type, field] of pauseFields) {
-   const parts = field.value() === ':' ? [] : field.read({requireAll:true});
+   const parts = field.value() === ':' ? [] : field.read();
    if (!parts) {
      $('pauseError').textContent = 'Skriv gyldig klokkeslett mellom 00:00 og 23:59.';
      $('pauseError').hidden = false;
